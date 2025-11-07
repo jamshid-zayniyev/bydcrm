@@ -1,0 +1,13 @@
+{
+  "welcome": "Xush kelibsiz",
+  "description": "Bu ko'p tilli ilova",
+  "buttons": {
+    "login": "Kirish",
+    "signup": "Ro'yxatdan o'tish"
+  },
+  "nav": {
+    "home": "Bosh sahifa",
+    "about": "Biz haqimizda",
+    "contact": "Aloqa"
+  }
+}
