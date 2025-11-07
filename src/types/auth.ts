@@ -1,0 +1,21 @@
+export interface User {
+  id: string;
+  username: string;
+  email: string;
+  role: 'superadmin' | 'reception';
+  department: string;
+  name: string;
+}
+
+export interface LoginCredentials {
+  username: string;
+  password: string;
+}
+
+export interface AuthResponse {
+  user: User;
+  tokens: {
+    access: string;
+    refresh: string;
+  };
+}
