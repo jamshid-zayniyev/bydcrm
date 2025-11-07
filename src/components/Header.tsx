@@ -1,7 +1,7 @@
-import { Bell, Menu, User, ChevronDown, Globe } from 'lucide-react';
-import { currentUser } from '../data/mockData';
+import { Bell, Menu, User, ChevronDown, Globe, LogOut } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useState, useRef, useEffect } from 'react';
+import { useAuthContext } from '../contexts/AuthContext';
 
 interface HeaderProps {
   onMenuClick?: () => void;
@@ -9,13 +9,13 @@ interface HeaderProps {
 
 export function Header({ onMenuClick }: HeaderProps) {
   const { t, i18n } = useTranslation();
+  const { user, logout } = useAuthContext();
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  console.log('Current language:', i18n.language); // Debug uchun
+  const profileRef = useRef<HTMLDivElement>(null);
 
   const changeLanguage = (lng: string) => {
-    console.log('Changing language to:', lng); // Debug uchun
     i18n.changeLanguage(lng);
     setIsLanguageOpen(false);
   };
@@ -24,11 +24,19 @@ export function Header({ onMenuClick }: HeaderProps) {
     return i18n.language === 'ru' ? 'РУ' : 'UZ';
   };
 
-  // Click outside to close dropdown
+  const handleLogout = () => {
+    logout();
+    setIsProfileOpen(false);
+  };
+
+  // Click outside to close dropdowns
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsLanguageOpen(false);
+      }
+      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
+        setIsProfileOpen(false);
       }
     };
 
@@ -53,8 +61,8 @@ export function Header({ onMenuClick }: HeaderProps) {
               <span className="text-white font-bold">BYD</span>
             </div>
             <div>
-              <h2 className="text-gray-900 font-medium">{t('welcome')}, {currentUser.name}</h2>
-              <p className="text-sm text-gray-500">{currentUser.department}</p>
+              <h2 className="text-gray-900 font-medium">{t('welcome')}, {user?.name}</h2>
+              <p className="text-sm text-gray-500">{user?.department} • {user?.role}</p>
             </div>
           </div>
         </div>
@@ -130,10 +138,44 @@ export function Header({ onMenuClick }: HeaderProps) {
           </button>
           
           {/* User Profile */}
-          <div className="flex items-center gap-3 pl-3 border-l border-gray-200">
-            <div className="w-9 h-9 bg-gradient-to-br from-[#E60012] to-[#b00010] rounded-full flex items-center justify-center">
-              <User className="w-5 h-5 text-white" />
-            </div>
+          <div className="relative" ref={profileRef}>
+            <button 
+              onClick={() => setIsProfileOpen(!isProfileOpen)}
+              className="flex items-center gap-3 pl-3 border-l border-gray-200"
+            >
+              <div className="w-9 h-9 bg-gradient-to-br from-[#E60012] to-[#b00010] rounded-full flex items-center justify-center">
+                <User className="w-5 h-5 text-white" />
+              </div>
+              <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${isProfileOpen ? 'rotate-180' : ''}`} />
+            </button>
+
+            {/* Profile Dropdown */}
+    {isProfileOpen && (
+      <div className="absolute top-full right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
+        <div className="px-4 py-3 border-b border-gray-100">
+          <p className="font-medium text-gray-900">{user?.name}</p>
+          <p className="text-sm text-gray-500">{user?.email}</p>
+          <div className="flex items-center gap-2 mt-1">
+            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+              user?.role === 'superadmin' 
+                ? 'bg-purple-100 text-purple-800'
+                : 'bg-blue-100 text-blue-800'
+            }`}>
+              {user?.role}
+            </span>
+            <span className="text-xs text-gray-400">{user?.department}</span>
+          </div>
+        </div>
+        
+        <button
+          onClick={handleLogout}
+          className="w-full px-4 py-3 text-left flex items-center gap-3 text-gray-700 hover:bg-gray-50 transition-colors"
+        >
+          <LogOut className="w-4 h-4" />
+          <span>{t('logout')}</span>
+        </button>
+      </div>
+    )}
           </div>
         </div>
       </div>

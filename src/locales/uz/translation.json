@@ -1,18 +1,17 @@
 {
+  "login": {
+    "welcome": "Xush kelibsiz",
+    "subtitle": "BYD avtosalonini boshqarish uchun zamonaviy CRM tizimi",
+    "username": "Foydalanuvchi nomi",
+    "usernamePlaceholder": "Foydalanuvchi nomingizni kiriting",
+    "password": "Parol",
+    "passwordPlaceholder": "Parolingizni kiriting",
+    "signIn": "Tizimga kirish",
+    "signingIn": "Kirish amalga oshirilmoqda...",
+    "fillAllFields": "Iltimos, barcha maydonlarni to'ldiring",
+    "invalidCredentials": "Noto'g'ri foydalanuvchi nomi yoki parol",
+    "version": "Versiya"
+  },
   "welcome": "Xush kelibsiz",
-  "description": "Bu ko'p tilli ilova",
-  "buttons": {
-    "login": "Kirish",
-    "signup": "Ro'yxatdan o'tish"
-  },
-  "nav": {
-    "home": "Bosh sahifa",
-    "about": "Biz haqimizda",
-    "contact": "Aloqa"
-  },
-  "dashboard":{
-    "salesData":{
-      "june":"Iyun"
-    }
-  }
+  "logout": "Chiqish"
 }

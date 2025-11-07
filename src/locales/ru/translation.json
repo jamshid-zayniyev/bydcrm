@@ -1,18 +1,17 @@
 {
+  "login": {
+    "welcome": "Добро пожаловать в",
+    "subtitle": "Современная CRM система для управления автосалоном BYD",
+    "username": "Имя пользователя",
+    "usernamePlaceholder": "Введите ваше имя пользователя",
+    "password": "Пароль",
+    "passwordPlaceholder": "Введите ваш пароль",
+    "signIn": "Войти в систему",
+    "signingIn": "Выполняется вход...",
+    "fillAllFields": "Пожалуйста, заполните все поля",
+    "invalidCredentials": "Неверное имя пользователя или пароль",
+    "version": "Версия"
+  },
   "welcome": "Добро пожаловать",
-  "description": "Это многоязычное приложение",
-  "buttons": {
-    "login": "Войти",
-    "signup": "Зарегистрироваться"
-  },
-  "nav": {
-    "home": "Главная",
-    "about": "О нас",
-    "contact": "Контакты"
-  },
-  "dashboard": {
-    "salesData": {
-      "june": "Июнь"
-    }
-  }
+  "logout": "Выйти"
 }

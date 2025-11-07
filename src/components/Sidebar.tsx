@@ -15,19 +15,20 @@ interface SidebarProps {
   onViewChange: (view: string) => void;
   isMobile?: boolean;
   onClose?: () => void;
+  userRole?: string;
 }
 
-export function Sidebar({ currentView, onViewChange, isMobile, onClose }: SidebarProps) {
+export function Sidebar({ currentView, onViewChange, isMobile, onClose, userRole }: SidebarProps) {
   const menuItems = [
-    { id: 'dashboard', label: 'Панель управления', icon: LayoutDashboard },
-    { id: 'customers', label: 'Клиенты', icon: Users },
-    { id: 'calls', label: 'Колл-центр', icon: Phone },
-    { id: 'sales', label: 'Продажи', icon: TrendingUp },
-    { id: 'service', label: 'Сервис', icon: Wrench },
-    { id: 'kpi', label: 'KPI сотрудников', icon: Target },
-    { id: 'ai', label: 'ИИ Рекомендации', icon: Brain },
-    { id: 'qr', label: 'QR Регистрация', icon: QrCode },
-    { id: 'reviews', label: 'Отзывы', icon: Star }
+    { id: 'dashboard', label: 'Панель управления', icon: LayoutDashboard, roles: ['superadmin', 'reception'] },
+    { id: 'customers', label: 'Клиенты', icon: Users, roles: ['superadmin', 'reception'] },
+    { id: 'calls', label: 'Колл-центр', icon: Phone, roles: ['superadmin', 'reception'] },
+    { id: 'sales', label: 'Продажи', icon: TrendingUp, roles: ['superadmin', 'reception'] },
+    { id: 'service', label: 'Сервис', icon: Wrench, roles: ['superadmin', 'reception'] },
+    { id: 'kpi', label: 'KPI сотрудников', icon: Target, roles: ['superadmin'] },
+    { id: 'ai', label: 'ИИ Рекомендации', icon: Brain, roles: ['superadmin'] },
+    { id: 'qr', label: 'QR Регистрация', icon: QrCode, roles: ['superadmin', 'reception'] },
+    { id: 'reviews', label: 'Отзывы', icon: Star, roles: ['superadmin', 'reception'] }
   ];
 
   const handleClick = (id: string) => {
@@ -37,6 +38,11 @@ export function Sidebar({ currentView, onViewChange, isMobile, onClose }: Sideba
     }
   };
 
+
+  const filteredMenuItems = menuItems.filter(item => 
+    userRole && item.roles.includes(userRole)
+  );
+  
   return (
     <div className="h-full bg-black border-r border-gray-800 flex flex-col">
       <div className="p-6 border-b border-gray-800 bg-gradient-to-r from-[#E60012] to-[#b00010]">
@@ -45,7 +51,7 @@ export function Sidebar({ currentView, onViewChange, isMobile, onClose }: Sideba
       </div>
       
       <nav className="flex-1 p-4 overflow-y-auto">
-        {menuItems.map((item) => {
+        {filteredMenuItems.map((item) => {
           const Icon = item.icon;
           return (
             <button
@@ -66,7 +72,8 @@ export function Sidebar({ currentView, onViewChange, isMobile, onClose }: Sideba
       
       <div className="p-4 border-t border-gray-800">
         <div className="px-4 py-3 bg-gray-900 rounded-lg">
-          <p className="text-xs text-gray-400">Версия 1.0.0</p>
+          <p className="text-xs text-gray-400 capitalize">{userRole}</p>
+          <p className="text-xs text-gray-400 mt-1">Версия 1.0.0</p>
           <p className="text-xs text-gray-500 mt-1">© 2025 BYD Карши</p>
         </div>
       </div>
