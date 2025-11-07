@@ -9,5 +9,10 @@
     "home": "Bosh sahifa",
     "about": "Biz haqimizda",
     "contact": "Aloqa"
+  },
+  "dashboard":{
+    "salesData":{
+      "june":"Iyun"
+    }
   }
 }
