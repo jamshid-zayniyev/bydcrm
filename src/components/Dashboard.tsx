@@ -5,9 +5,12 @@ import { customers, calls, sales, kpiData } from '../data/mockData';
 import { bydVehicles, BYDVehicle } from '../data/bydVehicles';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from './ui/dialog';
+import { useTranslation } from 'react-i18next';
 
 export function Dashboard() {
   const [selectedVehicle, setSelectedVehicle] = useState<BYDVehicle | null>(null);
+    const { t } = useTranslation();
+  
 
   const vehicleImages: Record<string, string> = {
     '1': 'https://images.unsplash.com/photo-1669198074495-d04dae22bb90?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxCWUQlMjBTb25nJTIwUGx1cyUyMFNVVnxlbnwxfHx8fDE3NjAzMzA3ODN8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
@@ -43,7 +46,7 @@ export function Dashboard() {
       color: 'red'
     },
     {
-      label: 'Средняя оценка',
+      label: t(''),
       value: '4.6',
       change: '+0.3',
       isPositive: true,
@@ -53,7 +56,7 @@ export function Dashboard() {
   ];
 
   const salesData = [
-    { month: 'Июнь', sales: 8 },
+    { month: t('dashboard.salesData.june'), sales: 8 },
     { month: 'Июль', sales: 12 },
     { month: 'Авг', sales: 10 },
     { month: 'Сен', sales: 15 },
