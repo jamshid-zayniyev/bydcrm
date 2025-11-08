@@ -12,6 +12,90 @@
     "invalidCredentials": "Неверное имя пользователя или пароль",
     "version": "Версия"
   },
+  "logout": "Выйти",
   "welcome": "Добро пожаловать",
-  "logout": "Выйти"
+  "description": "Это многоязычное приложение",
+  "buttons": {
+    "login": "Войти",
+    "signup": "Зарегистрироваться"
+  },
+  "nav": {
+    "home": "Главная",
+    "about": "О нас",
+    "contact": "Контакты",
+    "version": "Версия 1.0.0",
+    "city": "Карши",
+
+    "carDealership": "Автосалон Карши",
+    "dashboard": "Панель управления",
+    "customers": "Клиенты",
+    "calls": "Колл-центр",
+    "sales": "Продажи",
+    "service": "Сервис",
+    "kpi": "KPI сотрудников",
+    "ai": "ИИ Рекомендации",
+    "qr": "QR Регистрация",
+    "reviews": "Отзывы"
+  },
+  "dashboard": {
+    "controlPanel": "BYD Карши - Панель управления",
+    "crmSystem": "Обзор работы CRM системы",
+    "clients": "Всего клиентов",
+    "callsToday": "Звонков сегодня",
+    "sales": "Продажи (месяц)",
+    "star": "звезда",
+    "salesMonth": "Продажи по месяцам",
+    "salesDay": "Продажи по дням",
+    "callsMonth": "Звонки за неделю",
+    "clientSources": "Источники клиентов",
+    "sources": {
+      "online": "Онлайн",
+      "visit": "Визит",
+      "telephone": "Телефон",
+      "recommendations": "Рекомендации"
+    },
+    "best": {
+      "title": "Лучшие со рудники",
+      "sales": "продаж"
+    },
+    "warehouse": {
+      "title": "Модельный ряд BYD в наличии",
+      "model": "моделей",
+      "cars": "автомобилей",
+      "warehouseUpdated": "Склад обновлен"
+    }
+  },
+  "customers": {
+    "clientManagement": "Управление клиентами",
+    "totalClients": "Всего клиентов",
+    "addClient": "Добавить клиента",
+    "addClientObj": {
+      "addNewClient": "Добавить нового клиента",
+      "clientName": "Имя клиента",
+      "enterName": "Введите имя",
+      "phone": "Телефон",
+      "emailOptional": "Email (опционально)",
+      "source": "Источник",
+      "interestedModel": "Интересующая модель",
+      "status": "Статус",
+      "notes": "Заметки",
+      "additionalInfo": "Дополнительная информация о клиенте...",
+      "addClient": "Добавить клиента",
+      "cancel": "Отмена"
+    },
+    "search": "Поиск по имени или телефону...",
+    "manager": "Менеджер",
+    "contact": "Контакт",
+    "person": {
+      "contactInfo": "Контактная информация",
+      "leadDetails": "Детали лида",
+      "source": "Источник",
+      "interested": "Интересуется",
+      "manager": "Менеджер",
+      "createdDate": "Дата создания",
+      "notes": "Заметки",
+      "call": "Позвонить",
+      "sendEmail": "Отправить email"
+    }
+  }
 }

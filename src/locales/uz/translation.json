@@ -12,6 +12,91 @@
     "invalidCredentials": "Noto'g'ri foydalanuvchi nomi yoki parol",
     "version": "Versiya"
   },
+  "logout": "Chiqish",
   "welcome": "Xush kelibsiz",
-  "logout": "Chiqish"
+  "description": "Bu ko'p tilli ilova",
+  "buttons": {
+    "login": "Kirish",
+    "signup": "Ro'yxatdan o'tish"
+  },
+  "nav": {
+    "home": "Bosh sahifa",
+    "about": "Biz haqimizda",
+    "contact": "Aloqa",
+    "version": "Version 1.0.0",
+    "city": "Qarshi",
+
+    "carDealership": "Qarshi avtosaloni",
+    "dashboard": "Boshqaruv paneli",
+    "customers": "Mijozlar",
+    "calls": "Aloqa markazi",
+    "sales": "Sotuvlar",
+    "service": "Servis",
+    "kpi": "Xodimlar KPI",
+    "ai": "AI Tavsiyalar",
+    "qr": "QR Ro‘yxatdan o‘tish",
+    "reviews": "Sharhlar"
+  },
+  "dashboard": {
+    "controlPanel": "BYD Qarshi - Boshqaruv paneli",
+    "crmSystem": "CRM tizimiga umumiy nuqtai nazar",
+    "clients": "Jami mijozlar",
+    "callsToday": "Bugun qo'ng'iroqlar",
+    "sales": "Savdo (oy)",
+    "star": "Yulduz",
+    "salesMonth": "Oylik savdo",
+    "salesDay": "Kunlik savdo",
+    "callsMonth": "Haftalik qo'ng'iroqlar",
+    "clientSources": "Mijoz manbalari",
+
+    "sources": {
+      "online": "Online",
+      "visit": "Visit",
+      "telephone": "Telefon",
+      "recommendations": "Tavsiyalar"
+    },
+    "best": {
+      "title": "Eng yaxshi xodimlar",
+      "sales": "savdo"
+    },
+    "warehouse": {
+      "title": "BYD modellari qatori omborda mavjud",
+      "model": "modellar",
+      "cars": "avtomobillar",
+      "warehouseUpdated": "Ombor yangilandi"
+    }
+  },
+  "customers": {
+    "clientManagement": "Mijozlarni boshqarish",
+    "totalClients": "Jami mijozlar",
+    "addClient": "Mijoz qo'shish",
+    "addClientObj": {
+      "addNewClient": "Yangi mijoz qo'shish",
+      "clientName": "Mijoz ismi",
+      "enterName": "Ism kiriting",
+      "phone": "Telefon",
+      "emailOptional": "Elektron pochta (ixtiyoriy)",
+      "source": "Manba",
+      "interestedModel": "Qiziqayotgan model",
+      "status": "Holat",
+      "notes": "Eslatmalar",
+      "additionalInfo": "Mijoz haqida qo'shimcha ma'lumot...",
+      "addClient": "Mijoz qo'shish",
+      "cancel": "Bekor qilish"
+    },
+    "search": "Ism yoki telefon bo‘yicha qidirish...",
+    "manager": "Menejer",
+    "contact": "Aloqa",
+    "person": {
+      "contactInfo": "Aloqa ma’lumotlari",
+      "leadDetails": "Lid tafsilotlari",
+      "source": "Manba",
+      "interested": "Qiziqmoqda",
+      "manager": "Menejer",
+      "createdDate": "Yaratilgan sana",
+      "notes": "Izohlar",
+      "call": "Qo‘ng‘iroq qilish",
+      "sendEmail": "Email yuborish"
+    }
+  }
 }

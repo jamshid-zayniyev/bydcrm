@@ -1,93 +1,125 @@
-import { useState } from 'react';
-import { Users, Phone, TrendingUp, Star, ArrowUp, ArrowDown, Car, X } from 'lucide-react';
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { customers, calls, sales, kpiData } from '../data/mockData';
-import { bydVehicles, BYDVehicle } from '../data/bydVehicles';
-import { ImageWithFallback } from './figma/ImageWithFallback';
-import { Dialog, DialogContent, DialogTitle, DialogDescription } from './ui/dialog';
-import { useTranslation } from 'react-i18next';
+import { useState } from "react";
+import {
+  Users,
+  Phone,
+  TrendingUp,
+  Star,
+  ArrowUp,
+  ArrowDown,
+  Car,
+  X,
+} from "lucide-react";
+import {
+  BarChart,
+  Bar,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
+import { customers, calls, sales, kpiData } from "../data/mockData";
+import { bydVehicles, BYDVehicle } from "../data/bydVehicles";
+import { ImageWithFallback } from "./figma/ImageWithFallback";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+} from "./ui/dialog";
+import { useTranslation } from "react-i18next";
 
 export function Dashboard() {
-  const [selectedVehicle, setSelectedVehicle] = useState<BYDVehicle | null>(null);
-    const { t } = useTranslation();
-  
+  const [selectedVehicle, setSelectedVehicle] = useState<BYDVehicle | null>(
+    null
+  );
+  const { t } = useTranslation();
 
   const vehicleImages: Record<string, string> = {
-    '1': 'https://images.unsplash.com/photo-1669198074495-d04dae22bb90?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxCWUQlMjBTb25nJTIwUGx1cyUyMFNVVnxlbnwxfHx8fDE3NjAzMzA3ODN8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    '2': 'https://images.unsplash.com/photo-1733149085731-30ff1d334f9d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBlbGVjdHJpYyUyMHNlZGFufGVufDF8fHx8MTc2MDMzMDc4N3ww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    '3': 'https://images.unsplash.com/photo-1622333847289-41e8172e650a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbGVjdHJpYyUyMFNVViUyMGNyb3Nzb3ZlcnxlbnwxfHx8fDE3NjAzMzA3ODh8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    '4': 'https://images.unsplash.com/photo-1745393404775-ae350c1677ef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb21wYWN0JTIwZWxlY3RyaWMlMjBjYXJ8ZW58MXx8fHwxNzYwMzMwNzg4fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    '5': 'https://images.unsplash.com/photo-1710880135020-e0af9cc79dcc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzcG9ydHMlMjBlbGVjdHJpYyUyMHNlZGFufGVufDF8fHx8MTc2MDMzMDc4OHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+    "1": "https://images.unsplash.com/photo-1669198074495-d04dae22bb90?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxCWUQlMjBTb25nJTIwUGx1cyUyMFNVVnxlbnwxfHx8fDE3NjAzMzA3ODN8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+    "2": "https://images.unsplash.com/photo-1733149085731-30ff1d334f9d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBlbGVjdHJpYyUyMHNlZGFufGVufDF8fHx8MTc2MDMzMDc4N3ww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+    "3": "https://images.unsplash.com/photo-1622333847289-41e8172e650a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbGVjdHJpYyUyMFNVViUyMGNyb3Nzb3ZlcnxlbnwxfHx8fDE3NjAzMzA3ODh8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+    "4": "https://images.unsplash.com/photo-1745393404775-ae350c1677ef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb21wYWN0JTIwZWxlY3RyaWMlMjBjYXJ8ZW58MXx8fHwxNzYwMzMwNzg4fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+    "5": "https://images.unsplash.com/photo-1710880135020-e0af9cc79dcc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzcG9ydHMlMjBlbGVjdHJpYyUyMHNlZGFufGVufDF8fHx8MTc2MDMzMDc4OHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
   };
 
   const stats = [
     {
-      label: 'Всего клиентов',
+      label: t("dashboard.clients"),
       value: customers.length,
-      change: '+12%',
+      change: "+12%",
       isPositive: true,
       icon: Users,
-      color: 'red'
+      color: "red",
     },
     {
-      label: 'Звонков сегодня',
+      label: t("dashboard.callsToday"),
       value: calls.length,
-      change: '+8%',
+      change: "+8%",
       isPositive: true,
       icon: Phone,
-      color: 'black'
+      color: "black",
     },
     {
-      label: 'Продажи (месяц)',
+      label: t("dashboard.sales"),
       value: sales.length,
-      change: '+24%',
+      change: "+24%",
       isPositive: true,
       icon: TrendingUp,
-      color: 'red'
+      color: "red",
     },
     {
-      label: t(''),
-      value: '4.6',
-      change: '+0.3',
+      label: t("dashboard.star"),
+      value: "4.6",
+      change: "+0.3",
       isPositive: true,
       icon: Star,
-      color: 'black'
-    }
+      color: "black",
+    },
   ];
 
   const salesData = [
-    { month: t('dashboard.salesData.june'), sales: 8 },
-    { month: 'Июль', sales: 12 },
-    { month: 'Авг', sales: 10 },
-    { month: 'Сен', sales: 15 },
-    { month: 'Окт', sales: 18 }
+    { month: t("dashboard.salesData.june"), sales: 8 },
+    { month: "Июль", sales: 12 },
+    { month: "Авг", sales: 10 },
+    { month: "Сен", sales: 15 },
+    { month: "Окт", sales: 18 },
   ];
 
   const callsData = [
-    { day: 'Пн', calls: 45 },
-    { day: 'Вт', calls: 52 },
-    { day: 'Ср', calls: 48 },
-    { day: 'Чт', calls: 61 },
-    { day: 'Пт', calls: 55 },
-    { day: 'Сб', calls: 38 },
-    { day: 'Вс', calls: 25 }
+    { day: "Пн", calls: 45 },
+    { day: "Вт", calls: 52 },
+    { day: "Ср", calls: 48 },
+    { day: "Чт", calls: 61 },
+    { day: "Пт", calls: 55 },
+    { day: "Сб", calls: 38 },
+    { day: "Вс", calls: 25 },
   ];
 
   const dailySalesData = [
-    { day: 'Пн', sales: 2 },
-    { day: 'Вт', sales: 3 },
-    { day: 'Ср', sales: 1 },
-    { day: 'Чт', sales: 4 },
-    { day: 'Пт', sales: 3 },
-    { day: 'Сб', sales: 2 },
-    { day: 'Вс', sales: 1 }
+    { day: "Пн", sales: 2 },
+    { day: "Вт", sales: 3 },
+    { day: "Ср", sales: 1 },
+    { day: "Чт", sales: 4 },
+    { day: "Пт", sales: 3 },
+    { day: "Сб", sales: 2 },
+    { day: "Вс", sales: 1 },
   ];
 
   const leadSourceData = [
-    { name: 'Онлайн', value: 35, color: '#E60012' },
-    { name: 'Телефон', value: 28, color: '#000000' },
-    { name: 'Визит', value: 25, color: '#6b7280' },
-    { name: 'Рекомендации', value: 12, color: '#ef4444' }
+    { name: t("dashboard.sources.online"), value: 35, color: "#E60012" },
+    { name: t("dashboard.sources.telephone"), value: 28, color: "#000000" },
+    { name: t("dashboard.sources.visit"), value: 25, color: "#6b7280" },
+    {
+      name: t("dashboard.sources.recommendations"),
+      value: 12,
+      color: "#ef4444",
+    },
   ];
 
   const formatPrice = (price: number) => {
@@ -105,8 +137,12 @@ export function Dashboard() {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent">
           <div className="h-full flex flex-col justify-center px-4 sm:px-6 md:px-8">
-            <h1 className="text-white mb-1 sm:mb-2 text-lg sm:text-xl md:text-2xl">BYD Карши - Панель управления</h1>
-            <p className="text-gray-200 text-xs sm:text-sm">Обзор работы CRM системы</p>
+            <h1 className="text-white mb-1 sm:mb-2 text-lg sm:text-xl md:text-2xl">
+              {t("dashboard.controlPanel")}
+            </h1>
+            <p className="text-gray-200 text-xs sm:text-sm">
+              {t("dashboard.crmSystem")}
+            </p>
           </div>
         </div>
       </div>
@@ -116,22 +152,37 @@ export function Dashboard() {
         {stats.map((stat, index) => {
           const Icon = stat.icon;
           const colorClasses = {
-            red: 'bg-red-50 text-[#E60012] border-[#E60012]',
-            black: 'bg-gray-100 text-black border-black'
+            red: "bg-red-50 text-[#E60012] border-[#E60012]",
+            black: "bg-gray-100 text-black border-black",
           }[stat.color];
 
           return (
-            <div key={index} className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+            <div
+              key={index}
+              className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
+            >
               <div className="flex items-start justify-between mb-3 sm:mb-4">
-                <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center border-2 ${colorClasses}`}>
+                <div
+                  className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center border-2 ${colorClasses}`}
+                >
                   <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
-                <div className={`flex items-center gap-1 text-xs sm:text-sm ${stat.isPositive ? 'text-green-600' : 'text-red-600'}`}>
-                  {stat.isPositive ? <ArrowUp className="w-3 h-3 sm:w-4 sm:h-4" /> : <ArrowDown className="w-3 h-3 sm:w-4 sm:h-4" />}
+                <div
+                  className={`flex items-center gap-1 text-xs sm:text-sm ${
+                    stat.isPositive ? "text-green-600" : "text-red-600"
+                  }`}
+                >
+                  {stat.isPositive ? (
+                    <ArrowUp className="w-3 h-3 sm:w-4 sm:h-4" />
+                  ) : (
+                    <ArrowDown className="w-3 h-3 sm:w-4 sm:h-4" />
+                  )}
                   <span className="hidden sm:inline">{stat.change}</span>
                 </div>
               </div>
-              <p className="text-gray-500 text-xs sm:text-sm mb-1">{stat.label}</p>
+              <p className="text-gray-500 text-xs sm:text-sm mb-1">
+                {stat.label}
+              </p>
               <p className="text-gray-900 text-lg sm:text-xl">{stat.value}</p>
             </div>
           );
@@ -142,7 +193,9 @@ export function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         {/* Sales Chart */}
         <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl border border-gray-200 shadow-sm">
-          <h3 className="text-gray-900 mb-3 sm:mb-4 text-base sm:text-lg">Продажи по месяцам</h3>
+          <h3 className="text-gray-900 mb-3 sm:mb-4 text-base sm:text-lg">
+            {t("dashboard.salesMonth")}
+          </h3>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={salesData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
@@ -156,7 +209,9 @@ export function Dashboard() {
 
         {/* Daily Sales Chart */}
         <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl border border-gray-200 shadow-sm">
-          <h3 className="text-gray-900 mb-3 sm:mb-4 text-base sm:text-lg">Продажи по дням</h3>
+          <h3 className="text-gray-900 mb-3 sm:mb-4 text-base sm:text-lg">
+            {t("dashboard.salesDay")}
+          </h3>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={dailySalesData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
@@ -173,21 +228,30 @@ export function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         {/* Calls Chart */}
         <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl border border-gray-200 shadow-sm">
-          <h3 className="text-gray-900 mb-3 sm:mb-4 text-base sm:text-lg">Звонки за неделю</h3>
+          <h3 className="text-gray-900 mb-3 sm:mb-4 text-base sm:text-lg">
+            {t("dashboard.callsMonth")}
+          </h3>
           <ResponsiveContainer width="100%" height={250}>
             <LineChart data={callsData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
               <XAxis dataKey="day" tick={{ fontSize: 12 }} />
               <YAxis tick={{ fontSize: 12 }} />
               <Tooltip />
-              <Line type="monotone" dataKey="calls" stroke="#E60012" strokeWidth={2} />
+              <Line
+                type="monotone"
+                dataKey="calls"
+                stroke="#E60012"
+                strokeWidth={2}
+              />
             </LineChart>
           </ResponsiveContainer>
         </div>
 
         {/* Lead Sources */}
         <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl border border-gray-200 shadow-sm">
-          <h3 className="text-gray-900 mb-3 sm:mb-4 text-base sm:text-lg">Источники клиентов</h3>
+          <h3 className="text-gray-900 mb-3 sm:mb-4 text-base sm:text-lg">
+            {t("dashboard.clientSources")}
+          </h3>
           <ResponsiveContainer width="100%" height={200}>
             <PieChart>
               <Pie
@@ -209,8 +273,13 @@ export function Dashboard() {
           <div className="grid grid-cols-2 gap-2 mt-4">
             {leadSourceData.map((source, index) => (
               <div key={index} className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: source.color }}></div>
-                <span className="text-xs text-gray-600">{source.name}: {source.value}%</span>
+                <div
+                  className="w-3 h-3 rounded-full"
+                  style={{ backgroundColor: source.color }}
+                ></div>
+                <span className="text-xs text-gray-600">
+                  {source.name}: {source.value}%
+                </span>
               </div>
             ))}
           </div>
@@ -219,33 +288,51 @@ export function Dashboard() {
 
       {/* Top Performers */}
       <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl border border-gray-200 shadow-sm">
-        <h3 className="text-gray-900 mb-3 sm:mb-4 text-base sm:text-lg">Лучшие со��рудники</h3>
+        <h3 className="text-gray-900 mb-3 sm:mb-4 text-base sm:text-lg">
+          {t("dashboard.best.title")}
+        </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {kpiData
-            .filter(emp => emp.salesClosed)
+            .filter((emp) => emp.salesClosed)
             .sort((a, b) => (b.salesClosed || 0) - (a.salesClosed || 0))
             .slice(0, 6)
             .map((employee, index) => (
-              <div key={employee.employeeId} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+              <div
+                key={employee.employeeId}
+                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+              >
                 <div className="flex items-center gap-3">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                    index === 0 ? 'bg-[#E60012] text-white' :
-                    index === 1 ? 'bg-gray-800 text-white' :
-                    index === 2 ? 'bg-gray-600 text-white' :
-                    'bg-gray-200 text-gray-700'
-                  }`}>
+                  <div
+                    className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                      index === 0
+                        ? "bg-[#E60012] text-white"
+                        : index === 1
+                        ? "bg-gray-800 text-white"
+                        : index === 2
+                        ? "bg-gray-600 text-white"
+                        : "bg-gray-200 text-gray-700"
+                    }`}
+                  >
                     {index + 1}
                   </div>
                   <div>
-                    <p className="text-sm text-gray-900">{employee.employeeName}</p>
-                    <p className="text-xs text-gray-500">{employee.department}</p>
+                    <p className="text-sm text-gray-900">
+                      {employee.employeeName}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      {employee.department}
+                    </p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm text-gray-900">{employee.salesClosed} продаж</p>
+                  <p className="text-sm text-gray-900">
+                    {employee.salesClosed} {t("dashboard.best.sales")}
+                  </p>
                   <div className="flex items-center gap-1 mt-1">
                     <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
-                    <span className="text-xs text-gray-600">{employee.customerSatisfaction?.toFixed(1)}</span>
+                    <span className="text-xs text-gray-600">
+                      {employee.customerSatisfaction?.toFixed(1)}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -257,38 +344,42 @@ export function Dashboard() {
       <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl border border-gray-200 shadow-sm">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-3">
           <div>
-            <h3 className="text-gray-900 text-base sm:text-lg">Модельный ряд BYD в наличии</h3>
+            <h3 className="text-gray-900 text-base sm:text-lg">
+              {t("dashboard.warehouse.title")}
+            </h3>
             <p className="text-xs sm:text-sm text-gray-500 mt-1">
-              {bydVehicles.length} моделей • {bydVehicles.reduce((sum, v) => sum + v.totalAvailable, 0)} автомобилей
+              {bydVehicles.length} {t("dashboard.warehouse.model")} •{" "}
+              {bydVehicles.reduce((sum, v) => sum + v.totalAvailable, 0)}{" "}
+              {t("dashboard.warehouse.cars")}
             </p>
           </div>
           <div className="flex items-center gap-2">
             <Car className="w-4 h-4 sm:w-5 sm:h-5 text-[#E60012]" />
             <div className="px-3 py-1 bg-gradient-to-r from-[#E60012] to-[#b00010] text-white rounded-lg text-xs sm:text-sm shadow-sm">
-              Склад обновлен
+              {t("dashboard.warehouse.warehouseUpdated")}
             </div>
           </div>
         </div>
-        
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           {bydVehicles.map((vehicle) => {
             const colorStats = vehicle.variants.reduce((acc, variant) => {
-              const existing = acc.find(item => item.color === variant.color);
+              const existing = acc.find((item) => item.color === variant.color);
               if (existing) {
                 existing.count += variant.stock;
               } else {
-                acc.push({ 
-                  color: variant.color, 
-                  colorHex: variant.colorHex, 
-                  count: variant.stock 
+                acc.push({
+                  color: variant.color,
+                  colorHex: variant.colorHex,
+                  count: variant.stock,
                 });
               }
               return acc;
-            }, [] as Array<{color: string, colorHex: string, count: number}>);
+            }, [] as Array<{ color: string; colorHex: string; count: number }>);
 
             return (
-              <div 
-                key={vehicle.id} 
+              <div
+                key={vehicle.id}
                 className="border-2 border-gray-200 rounded-lg sm:rounded-xl overflow-hidden hover:border-[#E60012] transition-all hover:shadow-lg cursor-pointer"
                 onClick={() => setSelectedVehicle(vehicle)}
               >
@@ -309,38 +400,61 @@ export function Dashboard() {
                   <div className="flex items-start justify-between mb-2">
                     <div>
                       <h4 className="text-gray-900 mb-1">{vehicle.model}</h4>
-                      <p className="text-xs text-gray-500">{vehicle.description}</p>
+                      <p className="text-xs text-gray-500">
+                        {vehicle.description}
+                      </p>
                     </div>
-                    <div className={`w-3 h-3 rounded-full flex-shrink-0 mt-1 ${vehicle.brandColor === '#E60012' ? 'bg-[#E60012]' : 'bg-black'}`}></div>
+                    <div
+                      className={`w-3 h-3 rounded-full flex-shrink-0 mt-1 ${
+                        vehicle.brandColor === "#E60012"
+                          ? "bg-[#E60012]"
+                          : "bg-black"
+                      }`}
+                    ></div>
                   </div>
 
                   {/* Price */}
                   <div className="mb-3 pb-3 border-b border-gray-200">
                     <p className="text-xs text-gray-500">Цена</p>
                     <p className="text-sm text-[#E60012]">
-                      {formatPrice(Math.min(...vehicle.variants.map(v => v.price)))} - 
-                      {' '}{formatPrice(Math.max(...vehicle.variants.map(v => v.price)))} сум
+                      {formatPrice(
+                        Math.min(...vehicle.variants.map((v) => v.price))
+                      )}{" "}
+                      -{" "}
+                      {formatPrice(
+                        Math.max(...vehicle.variants.map((v) => v.price))
+                      )}{" "}
+                      сум
                     </p>
                   </div>
 
                   {/* Available Colors */}
                   <div>
-                    <p className="text-xs text-gray-500 mb-2">Доступные цвета:</p>
+                    <p className="text-xs text-gray-500 mb-2">
+                      Доступные цвета:
+                    </p>
                     <div className="space-y-2">
                       {colorStats.map((colorStat, idx) => (
-                        <div key={idx} className="flex items-center justify-between">
+                        <div
+                          key={idx}
+                          className="flex items-center justify-between"
+                        >
                           <div className="flex items-center gap-2">
-                            <div 
-                              className="w-6 h-6 rounded-full border-2 border-gray-300 shadow-sm" 
+                            <div
+                              className="w-6 h-6 rounded-full border-2 border-gray-300 shadow-sm"
                               style={{ backgroundColor: colorStat.colorHex }}
                             ></div>
-                            <span className="text-xs text-gray-700">{colorStat.color}</span>
+                            <span className="text-xs text-gray-700">
+                              {colorStat.color}
+                            </span>
                           </div>
-                          <span className={`px-2 py-1 rounded text-xs ${
-                            colorStat.count > 1 
-                              ? 'bg-green-100 text-green-700' 
-                              : 'bg-yellow-100 text-yellow-700'
-                          }`}>
+                          <span
+                            className={`px-2 py-1 rounded text-xs ${
+                              colorStat.count > 1
+                                ? "bg-green-100 text-green-700"
+                                : "bg-yellow-100 text-yellow-700"
+                            }`}
+                          >
                             {colorStat.count} шт
                           </span>
                         </div>
@@ -355,7 +469,10 @@ export function Dashboard() {
       </div>
 
       {/* Vehicle Details Modal */}
-      <Dialog open={!!selectedVehicle} onOpenChange={() => setSelectedVehicle(null)}>
+      <Dialog
+        open={!!selectedVehicle}
+        onOpenChange={() => setSelectedVehicle(null)}
+      >
         <DialogContent className="max-w-5xl w-[95vw] sm:w-full max-h-[90vh] overflow-y-auto p-0">
           {selectedVehicle && (
             <div className="relative">
@@ -364,7 +481,8 @@ export function Dashboard() {
                 {selectedVehicle.model}
               </DialogTitle>
               <DialogDescription className="sr-only">
-                Подробная информация об автомобиле {selectedVehicle.model}, включая доступные комплектации, цвета и характеристики
+                Подробная информация об автомобиле {selectedVehicle.model},
+                включая доступные комплектации, цвета и характеристики
               </DialogDescription>
 
               {/* Hero Section with Image and Gradient */}
@@ -375,17 +493,29 @@ export function Dashboard() {
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-                
+
                 {/* Title Overlay */}
                 <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 text-white">
                   <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
-                    <div className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full ${selectedVehicle.brandColor === '#E60012' ? 'bg-[#E60012]' : 'bg-white'} shadow-lg`}></div>
-                    <h2 className="text-white text-lg sm:text-xl md:text-2xl">{selectedVehicle.model}</h2>
+                    <div
+                      className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full ${
+                        selectedVehicle.brandColor === "#E60012"
+                          ? "bg-[#E60012]"
+                          : "bg-white"
+                      } shadow-lg`}
+                    ></div>
+                    <h2 className="text-white text-lg sm:text-xl md:text-2xl">
+                      {selectedVehicle.model}
+                    </h2>
                   </div>
-                  <p className="text-white/90 text-xs sm:text-sm mb-2 sm:mb-3">{selectedVehicle.description}</p>
+                  <p className="text-white/90 text-xs sm:text-sm mb-2 sm:mb-3">
+                    {selectedVehicle.description}
+                  </p>
                   <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-white/20 backdrop-blur-md rounded-lg border border-white/30">
                     <Car className="w-3 h-3 sm:w-4 sm:h-4" />
-                    <span className="text-xs sm:text-sm">{selectedVehicle.totalAvailable} автомобилей в наличии</span>
+                    <span className="text-xs sm:text-sm">
+                      {selectedVehicle.totalAvailable} автомобилей в наличии
+                    </span>
                   </div>
                 </div>
 
@@ -404,24 +534,36 @@ export function Dashboard() {
                 <div className="grid grid-cols-2 gap-2 sm:gap-3">
                   <div className="bg-gradient-to-br from-red-50 to-white p-3 sm:p-4 rounded-lg sm:rounded-xl border border-red-100">
                     <p className="text-xs text-gray-500 mb-1">Позиций</p>
-                    <p className="text-xl sm:text-2xl text-[#E60012]">{selectedVehicle.variants.length}</p>
+                    <p className="text-xl sm:text-2xl text-[#E60012]">
+                      {selectedVehicle.variants.length}
+                    </p>
                   </div>
                   <div className="bg-gradient-to-br from-gray-50 to-white p-3 sm:p-4 rounded-lg sm:rounded-xl border border-gray-200">
                     <p className="text-xs text-gray-500 mb-1">Серий</p>
                     <p className="text-xl sm:text-2xl text-gray-900">
-                      {new Set(selectedVehicle.variants.map(v => v.series)).size}
+                      {
+                        new Set(selectedVehicle.variants.map((v) => v.series))
+                          .size
+                      }
                     </p>
                   </div>
                   <div className="bg-gradient-to-br from-gray-50 to-white p-3 sm:p-4 rounded-lg sm:rounded-xl border border-gray-200">
                     <p className="text-xs text-gray-500 mb-1">Цветов</p>
                     <p className="text-xl sm:text-2xl text-gray-900">
-                      {new Set(selectedVehicle.variants.map(v => v.color)).size}
+                      {
+                        new Set(selectedVehicle.variants.map((v) => v.color))
+                          .size
+                      }
                     </p>
                   </div>
                   <div className="bg-gradient-to-br from-red-50 to-white p-3 sm:p-4 rounded-lg sm:rounded-xl border border-red-100">
                     <p className="text-xs text-gray-500 mb-1">Цена от</p>
                     <p className="text-base sm:text-xl text-[#E60012]">
-                      {formatPrice(Math.min(...selectedVehicle.variants.map(v => v.price)))}
+                      {formatPrice(
+                        Math.min(
+                          ...selectedVehicle.variants.map((v) => v.price)
+                        )
+                      )}
                     </p>
                   </div>
                 </div>
@@ -436,7 +578,10 @@ export function Dashboard() {
                     </h4>
                     <div className="space-y-2">
                       {selectedVehicle.features.map((feature, idx) => (
-                        <div key={idx} className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-700 bg-gray-50 p-2 sm:p-3 rounded-lg hover:bg-gray-100 transition-colors">
+                        <div
+                          key={idx}
+                          className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-700 bg-gray-50 p-2 sm:p-3 rounded-lg hover:bg-gray-100 transition-colors"
+                        >
                           <div className="w-5 h-5 rounded-full bg-[#E60012] flex items-center justify-center flex-shrink-0">
                             <span className="text-white text-xs">✓</span>
                           </div>
@@ -453,36 +598,47 @@ export function Dashboard() {
                       Доступные цвета
                     </h4>
                     <div className="space-y-2">
-                      {selectedVehicle.variants.reduce((acc, variant) => {
-                        const existing = acc.find(item => item.color === variant.color);
-                        if (existing) {
-                          existing.count += variant.stock;
-                        } else {
-                          acc.push({ 
-                            color: variant.color, 
-                            colorHex: variant.colorHex, 
-                            count: variant.stock 
-                          });
-                        }
-                        return acc;
-                      }, [] as Array<{color: string, colorHex: string, count: number}>).map((colorStat, idx) => (
-                        <div key={idx} className="flex items-center justify-between p-2 sm:p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                          <div className="flex items-center gap-2 sm:gap-3">
-                            <div 
-                              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-3 border-white shadow-md ring-2 ring-gray-200" 
-                              style={{ backgroundColor: colorStat.colorHex }}
-                            ></div>
-                            <span className="text-xs sm:text-sm text-gray-900">{colorStat.color}</span>
+                      {selectedVehicle.variants
+                        .reduce((acc, variant) => {
+                          const existing = acc.find(
+                            (item) => item.color === variant.color
+                          );
+                          if (existing) {
+                            existing.count += variant.stock;
+                          } else {
+                            acc.push({
+                              color: variant.color,
+                              colorHex: variant.colorHex,
+                              count: variant.stock,
+                            });
+                          }
+                          return acc;
+                        }, [] as Array<{ color: string; colorHex: string; count: number }>)
+                        .map((colorStat, idx) => (
+                          <div
+                            key={idx}
+                            className="flex items-center justify-between p-2 sm:p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                          >
+                            <div className="flex items-center gap-2 sm:gap-3">
+                              <div
+                                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-3 border-white shadow-md ring-2 ring-gray-200"
+                                style={{ backgroundColor: colorStat.colorHex }}
+                              ></div>
+                              <span className="text-xs sm:text-sm text-gray-900">
+                                {colorStat.color}
+                              </span>
+                            </div>
+                            <span
+                              className={`px-3 py-1 rounded-lg text-sm ${
+                                colorStat.count > 1
+                                  ? "bg-green-100 text-green-700"
+                                  : "bg-yellow-100 text-yellow-700"
+                              }`}
+                            >
+                              {colorStat.count} шт
+                            </span>
                           </div>
-                          <span className={`px-3 py-1 rounded-lg text-sm ${
-                            colorStat.count > 1 
-                              ? 'bg-green-100 text-green-700' 
-                              : 'bg-yellow-100 text-yellow-700'
-                          }`}>
-                            {colorStat.count} шт
-                          </span>
-                        </div>
-                      ))}
+                        ))}
                     </div>
                   </div>
                 </div>
@@ -498,38 +654,67 @@ export function Dashboard() {
                       <table className="w-full text-sm">
                         <thead className="bg-gradient-to-r from-gray-50 to-white border-b border-gray-200">
                           <tr>
-                            <th className="text-left py-3 px-4 text-xs text-gray-600">Серия</th>
-                            <th className="text-left py-3 px-4 text-xs text-gray-600">Цвет</th>
-                            <th className="text-left py-3 px-4 text-xs text-gray-600">Батарея</th>
-                            <th className="text-left py-3 px-4 text-xs text-gray-600">Запас</th>
-                            <th className="text-right py-3 px-4 text-xs text-gray-600">Цена</th>
-                            <th className="text-right py-3 px-4 text-xs text-gray-600">Склад</th>
+                            <th className="text-left py-3 px-4 text-xs text-gray-600">
+                              Серия
+                            </th>
+                            <th className="text-left py-3 px-4 text-xs text-gray-600">
+                              Цвет
+                            </th>
+                            <th className="text-left py-3 px-4 text-xs text-gray-600">
+                              Батарея
+                            </th>
+                            <th className="text-left py-3 px-4 text-xs text-gray-600">
+                              Запас
+                            </th>
+                            <th className="text-right py-3 px-4 text-xs text-gray-600">
+                              Цена
+                            </th>
+                            <th className="text-right py-3 px-4 text-xs text-gray-600">
+                              Склад
+                            </th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100">
                           {selectedVehicle.variants.map((variant) => (
-                            <tr key={variant.id} className="hover:bg-gray-50 transition-colors">
-                              <td className="py-3 px-4 text-gray-900">{variant.series}</td>
+                            <tr
+                              key={variant.id}
+                              className="hover:bg-gray-50 transition-colors"
+                            >
+                              <td className="py-3 px-4 text-gray-900">
+                                {variant.series}
+                              </td>
                               <td className="py-3 px-4">
                                 <div className="flex items-center gap-2">
-                                  <div 
-                                    className="w-5 h-5 rounded-full border-2 border-gray-300 shadow-sm" 
-                                    style={{ backgroundColor: variant.colorHex }}
+                                  <div
+                                    className="w-5 h-5 rounded-full border-2 border-gray-300 shadow-sm"
+                                    style={{
+                                      backgroundColor: variant.colorHex,
+                                    }}
                                   ></div>
-                                  <span className="text-gray-700 text-xs">{variant.color}</span>
+                                  <span className="text-gray-700 text-xs">
+                                    {variant.color}
+                                  </span>
                                 </div>
                               </td>
-                              <td className="py-3 px-4 text-gray-700 text-xs">{variant.battery}</td>
-                              <td className="py-3 px-4 text-gray-700 text-xs">{variant.range}</td>
-                              <td className="py-3 px-4 text-right text-[#E60012]">{formatPrice(variant.price)}</td>
+                              <td className="py-3 px-4 text-gray-700 text-xs">
+                                {variant.battery}
+                              </td>
+                              <td className="py-3 px-4 text-gray-700 text-xs">
+                                {variant.range}
+                              </td>
+                              <td className="py-3 px-4 text-right text-[#E60012]">
+                                {formatPrice(variant.price)}
+                              </td>
                               <td className="py-3 px-4 text-right">
-                                <span className={`inline-block px-2 py-1 rounded-lg text-xs ${
-                                  variant.stock > 1 
-                                    ? 'bg-green-100 text-green-700' 
-                                    : variant.stock === 1 
-                                    ? 'bg-yellow-100 text-yellow-700' 
-                                    : 'bg-red-100 text-red-700'
-                                }`}>
+                                <span
+                                  className={`inline-block px-2 py-1 rounded-lg text-xs ${
+                                    variant.stock > 1
+                                      ? "bg-green-100 text-green-700"
+                                      : variant.stock === 1
+                                      ? "bg-yellow-100 text-yellow-700"
+                                      : "bg-red-100 text-red-700"
+                                  }`}
+                                >
                                   {variant.stock}
                                 </span>
                               </td>
