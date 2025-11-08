@@ -97,5 +97,44 @@
       "call": "Позвонить",
       "sendEmail": "Отправить email"
     }
+  },
+  "callCenter": {
+    "call": "Колл-центр",
+    "callManagement": "Управление звонками и анализ качества",
+    "callStart": "Начать звонок",
+    "callTotal": "Всего звонков",
+    "averageDuration": "Средняя длительность",
+    "positive": "Позитивных",
+    "ai": "Средняя оценка ИИ",
+    "callHistory": "История звонков",
+    "Operator": "Оператор",
+    "todayTarget": "Цель на сегодня",
+    "callNumber": "звонков"
+  },
+  "sales": {
+    "departmentSales": "Отдел продаж",
+    "transaction": "Управление сделками и воронка продаж",
+    "latestTransactions": "Последние сделки",
+    "viewDetails": "Посмотреть детали"
+  },
+  "service": {
+    "serviceMaintenance": "Сервисное обслуживание",
+    "serviceRequest": "Управление сервисными запросами",
+    "servicePush": "Сервисные запросы",
+    "writing": "Расписание на неделю",
+    "records": "записей",
+    "viewReviews": "Посмотреть отзывы"
+  },
+  "kpi": {
+    "dashboard_title": "KPI Отдела продаж",
+    "dashboard_subtitle": "Система отслеживания показателей эффективности автосалона BYD",
+    "export": "Экспорт",
+    "addGoal": "Добавить цель",
+    "roleEmployee": "Роль сотрудника",
+    "reporting": "Период отчетности",
+    "review": {
+      "dynamics": "Динамика продаж и выручки",
+      "topComparison": "Сравнение топ продавцов"
+    }
   }
 }

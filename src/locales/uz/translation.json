@@ -98,5 +98,33 @@
       "call": "Qo‘ng‘iroq qilish",
       "sendEmail": "Email yuborish"
     }
+  },
+  "callCenter": {
+    "call": "Aloqa-markaz",
+    "callManagement": "Qo'ng'iroqlarni boshqarish va sifat tahlili",
+    "callStart": "Qo'ng'iroq boshlash",
+    "callTotal": "Umumiy qo'ng'iroqlar",
+    "averageDuration": "O'rtacha davomiylik",
+    "positive": "Ijobiylar",
+    "ai": "AI o'rtacha bahosi",
+
+    "callHistory": "Qo'ng'iroqlar tarixi",
+    "Operator": "Operator",
+    "todayTarget": "Bugungi maqsad",
+    "callNumber": "qo'ng'iroqlar"
+  },
+  "sales": {
+    "departmentSales": "Savdo bo'limi",
+    "transaction": "Shartnomalarni boshqarish va savdo trubkasi",
+    "latestTransactions": "Oxirgi shartnomalar",
+    "viewDetails": "Ma’lumotlarni ko‘rish"
+  },
+  "service": {
+    "serviceMaintenance": "Xizmat ko'rsatish",
+    "serviceRequest": "Xizmat so'rovlarini boshqarish",
+    "servicePush": "Xizmat so'rovlari",
+    "writing": "Haftalik jadval",
+    "records": "yozuvlar",
+    "viewReviews": "Sharhlarni ko'rish"
   }
 }
