@@ -1,48 +1,104 @@
-import { 
-  LayoutDashboard, 
-  Users, 
-  Phone, 
-  TrendingUp, 
-  Wrench, 
+import {
+  LayoutDashboard,
+  Users,
+  Phone,
+  TrendingUp,
+  Wrench,
   Target,
   Brain,
   QrCode,
-  Star
-} from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+  Star,
+} from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { Link, useLocation } from "react-router-dom";
 
 interface SidebarProps {
   userRole?: string;
 }
 
 export function Sidebar({ userRole }: SidebarProps) {
+  const { t } = useTranslation();
   const location = useLocation();
 
   const menuItems = [
-    { id: 'dashboard', path: '/dashboard', label: 'Панель управления', icon: LayoutDashboard, roles: ['s', 'e'] },
-    { id: 'customers', path: '/customers', label: 'Клиенты', icon: Users, roles: ['s', 'e'] },
-    { id: 'calls', path: '/calls', label: 'Колл-центр', icon: Phone, roles: ['s', 'e'] },
-    { id: 'sales', path: '/sales', label: 'Продажи', icon: TrendingUp, roles: ['s', 'e'] },
-    { id: 'service', path: '/service', label: 'Сервис', icon: Wrench, roles: ['s', 'e'] },
-    { id: 'kpi', path: '/kpi', label: 'KPI сотрудников', icon: Target, roles: ['s'] },
-    { id: 'ai', path: '/ai', label: 'ИИ Рекомендации', icon: Brain, roles: ['s'] },
-    { id: 'qr', path: '/qr', label: 'QR Регистрация', icon: QrCode, roles: ['s', 'e'] },
-    { id: 'reviews', path: '/reviews', label: 'Отзывы', icon: Star, roles: ['s', 'e'] }
+    {
+      id: "dashboard",
+      path: "/dashboard",
+      label: t("nav.dashboard"),
+      icon: LayoutDashboard,
+      roles: ["s", "e"],
+    },
+    {
+      id: "customers",
+      path: "/customers",
+      label: t("nav.customers"),
+      icon: Users,
+      roles: ["s", "e"],
+    },
+    {
+      id: "calls",
+      path: "/calls",
+      label: t("nav.calls"),
+      icon: Phone,
+      roles: ["s", "e"],
+    },
+    {
+      id: "sales",
+      path: "/sales",
+      label: t("nav.sales"),
+      icon: TrendingUp,
+      roles: ["s", "e"],
+    },
+    {
+      id: "service",
+      path: "/service",
+      label: t("nav.service"),
+      icon: Wrench,
+      roles: ["s", "e"],
+    },
+    {
+      id: "kpi",
+      path: "/kpi",
+      label: t("nav.kpi"),
+      icon: Target,
+      roles: ["s"],
+    },
+    {
+      id: "ai",
+      path: "/ai",
+      label: t("nav.ai"),
+      icon: Brain,
+      roles: ["s"],
+    },
+    {
+      id: "qr",
+      path: "/qr",
+      label: t("nav.qr"),
+      icon: QrCode,
+      roles: ["s", "e"],
+    },
+    {
+      id: "reviews",
+      path: "/reviews",
+      label: t("nav.reviews"),
+      icon: Star,
+      roles: ["s", "e"],
+    },
   ];
 
-  const filteredMenuItems = menuItems.filter(item => 
-    userRole && item.roles.includes(userRole)
+  const filteredMenuItems = menuItems.filter(
+    (item) => userRole && item.roles.includes(userRole)
   );
 
   const getRoleName = (role: string) => {
-    return role === 's' ? 'Super Admin' : 'Employee';
+    return role === "s" ? "Super Admin" : "Employee";
   };
 
   return (
     <div className="h-full bg-black border-r border-gray-800 flex flex-col">
       <div className="p-6 border-b border-gray-800 bg-gradient-to-r from-[#E60012] to-[#b00010]">
         <h1 className="text-white font-bold text-lg">BYD CRM</h1>
-        <p className="text-red-100 text-sm mt-1">Автосалон Карши</p>
+        <p className="text-red-100 text-sm mt-1">{t("nav.carDealership")}</p>
         {userRole && (
           <div className="mt-2">
             <span className="inline-block px-2 py-1 bg-black/20 rounded text-xs text-white">
@@ -51,20 +107,20 @@ export function Sidebar({ userRole }: SidebarProps) {
           </div>
         )}
       </div>
-      
+
       <nav className="flex-1 p-4 overflow-y-auto">
         {filteredMenuItems.map((item) => {
           const Icon = item.icon;
           const isActive = location.pathname === item.path;
-          
+
           return (
             <Link
               key={item.id}
               to={item.path}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg mb-1 transition-colors ${
                 isActive
-                  ? 'bg-[#E60012] text-white'
-                  : 'text-gray-300 hover:bg-gray-900 hover:text-white'
+                  ? "bg-[#E60012] text-white"
+                  : "text-gray-300 hover:bg-gray-900 hover:text-white"
               }`}
             >
               <Icon className="w-5 h-5" />
@@ -73,11 +129,13 @@ export function Sidebar({ userRole }: SidebarProps) {
           );
         })}
       </nav>
-      
+
       <div className="p-4 border-t border-gray-800">
         <div className="px-4 py-3 bg-gray-900 rounded-lg">
-          <p className="text-xs text-gray-400">Версия 1.0.0</p>
-          <p className="text-xs text-gray-500 mt-1">© 2025 BYD Карши</p>
+          <p className="text-xs text-gray-400">{t("nav.version")}</p>
+          <p className="text-xs text-gray-500 mt-1">
+            © 2025 BYD {t("nav.city")}
+          </p>
         </div>
       </div>
     </div>
