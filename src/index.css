@@ -167,6 +167,44 @@
   }
 }
 
+/* Mobile first responsive design */
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Smooth transitions for mobile menu */
+.sidebar-transition {
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Hide scrollbar for mobile */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Touch-friendly buttons for mobile */
+@media (max-width: 768px) {
+  button, 
+  [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  input, 
+  select, 
+  textarea {
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+}
+
 @layer base {
   *, :after, :before, ::backdrop {
     box-sizing: border-box;

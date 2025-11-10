@@ -3,7 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { useState, useRef, useEffect } from 'react';
 import { useAuthContext } from '../contexts/AuthContext';
 
-export function Header() {
+interface HeaderProps {
+  onMenuClick?: () => void;
+}
+
+export function Header({ onMenuClick }: HeaderProps) {
   const { t, i18n } = useTranslation();
   const { user, logout } = useAuthContext();
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
@@ -45,30 +49,38 @@ export function Header() {
   }, []);
 
   return (
-    <header className="bg-white border-b border-gray-200 px-6 py-4 shadow-sm">
+    <header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4 shadow-sm">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
+          {/* Mobile Menu Button - Faqat mobile uchun */}
+          <button
+            onClick={onMenuClick}
+            className="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <Menu className="w-5 h-5 text-gray-600" />
+          </button>
+          
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-[#E60012] rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold">BYD</span>
+              <span className="text-white font-bold text-sm">BYD</span>
             </div>
-            <div>
+            <div className="hidden sm:block">
               <h2 className="text-gray-900 font-medium">{t('welcome')}, {user?.full_name}</h2>
               <p className="text-sm text-gray-500">{getRoleName(user?.role || 'e')}</p>
             </div>
           </div>
         </div>
         
-        <div className="flex items-center gap-4">
-          {/* Language Selector */}
+        <div className="flex items-center gap-3 sm:gap-4">
+          {/* Language Selector - Mobile da kichraytirilgan */}
           <div className="relative" ref={dropdownRef}>
             <button 
               onClick={() => setIsLanguageOpen(!isLanguageOpen)}
-              className="flex items-center gap-2 px-4 py-2 hover:bg-gray-50 rounded-lg transition-colors border border-gray-200 min-w-[100px] justify-between"
+              className="flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2 hover:bg-gray-50 rounded-lg transition-colors border border-gray-200 min-w-[80px] sm:min-w-[100px] justify-between"
             >
               <div className="flex items-center gap-2">
                 <Globe className="w-4 h-4 text-gray-500" />
-                <span className="font-medium text-gray-700">
+                <span className="font-medium text-gray-700 text-sm sm:text-base">
                   {getCurrentLanguageName()}
                 </span>
               </div>
@@ -129,16 +141,17 @@ export function Header() {
             <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#E60012] rounded-full"></span>
           </button>
           
-          {/* User Profile */}
+          {/* User Profile - Mobile da soddalashtirilgan */}
           <div className="relative" ref={profileRef}>
             <button 
               onClick={() => setIsProfileOpen(!isProfileOpen)}
-              className="flex items-center gap-3 pl-3 border-l border-gray-200"
+              className="flex items-center gap-2 sm:gap-3 pl-3 border-l border-gray-200"
             >
-              <div className="w-9 h-9 bg-gradient-to-br from-[#E60012] to-[#b00010] rounded-full flex items-center justify-center">
-                <User className="w-5 h-5 text-white" />
+              <div className="w-8 h-8 sm:w-9 sm:h-9 bg-gradient-to-br from-[#E60012] to-[#b00010] rounded-full flex items-center justify-center">
+                <User className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
-              <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${isProfileOpen ? 'rotate-180' : ''}`} />
+              {/* Mobile da faqat icon, desktop da icon + chevron */}
+              <ChevronDown className={`hidden sm:block w-4 h-4 text-gray-400 transition-transform ${isProfileOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {/* Profile Dropdown */}
@@ -169,6 +182,12 @@ export function Header() {
             )}
           </div>
         </div>
+      </div>
+
+      {/* Mobile User Info - Faqat mobile uchun */}
+      <div className="lg:hidden mt-3 sm:hidden">
+        <h2 className="text-gray-900 font-medium text-sm">{t('welcome')}, {user?.full_name}</h2>
+        <p className="text-xs text-gray-500">{getRoleName(user?.role || 'e')}</p>
       </div>
     </header>
   );
