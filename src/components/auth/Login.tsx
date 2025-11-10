@@ -143,10 +143,10 @@ export function Login() {
               <h4 className="font-medium text-blue-800 mb-1">Demo Loginlar:</h4>
               <div className="text-blue-700 space-y-1">
                 <p>
-                  <strong>Super Admin:</strong> superadmin / admin123
+                  <strong>Super Admin:</strong> admin / 123
                 </p>
                 <p>
-                  <strong>Reception:</strong> reception / reception123
+                  <strong>Reception:</strong> employee1 / user1234
                 </p>
               </div>
             </div>

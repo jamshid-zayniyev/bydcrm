@@ -1,20 +1,23 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuthContext } from './contexts/AuthContext';
-import { Login } from './components/auth/Login';
-import { MainApp } from './components/MainApp';
-import { ProtectedRoute } from './components/ProtectedRoute';
+import { Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider, useAuthContext } from "./contexts/AuthContext";
+import { Login } from "./components/auth/Login";
+import { MainApp } from "./components/MainApp";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 function AppContent() {
   const { isAuthenticated, isLoading } = useAuthContext();
 
-  console.log('AppContent render:', { isAuthenticated, isLoading });
+  console.log("AppContent render:", { isAuthenticated, isLoading });
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
+      <div
+        className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4"
+        style={{ height: "100vh" }}
+      >
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-red-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white">Yuklanmoqda...</p>
+          <p className="text-black">Yuklanmoqda...</p>
         </div>
       </div>
     );
@@ -22,11 +25,11 @@ function AppContent() {
 
   return (
     <Routes>
-      <Route 
-        path="/login" 
+      <Route
+        path="/login"
         element={
           !isAuthenticated ? <Login /> : <Navigate to="/dashboard" replace />
-        } 
+        }
       />
       <Route
         path="/*"
