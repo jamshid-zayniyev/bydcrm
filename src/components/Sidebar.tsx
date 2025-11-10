@@ -114,7 +114,7 @@ export function Sidebar({ userRole, isMobile = false, onClose }: SidebarProps) {
         <div className="p-4 border-b border-gray-800 flex items-center justify-between bg-gradient-to-r from-[#E60012] to-[#b00010]">
           <div>
             <h1 className="text-white font-bold text-lg">BYD CRM</h1>
-            <p className="text-red-100 text-sm">Автосалон Карши</p>
+            <p className="text-red-100 text-sm">{t("nav.carDealership")}</p>
           </div>
           <button
             onClick={onClose}
@@ -129,7 +129,7 @@ export function Sidebar({ userRole, isMobile = false, onClose }: SidebarProps) {
       {!isMobile && (
         <div className="p-6 border-b border-gray-800 bg-gradient-to-r from-[#E60012] to-[#b00010]">
           <h1 className="text-white font-bold text-lg">BYD CRM</h1>
-          <p className="text-red-100 text-sm mt-1">Автосалон Карши</p>
+          <p className="text-red-100 text-sm mt-1">{t("nav.carDealership")}</p>
           {userRole && (
             <div className="mt-2">
               <span className="inline-block px-2 py-1 bg-black/20 rounded text-xs text-white">

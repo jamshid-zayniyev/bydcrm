@@ -177,5 +177,90 @@
     "effectivenessStats": {
       "title": "Статистика эффективности"
     }
+  },
+  "qr": {
+    "title": "QR Регистрация посетителей",
+    "description": "Быстрая егистрация клиентов через сканирование QR-кода",
+    "scanning": {
+      "startScanning": "Начать сканирование",
+      "againScan": "Сканировать еще",
+      "scan": "Сканирование..."
+    },
+    "manualRegistration": {
+      "title": "Ручная регистрация посетителя",
+      "form": {
+        "clientName": {
+          "label": "Имя клиента",
+          "placeholder": "Введите имя"
+        },
+        "phone": {
+          "label": "Телефон"
+        },
+        "email": {
+          "label": "Email (опционально)"
+        },
+        "interestedModel": {
+          "label": "Интересует модель"
+        }
+      },
+      "submitButton": "Зарегистрировать посетителя"
+    },
+    "recentVisits": "Последние посетители"
+  },
+  "reviews": {
+    "title": "Управление отзывами",
+    "subtitle": "Сбор и мониторинг отзывов клиентов",
+    "stats": {
+      "averageRating": {
+        "label": "Средняя оценка",
+        "value": 4.7,
+        "stars": 5
+      },
+      "totalReviews": {
+        "label": "Всего отзывов",
+        "value": 3
+      },
+      "fiveStars": {
+        "label": "5 звезд",
+        "count": 2,
+        "percentage": 67
+      }
+    },
+    "pendingReviews": {
+      "title": "Ожидающие отзывы",
+      "requestSent": "Запрос отправлен",
+      "actions": {
+        "sendReminder": "Отправить напоминание",
+        "markCompleted": "Отметить выполненным"
+      }
+    },
+    "publishedReviews": {
+      "title": "Опубликованные отзывы",
+      "requestButton": "Запросить отзывы",
+      "source": {
+        "google": "Google"
+      }
+    },
+    "autoMailSettings": {
+      "title": "Настройки автоматической рассылки",
+      "options": {
+        "afterSale": {
+          "title": "Запрос отзыва после продажи",
+          "description": "Через 3 дня после покупки"
+        },
+        "afterService": {
+          "title": "Запрос отзыва после сервиса",
+          "description": "Сразу после завершения"
+        },
+        "weeklyReminder": {
+          "title": "Напоминание через неделю",
+          "description": "Если клиент не оставил отзыв"
+        }
+      }
+    },
+    "qualityMessage": {
+      "title": "Качество BYD - в каждом отзыве",
+      "description": "Мы ценим мнение каждого клиента. Ваши отзывы помогают нам становиться лучше и предоставлять превосходный сервис автомобилей BYD."
+    }
   }
 }

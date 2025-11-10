@@ -25,7 +25,6 @@
     "contact": "Aloqa",
     "version": "Version 1.0.0",
     "city": "Qarshi",
-
     "carDealership": "Qarshi avtosaloni",
     "dashboard": "Boshqaruv paneli",
     "customers": "Mijozlar",
@@ -154,6 +153,115 @@
     "analytics": {
       "analyticsName": "Tahlil",
       "salesAnalysis": "Sotuvlarni taqqosiy tahlil qilish"
+    }
+  },
+  "ai": {
+    "title": "AI Tavsiyalari",
+    "subtitle": "Samaradorlikni oshirish uchun intellektual maslahatlar",
+    "aiWork": {
+      "analyses": "Kunlik tahlillar",
+      "forecasts": "Prognoz aniqligi",
+      "active": "Faol tavsiyalar",
+      "aiConversion": "AI konversiya"
+    },
+    "person": {
+      "type": "Turi",
+      "client": "Mijoz",
+      "reliability": "Ishonchlilik",
+      "apply": "Qo'llash",
+      "details": "Batafsil",
+      "reject": "Rad etish"
+    },
+    "aiFunctions": {
+      "title": "AI Funksiyalari"
+    },
+    "effectivenessStats": {
+      "title": "Samaradorlik statistikasi"
+    }
+  },
+  "qr": {
+    "title": "QR-kodlarni ro'yxatdan o'tkazish",
+    "description": "QR-kodni skanerlash orqali mijozlarni tezkor ro'yxatga olish",
+    "scanning": {
+      "startScanning": "Skanerlashni boshlash",
+      "againScan": "Yana skanerlash",
+      "scan": "Skanerlanmoqda..."
+    },
+    "manualRegistration": {
+      "title": "Qo'lda ro'yxatga olish",
+      "form": {
+        "clientName": {
+          "label": "Mijoz ismi",
+          "placeholder": "Ismni kiriting"
+        },
+        "phone": {
+          "label": "Telefon"
+        },
+        "email": {
+          "label": "Email (ixtiyoriy)"
+        },
+        "interestedModel": {
+          "label": "Qiziqtirgan model"
+        }
+      },
+      "submitButton": "Tashrif buyuruvchini ro'yxatga olish"
+    },
+    "recentVisits": "Oxirgi tashrif buyuruvchilar"
+  },
+  "reviews": {
+    "title": "Sharhlarni boshqarish",
+    "subtitle": "Mijozlar sharhlarini yig'ish va monitoring qilish",
+    "stats": {
+      "averageRating": {
+        "label": "O'rtacha baho",
+        "value": 4.7,
+        "stars": 5
+      },
+      "totalReviews": {
+        "label": "Jami sharhlar",
+        "value": 3
+      },
+      "fiveStars": {
+        "label": "5 yulduz",
+        "count": 2,
+        "percentage": 67
+      }
+    },
+    "pendingReviews": {
+      "title": "Kutilayotgan sharhlar",
+      "requestSent": "So'rov yuborildi",
+      "actions": {
+        "sendReminder": "Eslatma yuborish",
+        "markCompleted": "Bajarilgan deb belgilash"
+      }
+    },
+    "publishedReviews": {
+      "title": "Chop etilgan sharhlar",
+      "requestButton": "Sharh so'rash",
+      "source": {
+        "google": "Google"
+      }
+    },
+    "autoMailSettings": {
+      "title": "Avtomatik xabar yuborish sozlamalari",
+      "options": {
+        "afterSale": {
+          "title": "Sotuvdan keyin sharh so'rash",
+          "description": "Xariddan 3 kun o'tgach"
+        },
+        "afterService": {
+          "title": "Xizmatdan keyin sharh so'rash",
+          "description": "Tugatilgandan so'ng darhol"
+        },
+        "weeklyReminder": {
+          "title": "Bir haftadan keyin eslatma",
+          "description": "Agar mijoz sharh qoldirmagan bo'lsa"
+        }
+      }
+    },
+    "qualityMessage": {
+      "title": "BYD sifati - har bir sharhda",
+      "description": "Biz har bir mijozning fikrini qadrlaymiz. Sizning sharhlaringiz bizga yaxshiroq bo'lishga va BYD avtomobillarining ajoyib xizmatini taqdim etishga yordam beradi."
     }
   }
 }

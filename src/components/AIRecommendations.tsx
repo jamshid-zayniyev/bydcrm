@@ -1,44 +1,55 @@
-import { useState } from 'react';
-import { Brain, TrendingUp, Target, Phone, DollarSign, AlertCircle, Check, X } from 'lucide-react';
-import { aiRecommendations } from '../data/mockData';
+import { useState } from "react";
+import {
+  Brain,
+  TrendingUp,
+  Target,
+  Phone,
+  DollarSign,
+  AlertCircle,
+  Check,
+  X,
+} from "lucide-react";
+import { aiRecommendations } from "../data/mockData";
+import { useTranslation } from "react-i18next";
 
 export function AIRecommendations() {
   const [dismissedIds, setDismissedIds] = useState<string[]>([]);
+  const { t } = useTranslation();
 
   const typeIcons: Record<string, any> = {
-    'lead-scoring': Target,
-    'sales-strategy': TrendingUp,
-    'call-quality': Phone,
-    'best-time': AlertCircle,
-    'upsell': DollarSign
+    "lead-scoring": Target,
+    "sales-strategy": TrendingUp,
+    "call-quality": Phone,
+    "best-time": AlertCircle,
+    upsell: DollarSign,
   };
 
   const typeColors: Record<string, string> = {
-    'lead-scoring': 'bg-green-50 text-green-600 border-green-200',
-    'sales-strategy': 'bg-[#E60012]/10 text-[#E60012] border-[#E60012]/20',
-    'call-quality': 'bg-purple-50 text-purple-600 border-purple-200',
-    'best-time': 'bg-yellow-50 text-yellow-600 border-yellow-200',
-    'upsell': 'bg-orange-50 text-orange-600 border-orange-200'
+    "lead-scoring": "bg-green-50 text-green-600 border-green-200",
+    "sales-strategy": "bg-[#E60012]/10 text-[#E60012] border-[#E60012]/20",
+    "call-quality": "bg-purple-50 text-purple-600 border-purple-200",
+    "best-time": "bg-yellow-50 text-yellow-600 border-yellow-200",
+    upsell: "bg-orange-50 text-orange-600 border-orange-200",
   };
 
   const typeLabels: Record<string, string> = {
-    'lead-scoring': 'Оценка лида',
-    'sales-strategy': 'Стратегия продаж',
-    'call-quality': 'Качество звонка',
-    'best-time': 'Оптимальное время',
-    'upsell': 'Доп. продажи'
+    "lead-scoring": "Оценка лида",
+    "sales-strategy": "Стратегия продаж",
+    "call-quality": "Качество звонка",
+    "best-time": "Оптимальное время",
+    upsell: "Доп. продажи",
   };
 
   const priorityColors: Record<string, string> = {
-    high: 'bg-red-100 text-red-700 border-red-200',
-    medium: 'bg-yellow-100 text-yellow-700 border-yellow-200',
-    low: 'bg-blue-100 text-blue-700 border-blue-200'
+    high: "bg-red-100 text-red-700 border-red-200",
+    medium: "bg-yellow-100 text-yellow-700 border-yellow-200",
+    low: "bg-blue-100 text-blue-700 border-blue-200",
   };
 
   const priorityLabels: Record<string, string> = {
-    high: 'Высокий',
-    medium: 'Средний',
-    low: 'Низкий'
+    high: "Высокий",
+    medium: "Средний",
+    low: "Низкий",
   };
 
   const handleDismiss = (id: string) => {
@@ -46,17 +57,21 @@ export function AIRecommendations() {
   };
 
   const handleApply = (id: string) => {
-    alert('Рекомендация применена! В реальной системе это запустит соответствующий процесс.');
+    alert(
+      "Рекомендация применена! В реальной системе это запустит соответствующий процесс."
+    );
     setDismissedIds([...dismissedIds, id]);
   };
 
-  const activeRecommendations = aiRecommendations.filter(r => !dismissedIds.includes(r.id));
+  const activeRecommendations = aiRecommendations.filter(
+    (r) => !dismissedIds.includes(r.id)
+  );
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-gray-900 mb-1">ИИ Рекомендации</h2>
-        <p className="text-gray-500 text-sm">Интеллектуальные советы для повышения эффективности</p>
+        <h2 className="text-gray-900 mb-1">{t("ai.title")}</h2>
+        <p className="text-gray-500 text-sm">{t("ai.subtitle")}</p>
       </div>
 
       {/* AI Overview */}
@@ -68,24 +83,34 @@ export function AIRecommendations() {
           <div className="flex-1">
             <h3 className="mb-2">Искусственный интеллект в работе</h3>
             <p className="text-sm text-red-100 mb-4">
-              ИИ анализирует данные о клиентах, звонках и продажах, чтобы предоставить персонализированные рекомендации 
-              для каждого отдела. Все предложения основаны на реальных показателях и прогнозном моделировании.
+              ИИ анализирует данные о клиентах, звонках и продажах, чтобы
+              предоставить персонализированные рекомендации для каждого отдела.
+              Все предложения основаны на реальных показателях и прогнозном
+              моделировании.
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div>
-                <p className="text-sm text-red-100">Анализов за день</p>
+                <p className="text-sm text-red-100">
+                  {t("ai.aiWork.analyses")}
+                </p>
                 <p className="text-white mt-1">1,247</p>
               </div>
               <div>
-                <p className="text-sm text-red-100">Точность прогнозов</p>
+                <p className="text-sm text-red-100">
+                  {t("ai.aiWork.forecasts")}
+                </p>
                 <p className="text-white mt-1">87%</p>
               </div>
               <div>
-                <p className="text-sm text-red-100">Активных рекомендаций</p>
-                <p className="text-white mt-1">{activeRecommendations.length}</p>
+                <p className="text-sm text-red-100">{t("ai.aiWork.active")}</p>
+                <p className="text-white mt-1">
+                  {activeRecommendations.length}
+                </p>
               </div>
               <div>
-                <p className="text-sm text-red-100">Конверсия по ИИ</p>
+                <p className="text-sm text-red-100">
+                  {t("ai.aiWork.aiConversion")}
+                </p>
                 <p className="text-white mt-1">+24%</p>
               </div>
             </div>
@@ -100,33 +125,61 @@ export function AIRecommendations() {
           const typeColor = typeColors[recommendation.type];
 
           return (
-            <div key={recommendation.id} className="bg-white border-2 border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-all">
-              <div className={`p-4 border-l-4 ${typeColor.includes('E60012') ? 'border-l-[#E60012]' : 'border-l-green-500'}`}>
+            <div
+              key={recommendation.id}
+              className="bg-white border-2 border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-all"
+            >
+              <div
+                className={`p-4 border-l-4 ${
+                  typeColor.includes("E60012")
+                    ? "border-l-[#E60012]"
+                    : "border-l-green-500"
+                }`}
+              >
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-start gap-3 flex-1">
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 border-2 ${typeColor}`}>
+                    <div
+                      className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 border-2 ${typeColor}`}
+                    >
                       <Icon className="w-5 h-5" />
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
-                        <h3 className="text-gray-900">{recommendation.title}</h3>
-                        <span className={`px-2 py-1 rounded-lg text-xs border ${priorityColors[recommendation.priority]}`}>
+                        <h3 className="text-gray-900">
+                          {recommendation.title}
+                        </h3>
+                        <span
+                          className={`px-2 py-1 rounded-lg text-xs border ${
+                            priorityColors[recommendation.priority]
+                          }`}
+                        >
                           {priorityLabels[recommendation.priority]}
                         </span>
                       </div>
-                      <p className="text-sm text-gray-600 mb-3">{recommendation.description}</p>
-                      
+                      <p className="text-sm text-gray-600 mb-3">
+                        {recommendation.description}
+                      </p>
+
                       <div className="flex flex-wrap items-center gap-4 text-xs">
                         <span className="text-gray-500">
-                          Тип: <span className="text-gray-700">{typeLabels[recommendation.type]}</span>
+                          {t("ai.person.type")}:{" "}
+                          <span className="text-gray-700">
+                            {typeLabels[recommendation.type]}
+                          </span>
                         </span>
                         {recommendation.targetCustomerName && (
                           <span className="text-gray-500">
-                            Клиент: <span className="text-gray-700">{recommendation.targetCustomerName}</span>
+                            {t("ai.person.client")}:{" "}
+                            <span className="text-gray-700">
+                              {recommendation.targetCustomerName}
+                            </span>
                           </span>
                         )}
                         <span className="text-gray-500">
-                          Достоверность: <span className="text-gray-700">{recommendation.confidence}%</span>
+                          {t("ai.person.reliability")}:{" "}
+                          <span className="text-gray-700">
+                            {recommendation.confidence}%
+                          </span>
                         </span>
                       </div>
                     </div>
@@ -150,34 +203,38 @@ export function AIRecommendations() {
                           stroke="#E60012"
                           strokeWidth="4"
                           fill="none"
-                          strokeDasharray={`${(recommendation.confidence / 100) * 176} 176`}
+                          strokeDasharray={`${
+                            (recommendation.confidence / 100) * 176
+                          } 176`}
                           strokeLinecap="round"
                         />
                       </svg>
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-xs text-gray-900">{recommendation.confidence}%</span>
+                        <span className="text-xs text-gray-900">
+                          {recommendation.confidence}%
+                        </span>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 <div className="flex gap-2 mt-4">
-                  <button 
+                  <button
                     onClick={() => handleApply(recommendation.id)}
                     className="px-4 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors text-sm flex items-center gap-2"
                   >
                     <Check className="w-4 h-4" />
-                    Применить
+                    {t("ai.person.apply")}
                   </button>
                   <button className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors text-sm">
-                    Подробнее
+                    {t("ai.person.details")}
                   </button>
-                  <button 
+                  <button
                     onClick={() => handleDismiss(recommendation.id)}
                     className="px-4 py-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors text-sm flex items-center gap-2"
                   >
                     <X className="w-4 h-4" />
-                    Отклонить
+                    {t("ai.person.reject")}
                   </button>
                 </div>
               </div>
@@ -189,41 +246,58 @@ export function AIRecommendations() {
       {/* AI Features */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-          <h3 className="text-gray-900 mb-3">Функции ИИ</h3>
+          <h3 className="text-gray-900 mb-3">{t("ai.aiFunctions.title")}</h3>
           <ul className="space-y-2">
             <li className="flex items-start gap-2 text-sm">
               <span className="text-[#E60012]">✓</span>
-              <span className="text-gray-700">Анализ эмоционального состояния клиентов</span>
+              <span className="text-gray-700">
+                Анализ эмоционального состояния клиентов
+              </span>
             </li>
             <li className="flex items-start gap-2 text-sm">
               <span className="text-[#E60012]">✓</span>
-              <span className="text-gray-700">Прогнозирование вероятности покупки</span>
+              <span className="text-gray-700">
+                Прогнозирование вероятности покупки
+              </span>
             </li>
             <li className="flex items-start gap-2 text-sm">
               <span className="text-[#E60012]">✓</span>
-              <span className="text-gray-700">Оптимизация времени контакта с клиентом</span>
+              <span className="text-gray-700">
+                Оптимизация времени контакта с клиентом
+              </span>
             </li>
             <li className="flex items-start gap-2 text-sm">
               <span className="text-[#E60012]">✓</span>
-              <span className="text-gray-700">Рекомендации по дополнительным продажам</span>
+              <span className="text-gray-700">
+                Рекомендации по дополнительным продажам
+              </span>
             </li>
             <li className="flex items-start gap-2 text-sm">
               <span className="text-[#E60012]">✓</span>
-              <span className="text-gray-700">Оценка качества звонков и обслуживания</span>
+              <span className="text-gray-700">
+                Оценка качества звонков и обслуживания
+              </span>
             </li>
           </ul>
         </div>
 
         <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-          <h3 className="text-gray-900 mb-3">Статистика эффективности</h3>
+          <h3 className="text-gray-900 mb-3">
+            {t("ai.effectivenessStats.title")}
+          </h3>
           <div className="space-y-3">
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-gray-600">Принято рекомендаций</span>
+                <span className="text-sm text-gray-600">
+                  Принято рекомендаций
+                </span>
                 <span className="text-sm text-gray-900">78%</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
-                <div className="bg-[#E60012] h-2 rounded-full transition-all" style={{ width: '78%' }}></div>
+                <div
+                  className="bg-[#E60012] h-2 rounded-full transition-all"
+                  style={{ width: "78%" }}
+                ></div>
               </div>
             </div>
             <div>
@@ -232,16 +306,24 @@ export function AIRecommendations() {
                 <span className="text-sm text-gray-900">+24%</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
-                <div className="bg-black h-2 rounded-full transition-all" style={{ width: '60%' }}></div>
+                <div
+                  className="bg-black h-2 rounded-full transition-all"
+                  style={{ width: "60%" }}
+                ></div>
               </div>
             </div>
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-gray-600">Точность прогнозов</span>
+                <span className="text-sm text-gray-600">
+                  Точность прогнозов
+                </span>
                 <span className="text-sm text-gray-900">87%</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
-                <div className="bg-green-600 h-2 rounded-full transition-all" style={{ width: '87%' }}></div>
+                <div
+                  className="bg-green-600 h-2 rounded-full transition-all"
+                  style={{ width: "87%" }}
+                ></div>
               </div>
             </div>
           </div>
