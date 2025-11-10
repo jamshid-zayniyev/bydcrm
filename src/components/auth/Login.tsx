@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAuthContext } from "../../contexts/AuthContext";
 import { Car, Eye, EyeOff, Loader } from "lucide-react";
+import { api } from "../../api/axios";
 
 export function Login() {
   const { t } = useTranslation();
@@ -25,6 +26,19 @@ export function Login() {
     const success = await login(credentials);
     if (!success) {
       setError(t("login.invalidCredentials"));
+    }
+
+    let newObj = {
+      username: credentials.username,
+      password: credentials.password,
+    };
+    console.log(newObj);
+
+    try {
+      let { data } = await api.post("/users/login/", newObj);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
     }
   };
 

@@ -126,5 +126,34 @@
     "writing": "Haftalik jadval",
     "records": "yozuvlar",
     "viewReviews": "Sharhlarni ko'rish"
+  },
+  "kpi": {
+    "dashboard_title": "Sotuv bo‘limi KPI",
+    "dashboard_subtitle": "BYD avtosalonining samaradorlik ko‘rsatkichlarini kuzatish tizimi",
+    "export": "Eksport",
+    "addGoal": "Maqsad qo‘shish",
+    "roleEmployee": "Xodim roli",
+    "reporting": "Hisobot davri",
+    "review": {
+      "reviewName": "Umumiy ko‘rinish",
+      "dynamics": "Sotuv va daromad dinamikasi",
+      "topComparison": "Eng yaxshi sotuvchilar taqqoslanishi"
+    },
+    "employees": {
+      "employeesName": "Xodimlar",
+      "detailedReport": "Batafsil hisobot",
+      "sales": "Sotuvlar",
+      "revenue": "Daromad",
+      "conversion": "Konversiya",
+      "rating": "Reyting",
+      "efficiency": "Samaradorlik"
+    },
+    "funnel": {
+      "funnelName": "Sotuv voronkasi"
+    },
+    "analytics": {
+      "analyticsName": "Tahlil",
+      "salesAnalysis": "Sotuvlarni taqqosiy tahlil qilish"
+    }
   }
 }

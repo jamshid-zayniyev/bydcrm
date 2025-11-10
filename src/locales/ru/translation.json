@@ -133,8 +133,25 @@
     "roleEmployee": "Роль сотрудника",
     "reporting": "Период отчетности",
     "review": {
+      "reviewName": "Обзор",
       "dynamics": "Динамика продаж и выручки",
       "topComparison": "Сравнение топ продавцов"
+    },
+    "employees": {
+      "employeesName": "Сотрудники",
+      "detailedReport": "Детальный отчет",
+      "sales": "Продажи",
+      "revenue": "Выручка",
+      "conversion": "Конверсия",
+      "rating": "Рейтинг",
+      "efficiency": "Эффективность"
+    },
+    "funnel": {
+      "funnelName": "Воронка"
+    },
+    "analytics": {
+      "analyticsName": "Аналитика",
+      "salesAnalysis": "Сравнительный анализ продаж"
     }
   }
 }

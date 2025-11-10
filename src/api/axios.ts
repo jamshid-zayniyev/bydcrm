@@ -1,12 +1,18 @@
-import axios from 'axios';
-import { getAccessToken, getRefreshToken, setTokens, clearTokens } from '../utils/token';
+import axios from "axios";
+import {
+  getAccessToken,
+  getRefreshToken,
+  setTokens,
+  clearTokens,
+} from "../utils/token";
+import { ENDPOINT } from "../constants";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: `${ENDPOINT}/api/v1`,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
@@ -39,16 +45,16 @@ api.interceptors.response.use(
           const response = await axios.post(`${API_BASE_URL}/auth/refresh`, {
             refreshToken,
           });
-          
+
           const { access, refresh } = response.data.tokens;
           setTokens(access, refresh);
-          
+
           originalRequest.headers.Authorization = `Bearer ${access}`;
           return api(originalRequest);
         }
       } catch (refreshError) {
         clearTokens();
-        window.location.href = '/login';
+        window.location.href = "/login";
         return Promise.reject(refreshError);
       }
     }
