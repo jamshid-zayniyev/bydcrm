@@ -1,92 +1,76 @@
 import { LoginCredentials, AuthResponse, User } from '../types/auth';
 
-// Mock user data
-const mockUsers: User[] = [
-  {
-    id: '1',
-    username: 'superadmin',
-    email: 'superadmin@byd.karshi',
-    name: 'Super Admin',
-    role: 'superadmin',
-    department: 'Management'
-  },
-  {
-    id: '2', 
-    username: 'reception',
-    email: 'reception@byd.karshi',
-    name: 'Reception User',
-    role: 'reception',
-    department: 'Reception'
-  }
-];
-
-// Simulate API delay
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+const API_BASE_URL = 'https://bydats.pythonanywhere.com/api/v1';
 
 export const authApi = {
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
-    await delay(1000); // Simulate network delay
+    const response = await fetch(`${API_BASE_URL}/users/login/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(credentials),
+    });
 
-    // Check credentials
-    if (credentials.username === 'superadmin' && credentials.password === 'admin123') {
-      const user = mockUsers.find(u => u.username === 'superadmin');
-      return {
-        user: user!,
-        tokens: {
-          access: 'mock_access_token_superadmin',
-          refresh: 'mock_refresh_token_superadmin'
-        }
-      };
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.detail || `Login failed: ${response.status}`);
     }
 
-    if (credentials.username === 'reception' && credentials.password === 'reception123') {
-      const user = mockUsers.find(u => u.username === 'reception');
-      return {
-        user: user!,
-        tokens: {
-          access: 'mock_access_token_reception', 
-          refresh: 'mock_refresh_token_reception'
-        }
-      };
-    }
-
-    throw new Error('Invalid username or password');
+    return response.json();
   },
 
   logout: async (): Promise<void> => {
-    await delay(300);
-    // In real app, you'd call logout API
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (refreshToken) {
+      try {
+        await fetch(`${API_BASE_URL}/users/logout/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ refresh: refreshToken }),
+        });
+      } catch (error) {
+        console.error('Logout API call failed:', error);
+      }
+    }
   },
 
-  refreshTokens: async (refreshToken: string): Promise<{ tokens: { access: string; refresh: string } }> => {
-    await delay(500);
-    
-    // Simulate token refresh
-    if (refreshToken.includes('superadmin')) {
-      return {
-        tokens: {
-          access: 'new_mock_access_token_superadmin',
-          refresh: 'new_mock_refresh_token_superadmin'
-        }
-      };
-    } else {
-      return {
-        tokens: {
-          access: 'new_mock_access_token_reception',
-          refresh: 'new_mock_refresh_token_reception'
-        }
-      };
+  refreshTokens: async (refreshToken: string): Promise<{ access: string }> => {
+    const response = await fetch(`${API_BASE_URL}/users/token/refresh/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ refresh: refreshToken }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Token refresh failed');
     }
+
+    return response.json();
   },
 
   getProfile: async (): Promise<User> => {
-    await delay(300);
+    const token = localStorage.getItem('accessToken');
     
-    const accessToken = localStorage.getItem('accessToken');
-    if (accessToken?.includes('superadmin')) {
-      return mockUsers[0];
-    } else {
-      return mockUsers[1];
+    if (!token) {
+      throw new Error('No access token');
     }
+
+    const response = await fetch(`${API_BASE_URL}/users/profile/`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to get profile');
+    }
+
+    return response.json();
   },
 };

@@ -1,10 +1,8 @@
 export interface User {
-  id: string;
+  id: number;
+  role: 's' | 'e';
+  full_name: string;
   username: string;
-  email: string;
-  role: 'superadmin' | 'reception';
-  department: string;
-  name: string;
 }
 
 export interface LoginCredentials {
@@ -13,9 +11,9 @@ export interface LoginCredentials {
 }
 
 export interface AuthResponse {
-  user: User;
-  tokens: {
-    access: string;
-    refresh: string;
-  };
+  access: string;
+  refresh: string;
+  id: number;
+  role: 's' | 'e';
+  full_name: string;
 }
