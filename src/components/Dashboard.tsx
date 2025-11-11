@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Users,
   Phone,
@@ -24,7 +24,6 @@ import {
   Cell,
 } from "recharts";
 import { customers, calls, sales, kpiData } from "../data/mockData";
-import { bydVehicles, BYDVehicle } from "../data/bydVehicles";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import {
   Dialog,
@@ -33,12 +32,13 @@ import {
   DialogDescription,
 } from "./ui/dialog";
 import { useTranslation } from "react-i18next";
+import { useCars } from "../hooks/useCars";
+import { Car as CarType } from "../api/cars";
 
 export function Dashboard() {
-  const [selectedVehicle, setSelectedVehicle] = useState<BYDVehicle | null>(
-    null
-  );
+  const [selectedVehicle, setSelectedVehicle] = useState<CarType | null>(null);
   const { t } = useTranslation();
+  const { cars: bydVehicles, loading: carsLoading, error: carsError } = useCars();
 
   const vehicleImages: Record<string, string> = {
     "1": "https://images.unsplash.com/photo-1669198074495-d04dae22bb90?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxCWUQlMjBTb25nJTIwUGx1cyUyMFNVVnxlbnwxfHx8fDE3NjAzMzA3ODN8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
@@ -125,6 +125,23 @@ export function Dashboard() {
   const formatPrice = (price: number) => {
     return `${(price / 1000000).toFixed(0)} млн`;
   };
+
+  // BYD Vehicles loading state
+  if (carsLoading) {
+    return (
+      <div className="space-y-4 sm:space-y-6">
+        {/* Loading state for BYD Models section */}
+        <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl border border-gray-200 shadow-sm">
+          <div className="flex items-center justify-center h-32">
+            <div className="text-center">
+              <div className="w-8 h-8 border-4 border-[#E60012] border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+              <p className="text-gray-600 text-sm">Mashinalar yuklanmoqda...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4 sm:space-y-6">
@@ -340,7 +357,7 @@ export function Dashboard() {
         </div>
       </div>
 
-      {/* BYD Models Section */}
+      {/* BYD Models Section - API dan ma'lumotlar bilan */}
       <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl border border-gray-200 shadow-sm">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-3">
           <div>
@@ -361,114 +378,127 @@ export function Dashboard() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-          {bydVehicles.map((vehicle) => {
-            const colorStats = vehicle.variants.reduce((acc, variant) => {
-              const existing = acc.find((item) => item.color === variant.color);
-              if (existing) {
-                existing.count += variant.stock;
-              } else {
-                acc.push({
-                  color: variant.color,
-                  colorHex: variant.colorHex,
-                  count: variant.stock,
-                });
-              }
-              return acc;
-            }, [] as Array<{ color: string; colorHex: string; count: number }>);
+        {carsError ? (
+          <div className="text-center py-8">
+            <div className="text-red-500 text-lg mb-2">⚠️</div>
+            <p className="text-gray-700 mb-4">{carsError}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="bg-[#E60012] text-white px-4 py-2 rounded-lg hover:bg-[#c4000f] transition-colors"
+            >
+              Qayta yuklash
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+            {bydVehicles.map((vehicle) => {
+              const colorStats = vehicle.variants.reduce((acc, variant) => {
+                const existing = acc.find((item) => item.color === variant.color);
+                if (existing) {
+                  existing.count += variant.stock;
+                } else {
+                  acc.push({
+                    color: variant.color,
+                    colorHex: variant.colorHex,
+                    count: variant.stock,
+                  });
+                }
+                return acc;
+              }, [] as Array<{ color: string; colorHex: string; count: number }>);
 
-            return (
-              <div
-                key={vehicle.id}
-                className="border-2 border-gray-200 rounded-lg sm:rounded-xl overflow-hidden hover:border-[#E60012] transition-all hover:shadow-lg cursor-pointer"
-                onClick={() => setSelectedVehicle(vehicle)}
-              >
-                {/* Vehicle Image */}
-                <div className="relative h-40 sm:h-48 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
-                  <ImageWithFallback
-                    src={vehicleImages[vehicle.id]}
-                    alt={vehicle.model}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute top-3 right-3 px-3 py-1 bg-black/70 backdrop-blur-sm text-white rounded-lg text-xs">
-                    {vehicle.totalAvailable} в наличии
+              return (
+                <div
+                  key={vehicle.id}
+                  className="border-2 border-gray-200 rounded-lg sm:rounded-xl overflow-hidden hover:border-[#E60012] transition-all hover:shadow-lg cursor-pointer"
+                  onClick={() => setSelectedVehicle(vehicle)}
+                >
+                  {/* Vehicle Image */}
+                  <div className="relative h-40 sm:h-48 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+                    <ImageWithFallback
+                      src={vehicleImages[vehicle.id] || "/default-car.jpg"}
+                      alt={vehicle.model}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute top-3 right-3 px-3 py-1 bg-black/70 backdrop-blur-sm text-white rounded-lg text-xs">
+                      {vehicle.totalAvailable} в наличии
+                    </div>
                   </div>
-                </div>
 
-                {/* Vehicle Info */}
-                <div className="p-4">
-                  <div className="flex items-start justify-between mb-2">
-                    <div>
-                      <h4 className="text-gray-900 mb-1">{vehicle.model}</h4>
-                      <p className="text-xs text-gray-500">
-                        {vehicle.description}
+                  {/* Vehicle Info */}
+                  <div className="p-4">
+                    <div className="flex items-start justify-between mb-2">
+                      <div>
+                        <h4 className="text-gray-900 mb-1">{vehicle.model}</h4>
+                        <p className="text-xs text-gray-500">
+                          {vehicle.description}
+                        </p>
+                      </div>
+                      <div
+                        className={`w-3 h-3 rounded-full flex-shrink-0 mt-1 ${
+                          vehicle.brandColor === "#E60012"
+                            ? "bg-[#E60012]"
+                            : "bg-black"
+                        }`}
+                      ></div>
+                    </div>
+
+                    {/* Price */}
+                    <div className="mb-3 pb-3 border-b border-gray-200">
+                      <p className="text-xs text-gray-500">Цена</p>
+                      <p className="text-sm text-[#E60012]">
+                        {formatPrice(
+                          Math.min(...vehicle.variants.map((v) => v.price))
+                        )}{" "}
+                        -{" "}
+                        {formatPrice(
+                          Math.max(...vehicle.variants.map((v) => v.price))
+                        )}{" "}
+                        сум
                       </p>
                     </div>
-                    <div
-                      className={`w-3 h-3 rounded-full flex-shrink-0 mt-1 ${
-                        vehicle.brandColor === "#E60012"
-                          ? "bg-[#E60012]"
-                          : "bg-black"
-                      }`}
-                    ></div>
-                  </div>
 
-                  {/* Price */}
-                  <div className="mb-3 pb-3 border-b border-gray-200">
-                    <p className="text-xs text-gray-500">Цена</p>
-                    <p className="text-sm text-[#E60012]">
-                      {formatPrice(
-                        Math.min(...vehicle.variants.map((v) => v.price))
-                      )}{" "}
-                      -{" "}
-                      {formatPrice(
-                        Math.max(...vehicle.variants.map((v) => v.price))
-                      )}{" "}
-                      сум
-                    </p>
-                  </div>
-
-                  {/* Available Colors */}
-                  <div>
-                    <p className="text-xs text-gray-500 mb-2">
-                      Доступные цвета:
-                    </p>
-                    <div className="space-y-2">
-                      {colorStats.map((colorStat, idx) => (
-                        <div
-                          key={idx}
-                          className="flex items-center justify-between"
-                        >
-                          <div className="flex items-center gap-2">
-                            <div
-                              className="w-6 h-6 rounded-full border-2 border-gray-300 shadow-sm"
-                              style={{ backgroundColor: colorStat.colorHex }}
-                            ></div>
-                            <span className="text-xs text-gray-700">
-                              {colorStat.color}
+                    {/* Available Colors */}
+                    <div>
+                      <p className="text-xs text-gray-500 mb-2">
+                        Доступные цвета:
+                      </p>
+                      <div className="space-y-2">
+                        {colorStats.map((colorStat, idx) => (
+                          <div
+                            key={idx}
+                            className="flex items-center justify-between"
+                          >
+                            <div className="flex items-center gap-2">
+                              <div
+                                className="w-6 h-6 rounded-full border-2 border-gray-300 shadow-sm"
+                                style={{ backgroundColor: colorStat.colorHex }}
+                              ></div>
+                              <span className="text-xs text-gray-700">
+                                {colorStat.color}
+                              </span>
+                            </div>
+                            <span
+                              className={`px-2 py-1 rounded text-xs ${
+                                colorStat.count > 1
+                                  ? "bg-green-100 text-green-700"
+                                  : "bg-yellow-100 text-yellow-700"
+                              }`}
+                            >
+                              {colorStat.count} шт
                             </span>
                           </div>
-                          <span
-                            className={`px-2 py-1 rounded text-xs ${
-                              colorStat.count > 1
-                                ? "bg-green-100 text-green-700"
-                                : "bg-yellow-100 text-yellow-700"
-                            }`}
-                          >
-                            {colorStat.count} шт
-                          </span>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
       </div>
 
-      {/* Vehicle Details Modal */}
+      {/* Vehicle Details Modal - API dan ma'lumotlar bilan */}
       <Dialog
         open={!!selectedVehicle}
         onOpenChange={() => setSelectedVehicle(null)}
@@ -488,7 +518,7 @@ export function Dashboard() {
               {/* Hero Section with Image and Gradient */}
               <div className="relative h-48 sm:h-64 md:h-72 overflow-hidden">
                 <ImageWithFallback
-                  src={vehicleImages[selectedVehicle.id]}
+                  src={vehicleImages[selectedVehicle.id] || "/default-car.jpg"}
                   alt={selectedVehicle.model}
                   className="w-full h-full object-cover"
                 />
@@ -518,14 +548,6 @@ export function Dashboard() {
                     </span>
                   </div>
                 </div>
-
-                {/* Close Button */}
-                {/* <button
-                  onClick={() => setSelectedVehicle(null)}
-                  className="absolute top-4 right-4 w-10 h-10 bg-black/50 hover:bg-black/70 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button> */}
               </div>
 
               {/* Content */}
@@ -603,7 +625,6 @@ export function Dashboard() {
                   <div>
                     <h4 className="text-gray-900 mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
                       <span className="text-[#E60012]">🎨</span>
-
                       {t("dashboard.cars.colors")}
                     </h4>
                     <div className="space-y-2">

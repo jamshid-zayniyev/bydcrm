@@ -5,9 +5,9 @@ import {
   setTokens,
   clearTokens,
 } from "../utils/token";
-import { ENDPOINT } from "../constants";
+import i18n from "../i18n/i18n";
 
-const API_BASE_URL = "https://bydats.pythonanywhere.com/";
+const API_BASE_URL = "https://bydats.pythonanywhere.com";
 
 export const api = axios.create({
   baseURL: `${API_BASE_URL}/api/v1`,
@@ -16,13 +16,18 @@ export const api = axios.create({
   },
 });
 
-// Request interceptor to add auth token
+// Request interceptor to add auth token va language
 api.interceptors.request.use(
   (config) => {
     const token = getAccessToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    
+    // Accept-language header qo'shamiz
+    const currentLanguage = i18n.language;
+    config.headers['Accept-language'] = currentLanguage;
+
     return config;
   },
   (error) => {
@@ -42,12 +47,12 @@ api.interceptors.response.use(
       try {
         const refreshToken = getRefreshToken();
         if (refreshToken) {
-          const response = await axios.post(`${API_BASE_URL}/auth/refresh`, {
-            refreshToken,
+          const response = await axios.post(`${API_BASE_URL}/api/v1/users/token/refresh/`, {
+            refresh: refreshToken,
           });
 
-          const { access, refresh } = response.data.tokens;
-          setTokens(access, refresh);
+          const { access } = response.data;
+          setTokens(access, refreshToken);
 
           originalRequest.headers.Authorization = `Bearer ${access}`;
           return api(originalRequest);

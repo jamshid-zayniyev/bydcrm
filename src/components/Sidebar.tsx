@@ -9,6 +9,7 @@ import {
   QrCode,
   Star,
   X,
+  Car, // Yangi icon qo'shildi
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
@@ -89,6 +90,7 @@ export function Sidebar({ userRole, isMobile = false, onClose }: SidebarProps) {
     },
   ];
 
+  // ... qolgan kod o'zgarmadi
   const filteredMenuItems = menuItems.filter(
     (item) => userRole && item.roles.includes(userRole)
   );
