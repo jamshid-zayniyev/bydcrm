@@ -18,6 +18,11 @@ export function Header({ onMenuClick }: HeaderProps) {
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
     setIsLanguageOpen(false);
+    
+    // Til o'zgartirganda sahifani refresh qilish
+    setTimeout(() => {
+      window.location.reload();
+    }, 300); // Kichik kechikish bilan animatsiya ko'rinishi uchun
   };
 
   const getCurrentLanguageName = () => {

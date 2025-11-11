@@ -96,14 +96,33 @@
       "phone": "Telefon",
       "emailOptional": "Elektron pochta (ixtiyoriy)",
       "source": "Manba",
+      "sourceObj": {
+        "online": "Online",
+        "phone": "Telefon",
+        "visit": "Visit",
+        "recommendation": "Tavsiya"
+      },
       "interestedModel": "Qiziqayotgan model",
       "status": "Holat",
+      "statusObj": {
+        "new": "Yangi",
+        "connected": "Bog‘lanildi",
+        "qualified": "Malakali"
+      },
       "notes": "Eslatmalar",
       "additionalInfo": "Mijoz haqida qo'shimcha ma'lumot...",
       "addClient": "Mijoz qo'shish",
       "cancel": "Bekor qilish"
     },
     "search": "Ism yoki telefon bo‘yicha qidirish...",
+    "statusFilters": {
+      "all": "Barcha statuslar",
+      "new": "Yangi",
+      "contacted": "Aloqaga chiqildi",
+      "qualified": "Kvalifikatsiyadan o'tdi",
+      "negotiation": "Muzokaralar",
+      "won": "Sotuvlar"
+    },
     "manager": "Menejer",
     "contact": "Aloqa",
     "person": {
@@ -153,7 +172,19 @@
     "export": "Eksport",
     "addGoal": "Maqsad qo‘shish",
     "roleEmployee": "Xodim roli",
+    "roles": {
+      "all": "Barcha rollar",
+      "sales": "Sotuv bo'yicha menejer",
+      "callcenter": "Aloqa-markazi",
+      "service": "Servis menejeri",
+      "marketing": "Marketing"
+    },
     "reporting": "Hisobot davri",
+    "reportPeriods": {
+      "monthly": "Har oylik",
+      "quarterly": "Har choraklik",
+      "yearly": "Yillik"
+    },
     "target": "Maqsad",
     "review": {
       "reviewName": "Umumiy ko‘rinish",

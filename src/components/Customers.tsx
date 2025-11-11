@@ -100,12 +100,18 @@ export function Customers() {
               onChange={(e) => setFilterStatus(e.target.value)}
               className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#E60012] focus:border-transparent"
             >
-              <option value="all">Все статусы</option>
-              <option value="new">Новые</option>
-              <option value="contacted">Связались</option>
-              <option value="qualified">Квалифицированы</option>
-              <option value="negotiation">Переговоры</option>
-              <option value="won">Продажи</option>
+              <option value="all">{t("customers.statusFilters.all")}</option>
+              <option value="new">{t("customers.statusFilters.new")}</option>
+              <option value="contacted">
+                {t("customers.statusFilters.contacted")}
+              </option>
+              <option value="qualified">
+                {t("customers.statusFilters.qualified")}
+              </option>
+              <option value="negotiation">
+                {t("customers.statusFilters.negotiation")}
+              </option>
+              <option value="won">{t("customers.statusFilters.won")}</option>
             </select>
           </div>
         </div>
@@ -229,10 +235,18 @@ export function Customers() {
                     {t("customers.addClientObj.source")}
                   </label>
                   <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]">
-                    <option>Онлайн</option>
-                    <option>Телефон</option>
-                    <option>Визит</option>
-                    <option>Рекомендация</option>
+                    <option>
+                      {t("customers.addClientObj.sourceObj.online")}
+                    </option>
+                    <option>
+                      {t("customers.addClientObj.sourceObj.phone")}
+                    </option>
+                    <option>
+                      {t("customers.addClientObj.sourceObj.visit")}
+                    </option>
+                    <option>
+                      {t("customers.addClientObj.sourceObj.recommendation")}
+                    </option>
                   </select>
                 </div>
                 <div>
@@ -252,9 +266,13 @@ export function Customers() {
                     {t("customers.addClientObj.status")}
                   </label>
                   <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]">
-                    <option>Новый</option>
-                    <option>Связались</option>
-                    <option>Квалифицирован</option>
+                    <option>{t("customers.addClientObj.statusObj.new")}</option>
+                    <option>
+                      {t("customers.addClientObj.statusObj.connected")}
+                    </option>
+                    <option>
+                      {t("customers.addClientObj.statusObj.qualified")}
+                    </option>
                   </select>
                 </div>
               </div>

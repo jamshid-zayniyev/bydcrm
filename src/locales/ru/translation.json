@@ -96,14 +96,34 @@
       "phone": "Телефон",
       "emailOptional": "Email (опционально)",
       "source": "Источник",
+      "sourceObj": {
+        "online": "Онлайн",
+        "phone": "Телефон",
+        "visit": "Визит",
+        "recommendation": "Рекомендация"
+      },
       "interestedModel": "Интересующая модель",
       "status": "Статус",
+      "statusObj": {
+        "new": "Новый",
+        "connected": "Связались",
+        "qualified": "Квалифицирован"
+      },
+
       "notes": "Заметки",
       "additionalInfo": "Дополнительная информация о клиенте...",
       "addClient": "Добавить клиента",
       "cancel": "Отмена"
     },
     "search": "Поиск по имени или телефону...",
+    "statusFilters": {
+      "all": "Все статусы",
+      "new": "Новые",
+      "contacted": "Связались",
+      "qualified": "Квалифицированы",
+      "negotiation": "Переговоры",
+      "won": "Продажи"
+    },
     "manager": "Менеджер",
     "contact": "Контакт",
     "person": {
@@ -152,8 +172,20 @@
     "export": "Экспорт",
     "addGoal": "Добавить цель",
     "roleEmployee": "Роль сотрудника",
+    "roles": {
+      "all": "Все роли",
+      "sales": "Менеджер по продажам",
+      "callcenter": "Колл-центр",
+      "service": "Сервисный менеджер",
+      "marketing": "Маркетинг"
+    },
     "reporting": "Период отчетности",
-    "target":"Цель",
+    "reportPeriods": {
+      "monthly": "Ежемесячно",
+      "quarterly": "Квартально",
+      "yearly": "Годовой"
+    },
+    "target": "Цель",
     "review": {
       "reviewName": "Обзор",
       "dynamics": "Динамика продаж и выручки",

@@ -109,14 +109,6 @@ interface SalesmanKPI {
   score: number;
 }
 
-const salesRoles = [
-  { value: "all", label: "Все роли" },
-  { value: "sales", label: "Менеджер по продажам" },
-  { value: "callcenter", label: "Колл-центр" },
-  { value: "service", label: "Сервисный менеджер" },
-  { value: "marketing", label: "Маркетинг" },
-];
-
 export function KPI() {
   const [selectedRole, setSelectedRole] = useState("all");
   const [reportPeriod, setReportPeriod] = useState("monthly");
@@ -395,6 +387,14 @@ export function KPI() {
     },
   ];
 
+  const salesRoles = [
+    { value: "all", label: t("kpi.roles.all") },
+    { value: "sales", label: t("kpi.roles.sales") },
+    { value: "callcenter", label: t("kpi.roles.callcenter") },
+    { value: "service", label: t("kpi.roles.service") },
+    { value: "marketing", label: t("kpi.roles.marketing") },
+  ];
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -445,9 +445,15 @@ export function KPI() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="monthly">Ежемесячно</SelectItem>
-                  <SelectItem value="quarterly">Квартально</SelectItem>
-                  <SelectItem value="yearly">Годовой</SelectItem>
+                  <SelectItem value="monthly">
+                    {t("kpi.reportPeriods.monthly")}
+                  </SelectItem>
+                  <SelectItem value="quarterly">
+                    {t("kpi.reportPeriods.quarterly")}
+                  </SelectItem>
+                  <SelectItem value="yearly">
+                    {t("kpi.reportPeriods.yearly")}
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>

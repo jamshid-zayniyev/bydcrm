@@ -12,11 +12,11 @@ export interface VehicleVariant {
 export interface BYDVehicle {
   id: string;
   model: string;
-  basePrice: number;
-  totalAvailable: number;
+  base_price: number;
+  total_available: number;
   description: string;
   features: string[];
-  brandColor: string;
+  brand_color: string;
   variants: VehicleVariant[];
 }
 
@@ -24,8 +24,8 @@ export const bydVehicles: BYDVehicle[] = [
   {
     id: "1",
     model: "BYD Song Plus",
-    basePrice: 380000000,
-    totalAvailable: 3,
+    base_price: 380000000,
+    total_available: 3,
     description: "Премиальный SUV с передовыми технологиями",
     features: [
       "Дальность 505 км",
@@ -33,7 +33,7 @@ export const bydVehicles: BYDVehicle[] = [
       "Панорамная крыша",
       "Интеллектуальная система помощи",
     ],
-    brandColor: "#E60012",
+    brand_color: "#E60012",
     variants: [
       {
         id: "sp1",
@@ -70,8 +70,8 @@ export const bydVehicles: BYDVehicle[] = [
   {
     id: "2",
     model: "BYD Han",
-    basePrice: 680000000,
-    totalAvailable: 2,
+    base_price: 680000000,
+    total_available: 2,
     description: "Флагманский седан бизнес-класса",
     features: [
       "Дальность 605 км",
@@ -79,7 +79,7 @@ export const bydVehicles: BYDVehicle[] = [
       "Система автопилота",
       "Премиум звук Dynaudio",
     ],
-    brandColor: "#000000",
+    brand_color: "#000000",
     variants: [
       {
         id: "han1",
@@ -106,8 +106,8 @@ export const bydVehicles: BYDVehicle[] = [
   {
     id: "3",
     model: "BYD Tang",
-    basePrice: 550000000,
-    totalAvailable: 1,
+    base_price: 550000000,
+    total_available: 1,
     description: "Полноразмерный 7-местный SUV",
     features: [
       "Дальность 565 км",
@@ -115,7 +115,7 @@ export const bydVehicles: BYDVehicle[] = [
       "Полный привод",
       "Адаптивная подвеска",
     ],
-    brandColor: "#E60012",
+    brand_color: "#E60012",
     variants: [
       {
         id: "tang1",
@@ -132,8 +132,8 @@ export const bydVehicles: BYDVehicle[] = [
   {
     id: "4",
     model: "BYD Atto 3",
-    basePrice: 420000000,
-    totalAvailable: 5,
+    base_price: 420000000,
+    total_available: 5,
     description: "Компактный электрический кроссовер",
     features: [
       "Дальность 480 км",
@@ -141,7 +141,7 @@ export const bydVehicles: BYDVehicle[] = [
       "Современный дизайн",
       "Доступная цена",
     ],
-    brandColor: "#000000",
+    brand_color: "#000000",
     variants: [
       {
         id: "atto1",
@@ -178,8 +178,8 @@ export const bydVehicles: BYDVehicle[] = [
   {
     id: "5",
     model: "BYD Seal",
-    basePrice: 620000000,
-    totalAvailable: 2,
+    base_price: 620000000,
+    total_available: 2,
     description: "Спортивный электрический седан",
     features: [
       "Дальность 570 км",
@@ -187,7 +187,7 @@ export const bydVehicles: BYDVehicle[] = [
       "0-100 км/ч за 3.8с",
       "CTB технология",
     ],
-    brandColor: "#E60012",
+    brand_color: "#E60012",
     variants: [
       {
         id: "seal1",
