@@ -75,13 +75,17 @@
       "white": "Снежно-белый",
       "black": "Черный обсидиан",
       "available": "Доступные комплектации",
+      "mln": "млн",
+      "sum": "сум",
       "availableForm": {
         "series": "Серия",
         "color": "Цвет",
         "battery": "Батарея",
         "stock": "Запас",
         "price": "Цена",
-        "warehouse": "Склад"
+        "warehouse": "Склад",
+        "availability": "в наличии",
+        "car": "автомобилей"
       }
     }
   },

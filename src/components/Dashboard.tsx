@@ -127,7 +127,7 @@ export function Dashboard() {
   ];
 
   const formatPrice = (price: number) => {
-    return `${(price / 1000000).toFixed(0)} млн`;
+    return `${(price / 1000000).toFixed(0)} ${t("dashboard.cars.mln")}`;
   };
 
   // BYD Vehicles loading state
@@ -430,7 +430,8 @@ export function Dashboard() {
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute top-3 right-3 px-3 py-1 bg-black/70 backdrop-blur-sm text-white rounded-lg text-xs">
-                      {vehicle.total_available} в наличии
+                      {vehicle.total_available}{" "}
+                      {t("dashboard.cars.availableForm.availability")}
                     </div>
                   </div>
 
@@ -454,7 +455,9 @@ export function Dashboard() {
 
                     {/* Price */}
                     <div className="mb-3 pb-3 border-b border-gray-200">
-                      <p className="text-xs text-gray-500">Цена</p>
+                      <p className="text-xs text-gray-500">
+                        {t("dashboard.cars.availableForm.price")}
+                      </p>
                       <p className="text-sm text-[#E60012]">
                         {formatPrice(
                           Math.min(...vehicle.variants.map((v) => v.price))
@@ -463,14 +466,14 @@ export function Dashboard() {
                         {formatPrice(
                           Math.max(...vehicle.variants.map((v) => v.price))
                         )}{" "}
-                        сум
+                        {t("dashboard.cars.sum")}
                       </p>
                     </div>
 
                     {/* Available Colors */}
                     <div>
                       <p className="text-xs text-gray-500 mb-2">
-                        Доступные цвета:
+                        {t("dashboard.cars.colors")}
                       </p>
                       <div className="space-y-2">
                         {colorStats.map((colorStat, idx) => (
@@ -554,7 +557,9 @@ export function Dashboard() {
                   <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-white/20 backdrop-blur-md rounded-lg border border-white/30">
                     <Car className="w-3 h-3 sm:w-4 sm:h-4" />
                     <span className="text-xs sm:text-sm">
-                      {selectedVehicle.total_available} автомобилей в наличии
+                      {selectedVehicle.total_available}{" "}
+                      {t("dashboard.cars.availableForm.car")}{" "}
+                      {t("dashboard.cars.availableForm.availability")}
                     </span>
                   </div>
                 </div>

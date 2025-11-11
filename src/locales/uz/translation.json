@@ -75,13 +75,17 @@
       "white": "Qor-oq rang",
       "black": "Qora obsidian",
       "available": "Mavjud komplektatsiyalar",
+      "mln": "mln",
+      "sum": "sum",
       "availableForm": {
         "series": "Seriya",
         "color": "Rang",
         "battery": "Batareya",
         "stock": "Zaxira",
         "price": "Narx",
-        "warehouse": "Ombor"
+        "warehouse": "Ombor",
+        "availability": "sotuvda mavjud",
+        "car": "avtomobillar"
       }
     }
   },
