@@ -7,10 +7,10 @@ import {
 } from "../utils/token";
 import { ENDPOINT } from "../constants";
 
-// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = "https://bydats.pythonanywhere.com/";
 
 export const api = axios.create({
-  baseURL: `${ENDPOINT}/api/v1`,
+  baseURL: `${API_BASE_URL}/api/v1`,
   headers: {
     "Content-Type": "application/json",
   },

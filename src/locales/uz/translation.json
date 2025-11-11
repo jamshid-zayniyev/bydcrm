@@ -63,6 +63,26 @@
       "model": "modellar",
       "cars": "avtomobillar",
       "warehouseUpdated": "Ombor yangilandi"
+    },
+    "cars": {
+      "position": "Pozitsiyalar",
+      "series": "Seriyalar",
+      "flowers": "Ranglar",
+      "price": "Narxdan boshlab",
+      "key": "Asosiy xususiyatlar",
+      "colors": "Mavjud ranglar",
+      "gray": "Atlantik kulrang",
+      "white": "Qor-oq rang",
+      "black": "Qora obsidian",
+      "available": "Mavjud komplektatsiyalar",
+      "availableForm": {
+        "series": "Seriya",
+        "color": "Rang",
+        "battery": "Batareya",
+        "stock": "Zaxira",
+        "price": "Narx",
+        "warehouse": "Ombor"
+      }
     }
   },
   "customers": {

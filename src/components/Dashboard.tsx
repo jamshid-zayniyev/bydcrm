@@ -520,12 +520,12 @@ export function Dashboard() {
                 </div>
 
                 {/* Close Button */}
-                <button
+                {/* <button
                   onClick={() => setSelectedVehicle(null)}
                   className="absolute top-4 right-4 w-10 h-10 bg-black/50 hover:bg-black/70 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-colors"
                 >
                   <X className="w-5 h-5" />
-                </button>
+                </button> */}
               </div>
 
               {/* Content */}
@@ -533,13 +533,17 @@ export function Dashboard() {
                 {/* Quick Stats */}
                 <div className="grid grid-cols-2 gap-2 sm:gap-3">
                   <div className="bg-gradient-to-br from-red-50 to-white p-3 sm:p-4 rounded-lg sm:rounded-xl border border-red-100">
-                    <p className="text-xs text-gray-500 mb-1">Позиций</p>
+                    <p className="text-xs text-gray-500 mb-1">
+                      {t("dashboard.cars.position")}
+                    </p>
                     <p className="text-xl sm:text-2xl text-[#E60012]">
                       {selectedVehicle.variants.length}
                     </p>
                   </div>
                   <div className="bg-gradient-to-br from-gray-50 to-white p-3 sm:p-4 rounded-lg sm:rounded-xl border border-gray-200">
-                    <p className="text-xs text-gray-500 mb-1">Серий</p>
+                    <p className="text-xs text-gray-500 mb-1">
+                      {t("dashboard.cars.series")}
+                    </p>
                     <p className="text-xl sm:text-2xl text-gray-900">
                       {
                         new Set(selectedVehicle.variants.map((v) => v.series))
@@ -548,7 +552,9 @@ export function Dashboard() {
                     </p>
                   </div>
                   <div className="bg-gradient-to-br from-gray-50 to-white p-3 sm:p-4 rounded-lg sm:rounded-xl border border-gray-200">
-                    <p className="text-xs text-gray-500 mb-1">Цветов</p>
+                    <p className="text-xs text-gray-500 mb-1">
+                      {t("dashboard.cars.flowers")}
+                    </p>
                     <p className="text-xl sm:text-2xl text-gray-900">
                       {
                         new Set(selectedVehicle.variants.map((v) => v.color))
@@ -557,7 +563,9 @@ export function Dashboard() {
                     </p>
                   </div>
                   <div className="bg-gradient-to-br from-red-50 to-white p-3 sm:p-4 rounded-lg sm:rounded-xl border border-red-100">
-                    <p className="text-xs text-gray-500 mb-1">Цена от</p>
+                    <p className="text-xs text-gray-500 mb-1">
+                      {t("dashboard.cars.price")}
+                    </p>
                     <p className="text-base sm:text-xl text-[#E60012]">
                       {formatPrice(
                         Math.min(
@@ -574,7 +582,7 @@ export function Dashboard() {
                   <div>
                     <h4 className="text-gray-900 mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
                       <span className="text-[#E60012]">⚡</span>
-                      Ключевые особенности
+                      {t("dashboard.cars.key")}
                     </h4>
                     <div className="space-y-2">
                       {selectedVehicle.features.map((feature, idx) => (
@@ -595,7 +603,8 @@ export function Dashboard() {
                   <div>
                     <h4 className="text-gray-900 mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
                       <span className="text-[#E60012]">🎨</span>
-                      Доступные цвета
+
+                      {t("dashboard.cars.colors")}
                     </h4>
                     <div className="space-y-2">
                       {selectedVehicle.variants
@@ -647,7 +656,7 @@ export function Dashboard() {
                 <div>
                   <h4 className="text-gray-900 mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
                     <span className="text-[#E60012]">📋</span>
-                    Доступные комплектации
+                    {t("dashboard.cars.available")}
                   </h4>
                   <div className="border border-gray-200 rounded-lg sm:rounded-xl overflow-hidden bg-white">
                     <div className="overflow-x-auto">
@@ -655,22 +664,22 @@ export function Dashboard() {
                         <thead className="bg-gradient-to-r from-gray-50 to-white border-b border-gray-200">
                           <tr>
                             <th className="text-left py-3 px-4 text-xs text-gray-600">
-                              Серия
+                              {t("dashboard.cars.availableForm.series")}
                             </th>
                             <th className="text-left py-3 px-4 text-xs text-gray-600">
-                              Цвет
+                              {t("dashboard.cars.availableForm.color")}
                             </th>
                             <th className="text-left py-3 px-4 text-xs text-gray-600">
-                              Батарея
+                              {t("dashboard.cars.availableForm.battery")}
                             </th>
                             <th className="text-left py-3 px-4 text-xs text-gray-600">
-                              Запас
+                              {t("dashboard.cars.availableForm.stock")}
                             </th>
                             <th className="text-right py-3 px-4 text-xs text-gray-600">
-                              Цена
+                              {t("dashboard.cars.availableForm.price")}
                             </th>
                             <th className="text-right py-3 px-4 text-xs text-gray-600">
-                              Склад
+                              {t("dashboard.cars.availableForm.warehouse")}
                             </th>
                           </tr>
                         </thead>
