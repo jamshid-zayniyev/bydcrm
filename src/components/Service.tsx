@@ -129,7 +129,7 @@ export function Service() {
                         • {request.date}
                       </span>
                       <span className="text-sm text-gray-500">
-                        • Техник: {request.technician}
+                        • {t("service.technician")}: {request.technician}
                       </span>
                     </div>
 

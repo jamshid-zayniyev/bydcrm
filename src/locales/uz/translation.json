@@ -144,7 +144,8 @@
     "servicePush": "Xizmat so'rovlari",
     "writing": "Haftalik jadval",
     "records": "yozuvlar",
-    "viewReviews": "Sharhlarni ko'rish"
+    "viewReviews": "Sharhlarni ko'rish",
+    "technician": "Texnik"
   },
   "kpi": {
     "dashboard_title": "Sotuv bo‘limi KPI",
@@ -153,6 +154,7 @@
     "addGoal": "Maqsad qo‘shish",
     "roleEmployee": "Xodim roli",
     "reporting": "Hisobot davri",
+    "target": "Maqsad",
     "review": {
       "reviewName": "Umumiy ko‘rinish",
       "dynamics": "Sotuv va daromad dinamikasi",

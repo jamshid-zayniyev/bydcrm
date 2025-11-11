@@ -476,7 +476,9 @@ export function KPI() {
               <span className="text-muted-foreground">vs прошлый месяц</span>
             </div>
             <Progress value={106} className="mt-3 h-2" />
-            <p className="text-xs text-muted-foreground mt-1">Цель: 30 авто</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              {t("kpi.target")}: 30 авто
+            </p>
           </CardContent>
         </Card>
 
@@ -498,7 +500,7 @@ export function KPI() {
             </div>
             <Progress value={106.7} className="mt-3 h-2" />
             <p className="text-xs text-muted-foreground mt-1">
-              Цель: 1,050 млн ₸
+              {t("kpi.target")}: 1,050 млн ₸
             </p>
           </CardContent>
         </Card>
@@ -520,7 +522,9 @@ export function KPI() {
               <span className="text-muted-foreground">лид → продажа</span>
             </div>
             <Progress value={95} className="mt-3 h-2" />
-            <p className="text-xs text-muted-foreground mt-1">Цель: 12%</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              {t("kpi.target")}: 12%
+            </p>
           </CardContent>
         </Card>
 
@@ -543,7 +547,9 @@ export function KPI() {
               <span className="text-muted-foreground">из 5.0</span>
             </div>
             <Progress value={94} className="mt-3 h-2" />
-            <p className="text-xs text-muted-foreground mt-1">Цель: 4.5</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              {t("kpi.target")}: 4.5
+            </p>
           </CardContent>
         </Card>
       </div>

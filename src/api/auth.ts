@@ -1,13 +1,13 @@
-import { LoginCredentials, AuthResponse, User } from '../types/auth';
+import { LoginCredentials, AuthResponse, User } from "../types/auth";
 
-const API_BASE_URL = 'https://bydats.pythonanywhere.com/api/v1';
+const API_BASE_URL = "https://bydats.pythonanywhere.com/api/v1";
 
 export const authApi = {
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
     const response = await fetch(`${API_BASE_URL}/users/login/`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(credentials),
     });
@@ -21,54 +21,54 @@ export const authApi = {
   },
 
   logout: async (): Promise<void> => {
-    const refreshToken = localStorage.getItem('refreshToken');
+    const refreshToken = localStorage.getItem("refreshToken");
     if (refreshToken) {
       try {
         await fetch(`${API_BASE_URL}/users/logout/`, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({ refresh: refreshToken }),
         });
       } catch (error) {
-        console.error('Logout API call failed:', error);
+        console.error("Logout API call failed:", error);
       }
     }
   },
 
   refreshTokens: async (refreshToken: string): Promise<{ access: string }> => {
     const response = await fetch(`${API_BASE_URL}/users/token/refresh/`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ refresh: refreshToken }),
     });
 
     if (!response.ok) {
-      throw new Error('Token refresh failed');
+      throw new Error("Token refresh failed");
     }
 
     return response.json();
   },
 
   getProfile: async (): Promise<User> => {
-    const token = localStorage.getItem('accessToken');
-    
+    const token = localStorage.getItem("accessToken");
+
     if (!token) {
-      throw new Error('No access token');
+      throw new Error("No access token");
     }
 
     const response = await fetch(`${API_BASE_URL}/users/profile/`, {
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
     });
 
     if (!response.ok) {
-      throw new Error('Failed to get profile');
+      throw new Error("Failed to get profile");
     }
 
     return response.json();
