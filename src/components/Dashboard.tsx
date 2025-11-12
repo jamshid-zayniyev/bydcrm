@@ -88,7 +88,6 @@ export function Dashboard() {
   ];
 
   const salesData = [
-    { month: t("dashboard.salesData.june"), sales: 8 },
     { month: "Июль", sales: 12 },
     { month: "Авг", sales: 10 },
     { month: "Сен", sales: 15 },
