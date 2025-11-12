@@ -35,11 +35,21 @@ import { useTranslation } from "react-i18next";
 import { useCars } from "../hooks/useCars";
 import { Car as CarType } from "../api/cars";
 
+type DataItem = {
+  name: string;
+  value: number;
+  color?: string;
+};
+
 export function Dashboard() {
   const [selectedVehicle, setSelectedVehicle] = useState<CarType | null>(null);
   const { t } = useTranslation();
   const {
     cars: bydVehicles,
+    weekStatistics,
+    monthStatistics,
+    dayStatistics,
+    pieChart,
     loading: carsLoading,
     error: carsError,
   } = useCars();
@@ -87,43 +97,27 @@ export function Dashboard() {
     },
   ];
 
-  const salesData = [
-    { month: "Июль", sales: 12 },
-    { month: "Авг", sales: 10 },
-    { month: "Сен", sales: 15 },
-    { month: "Окт", sales: 18 },
-  ];
+  const salesData = monthStatistics;
 
-  const callsData = [
-    { day: "Пн", calls: 45 },
-    { day: "Вт", calls: 52 },
-    { day: "Ср", calls: 48 },
-    { day: "Чт", calls: 61 },
-    { day: "Пт", calls: 55 },
-    { day: "Сб", calls: 38 },
-    { day: "Вс", calls: 25 },
-  ];
+  const callsData = weekStatistics;
 
-  const dailySalesData = [
-    { day: "Пн", sales: 2 },
-    { day: "Вт", sales: 3 },
-    { day: "Ср", sales: 1 },
-    { day: "Чт", sales: 4 },
-    { day: "Пт", sales: 3 },
-    { day: "Сб", sales: 2 },
-    { day: "Вс", sales: 1 },
-  ];
+  const dailySalesData = dayStatistics;
 
-  const leadSourceData = [
-    { name: t("dashboard.sources.online"), value: 35, color: "#E60012" },
-    { name: t("dashboard.sources.telephone"), value: 28, color: "#000000" },
-    { name: t("dashboard.sources.visit"), value: 25, color: "#6b7280" },
-    {
-      name: t("dashboard.sources.recommendations"),
-      value: 12,
-      color: "#ef4444",
-    },
-  ];
+  console.log(pieChart);
+
+  const colors: Record<string, string> = {
+    Онлайн: "#E60012",
+    Телефон: "#000000",
+    Визит: "#6b7280",
+    Рекомендации: "#ef4444",
+  };
+
+  const leadSourceData: DataItem[] = pieChart.map((item) => ({
+    ...item,
+    color: colors[item.name],
+  }));
+
+  console.log(leadSourceData);
 
   const formatPrice = (price: number) => {
     return `${(price / 1000000).toFixed(0)} ${t("dashboard.cars.mln")}`;
