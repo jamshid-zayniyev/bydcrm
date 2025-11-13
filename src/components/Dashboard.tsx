@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Users,
   Phone,
@@ -7,7 +7,6 @@ import {
   ArrowUp,
   ArrowDown,
   Car,
-  X,
 } from "lucide-react";
 import {
   BarChart,
@@ -34,6 +33,10 @@ import {
 import { useTranslation } from "react-i18next";
 import { useCars } from "../hooks/useCars";
 import { Car as CarType } from "../api/cars";
+import { useWeekStatistics } from "../hooks/useWeekStatistics";
+import { useMonthStatistics } from "../hooks/useMonthStatistics";
+import { useDayStatistics } from "../hooks/useDayStatistics";
+import { usePieChart } from "../hooks/usePieChart";
 
 type DataItem = {
   name: string;
@@ -46,13 +49,15 @@ export function Dashboard() {
   const { t } = useTranslation();
   const {
     cars: bydVehicles,
-    weekStatistics,
-    monthStatistics,
-    dayStatistics,
-    pieChart,
+
     loading: carsLoading,
     error: carsError,
   } = useCars();
+
+  const { weekStatistics, error } = useWeekStatistics();
+  const { monthStatistics, error: monthError } = useMonthStatistics();
+  const { dayStatistics, error: dayError } = useDayStatistics();
+  const { pieChart, error: pieError } = usePieChart();
 
   const vehicleImages: Record<string, string> = {
     "1": "https://images.unsplash.com/photo-1669198074495-d04dae22bb90?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxCWUQlMjBTb25nJTIwUGx1cyUyMFNVVnxlbnwxfHx8fDE3NjAzMzA3ODN8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
@@ -103,8 +108,6 @@ export function Dashboard() {
 
   const dailySalesData = dayStatistics;
 
-  console.log(pieChart);
-
   const colors: Record<string, string> = {
     Онлайн: "#E60012",
     Телефон: "#000000",
@@ -116,8 +119,6 @@ export function Dashboard() {
     ...item,
     color: colors[item.name],
   }));
-
-  console.log(leadSourceData);
 
   const formatPrice = (price: number) => {
     return `${(price / 1000000).toFixed(0)} ${t("dashboard.cars.mln")}`;
@@ -132,7 +133,7 @@ export function Dashboard() {
           <div className="flex items-center justify-center h-32">
             <div className="text-center">
               <div className="w-8 h-8 border-4 border-[#E60012] border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-              <p className="text-gray-600 text-sm">Mashinalar yuklanmoqda...</p>
+              <p className="text-gray-600 text-sm">{t("loading")}</p>
             </div>
           </div>
         </div>
@@ -211,13 +212,26 @@ export function Dashboard() {
             {t("dashboard.salesMonth")}
           </h3>
           <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={salesData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-              <XAxis dataKey="month" tick={{ fontSize: 12 }} />
-              <YAxis tick={{ fontSize: 12 }} />
-              <Tooltip />
-              <Bar dataKey="sales" fill="#E60012" radius={[8, 8, 0, 0]} />
-            </BarChart>
+            {monthError ? (
+              <div className="text-center py-8">
+                <div className="text-red-500 text-lg mb-2">⚠️</div>
+                <p className="text-gray-700 mb-4">{monthError}</p>
+                <button
+                  onClick={() => window.location.reload()}
+                  className="bg-[#E60012] text-white px-4 py-2 rounded-lg hover:bg-[#c4000f] transition-colors"
+                >
+                  Qayta yuklash
+                </button>
+              </div>
+            ) : (
+              <BarChart data={salesData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+                <YAxis tick={{ fontSize: 12 }} />
+                <Tooltip />
+                <Bar dataKey="sales" fill="#E60012" radius={[8, 8, 0, 0]} />
+              </BarChart>
+            )}
           </ResponsiveContainer>
         </div>
 
@@ -227,13 +241,26 @@ export function Dashboard() {
             {t("dashboard.salesDay")}
           </h3>
           <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={dailySalesData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-              <XAxis dataKey="day" tick={{ fontSize: 12 }} />
-              <YAxis tick={{ fontSize: 12 }} />
-              <Tooltip />
-              <Bar dataKey="sales" fill="#000000" radius={[8, 8, 0, 0]} />
-            </BarChart>
+            {dayError ? (
+              <div className="text-center py-8">
+                <div className="text-red-500 text-lg mb-2">⚠️</div>
+                <p className="text-gray-700 mb-4">{dayError}</p>
+                <button
+                  onClick={() => window.location.reload()}
+                  className="bg-[#E60012] text-white px-4 py-2 rounded-lg hover:bg-[#c4000f] transition-colors"
+                >
+                  Qayta yuklash
+                </button>
+              </div>
+            ) : (
+              <BarChart data={dailySalesData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis dataKey="day" tick={{ fontSize: 12 }} />
+                <YAxis tick={{ fontSize: 12 }} />
+                <Tooltip />
+                <Bar dataKey="sales" fill="#000000" radius={[8, 8, 0, 0]} />
+              </BarChart>
+            )}
           </ResponsiveContainer>
         </div>
       </div>
@@ -246,18 +273,31 @@ export function Dashboard() {
             {t("dashboard.callsMonth")}
           </h3>
           <ResponsiveContainer width="100%" height={250}>
-            <LineChart data={callsData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-              <XAxis dataKey="day" tick={{ fontSize: 12 }} />
-              <YAxis tick={{ fontSize: 12 }} />
-              <Tooltip />
-              <Line
-                type="monotone"
-                dataKey="calls"
-                stroke="#E60012"
-                strokeWidth={2}
-              />
-            </LineChart>
+            {error ? (
+              <div className="text-center py-8">
+                <div className="text-red-500 text-lg mb-2">⚠️</div>
+                <p className="text-gray-700 mb-4">{error}</p>
+                <button
+                  onClick={() => window.location.reload()}
+                  className="bg-[#E60012] text-white px-4 py-2 rounded-lg hover:bg-[#c4000f] transition-colors"
+                >
+                  Qayta yuklash
+                </button>
+              </div>
+            ) : (
+              <LineChart data={callsData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis dataKey="day" tick={{ fontSize: 12 }} />
+                <YAxis tick={{ fontSize: 12 }} />
+                <Tooltip />
+                <Line
+                  type="monotone"
+                  dataKey="calls"
+                  stroke="#E60012"
+                  strokeWidth={2}
+                />
+              </LineChart>
+            )}
           </ResponsiveContainer>
         </div>
 
@@ -266,37 +306,53 @@ export function Dashboard() {
           <h3 className="text-gray-900 mb-3 sm:mb-4 text-base sm:text-lg">
             {t("dashboard.clientSources")}
           </h3>
-          <ResponsiveContainer width="100%" height={200}>
-            <PieChart>
-              <Pie
-                data={leadSourceData}
-                cx="50%"
-                cy="50%"
-                innerRadius={60}
-                outerRadius={90}
-                paddingAngle={5}
-                dataKey="value"
+
+          {pieError ? (
+            <div className="text-center py-8">
+              <div className="text-red-500 text-lg mb-2">⚠️</div>
+              <p className="text-gray-700 mb-4">{error}</p>
+              <button
+                onClick={() => window.location.reload()}
+                className="bg-[#E60012] text-white px-4 py-2 rounded-lg hover:bg-[#c4000f] transition-colors"
               >
-                {leadSourceData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
+                Qayta yuklash
+              </button>
+            </div>
+          ) : (
+            <>
+              <ResponsiveContainer width="100%" height={200}>
+                <PieChart>
+                  <Pie
+                    data={leadSourceData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={90}
+                    paddingAngle={5}
+                    dataKey="value"
+                  >
+                    {leadSourceData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="grid grid-cols-2 gap-2 mt-4">
+                {leadSourceData.map((source, index) => (
+                  <div key={index} className="flex items-center gap-2">
+                    <div
+                      className="w-3 h-3 rounded-full"
+                      style={{ backgroundColor: source.color }}
+                    ></div>
+                    <span className="text-xs text-gray-600">
+                      {source.name}: {source.value}%
+                    </span>
+                  </div>
                 ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-          <div className="grid grid-cols-2 gap-2 mt-4">
-            {leadSourceData.map((source, index) => (
-              <div key={index} className="flex items-center gap-2">
-                <div
-                  className="w-3 h-3 rounded-full"
-                  style={{ backgroundColor: source.color }}
-                ></div>
-                <span className="text-xs text-gray-600">
-                  {source.name}: {source.value}%
-                </span>
               </div>
-            ))}
-          </div>
+            </>
+          )}
         </div>
       </div>
 
@@ -363,11 +419,7 @@ export function Dashboard() {
             </h3>
             <p className="text-xs sm:text-sm text-gray-500 mt-1">
               {bydVehicles.length} {t("dashboard.warehouse.model")} •{" "}
-              {bydVehicles.reduce(
-                (sum, v) => sum + v.total_available,
-
-                0
-              )}{" "}
+              {bydVehicles.reduce((sum, v) => sum + v.total_available, 0)}{" "}
               {t("dashboard.warehouse.cars")}
             </p>
           </div>

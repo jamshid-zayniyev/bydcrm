@@ -12,6 +12,8 @@
     "invalidCredentials": "Noto'g'ri foydalanuvchi nomi yoki parol",
     "version": "Versiya"
   },
+  "loading": "Mashinalar yuklanmoqda...",
+  "selectLanguage": "Tilni tanlang",
   "logout": "Chiqish",
   "welcome": "Xush kelibsiz",
   "description": "Bu ko'p tilli ilova",

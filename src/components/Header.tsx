@@ -18,7 +18,7 @@ export function Header({ onMenuClick }: HeaderProps) {
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
     setIsLanguageOpen(false);
-    
+
     // Til o'zgartirganda sahifani refresh qilish
     setTimeout(() => {
       window.location.reload();
@@ -70,18 +70,22 @@ export function Header({ onMenuClick }: HeaderProps) {
           >
             <Menu className="w-5 h-5 text-gray-600" />
           </button>
-          
+
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-[#E60012] rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">BYD</span>
             </div>
             <div className="hidden sm:block">
-              <h2 className="text-gray-900 font-medium">{t('welcome')}, {user?.full_name}</h2>
-              <p className="text-sm text-gray-500">{getRoleName(user?.role || 'e')}</p>
+              <h2 className="text-gray-900 font-medium">
+                {t("welcome")}, {user?.full_name}
+              </h2>
+              <p className="text-sm text-gray-500">
+                {getRoleName(user?.role || "e")}
+              </p>
             </div>
           </div>
         </div>
-        
+
         <div className="flex items-center gap-3 sm:gap-4">
           {/* Language Selector - Mobile da kichraytirilgan */}
           <div className="relative" ref={dropdownRef}>
@@ -106,7 +110,7 @@ export function Header({ onMenuClick }: HeaderProps) {
             {isLanguageOpen && (
               <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
                 <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                  Tilni tanlang
+                  {t("selectLanguage")}
                 </div>
 
                 <button
@@ -125,7 +129,9 @@ export function Header({ onMenuClick }: HeaderProps) {
                     ></div>
                     <span className="font-medium">Русский</span>
                   </div>
-                  <span className="text-sm text-gray-400 font-mono">РУ</span>
+                  <span className="text-sm text-gray-400 font-mono pl-3">
+                    РУ
+                  </span>
                 </button>
 
                 <button
@@ -144,7 +150,9 @@ export function Header({ onMenuClick }: HeaderProps) {
                     ></div>
                     <span className="font-medium">O'zbekcha</span>
                   </div>
-                  <span className="text-sm text-gray-400 font-mono">UZ</span>
+                  <span className="text-sm text-gray-400 font-mono pl-3">
+                    UZ
+                  </span>
                 </button>
               </div>
             )}
@@ -155,7 +163,7 @@ export function Header({ onMenuClick }: HeaderProps) {
             <Bell className="w-5 h-5 text-gray-600" />
             <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#E60012] rounded-full"></span>
           </button>
-          
+
           {/* User Profile - Mobile da soddalashtirilgan */}
           <div className="relative" ref={profileRef}>
             <button
@@ -166,7 +174,11 @@ export function Header({ onMenuClick }: HeaderProps) {
                 <User className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
               {/* Mobile da faqat icon, desktop da icon + chevron */}
-              <ChevronDown className={`hidden sm:block w-4 h-4 text-gray-400 transition-transform ${isProfileOpen ? 'rotate-180' : ''}`} />
+              <ChevronDown
+                className={`hidden sm:block w-4 h-4 text-gray-400 transition-transform ${
+                  isProfileOpen ? "rotate-180" : ""
+                }`}
+              />
             </button>
 
             {/* Profile Dropdown */}
@@ -203,8 +215,12 @@ export function Header({ onMenuClick }: HeaderProps) {
 
       {/* Mobile User Info - Faqat mobile uchun */}
       <div className="lg:hidden mt-3 sm:hidden">
-        <h2 className="text-gray-900 font-medium text-sm">{t('welcome')}, {user?.full_name}</h2>
-        <p className="text-xs text-gray-500">{getRoleName(user?.role || 'e')}</p>
+        <h2 className="text-gray-900 font-medium text-sm">
+          {t("welcome")}, {user?.full_name}
+        </h2>
+        <p className="text-xs text-gray-500">
+          {getRoleName(user?.role || "e")}
+        </p>
       </div>
     </header>
   );

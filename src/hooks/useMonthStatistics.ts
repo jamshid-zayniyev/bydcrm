@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { carsApi, Car } from "../api/cars";
+import { getMonthStatistics, Month } from "../api/monthStatistics";
 
-export const useCars = () => {
-  const [cars, setCars] = useState<Car[]>([]);
+export const useMonthStatistics = () => {
+  const [monthStatistics, setMonthStatistics] = useState<Month[]>([]);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -11,8 +11,8 @@ export const useCars = () => {
     try {
       setLoading(true);
       setError(null);
-      const data = await carsApi.getAllCars();
-      setCars(data);
+      const data = await getMonthStatistics();
+      setMonthStatistics(data);
     } catch (err) {
       setError("Mashinalarni yuklab boʻlmadi");
       console.error("Error fetching cars:", err);
@@ -30,7 +30,7 @@ export const useCars = () => {
   };
 
   return {
-    cars,
+    monthStatistics,
     loading,
     error,
     refetch,
