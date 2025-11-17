@@ -519,8 +519,17 @@ export function Customers() {
                     <p className="text-xs text-gray-500 mb-1">
                       {t("customers.person.source")}
                     </p>
-                    <p className="text-sm text-gray-900">
+                    {/* <p className="text-sm text-gray-900">
                       {selectedCustomer.source}
+                    </p> */}
+                    <p className="text-sm text-gray-900">
+                      {selectedCustomer.source === "o"
+                        ? t("customers.addClientObj.sourceObj.online")
+                        : selectedCustomer.source === "p"
+                        ? t("customers.addClientObj.sourceObj.phone")
+                        : selectedCustomer.source === "w"
+                        ? t("customers.addClientObj.sourceObj.visit")
+                        : t("customers.addClientObj.sourceObj.recommendation")}
                     </p>
                   </div>
                   <div>
