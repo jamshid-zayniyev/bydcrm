@@ -112,8 +112,8 @@ export const useCustomers = () => {
     try {
       setLoading(true);
       setError(null);
-      const data = await getCustomers();
-      setCustomers(data);
+      const { results } = await getCustomers();
+      setCustomers(results);
     } catch (err) {
       setError("Mashinalarni yuklab boʻlmadi");
       console.error("Error fetching cars:", err);

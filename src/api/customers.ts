@@ -21,7 +21,14 @@ export interface CarsModels {
   name: string;
 }
 
-export const getCustomers = async (): Promise<Customers[]> => {
+export interface ApiResponse<T> {
+  results: T[];
+  count: number;
+  next: string | null;
+  previous: string | null;
+}
+
+export const getCustomers = async (): Promise<ApiResponse<Customers>> => {
   const response = await api.get("/users/customers/");
   return response.data;
 };

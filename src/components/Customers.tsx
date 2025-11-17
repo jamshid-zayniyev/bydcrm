@@ -19,6 +19,7 @@ import Delete from "../assets/delete.svg";
 import NoData from "../assets/no-data.svg";
 
 import DeleteModal from "./ui/delete-modal";
+import { PaginationDemo } from "./ui/paginationApi";
 
 export function Customers() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -287,6 +288,7 @@ export function Customers() {
               </div>
             </div>
           ))}
+          {/* <PaginationDemo itemsPerPage={10} /> */}
         </div>
       ) : (
         <div className="flex justify-center">
