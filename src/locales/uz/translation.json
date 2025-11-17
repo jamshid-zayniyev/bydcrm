@@ -17,6 +17,8 @@
   "logout": "Chiqish",
   "welcome": "Xush kelibsiz",
   "description": "Bu ko'p tilli ilova",
+  "delete": "O‘chirilsinmi-?",
+  "noData": "Notug'ri kiritilgan ma'lumot",
   "buttons": {
     "login": "Kirish",
     "signup": "Ro'yxatdan o'tish"
@@ -97,6 +99,8 @@
     "addClient": "Mijoz qo'shish",
     "addClientObj": {
       "addNewClient": "Yangi mijoz qo'shish",
+      "oneClient": "Mijoz tahrirlash",
+
       "clientName": "Mijoz ismi",
       "enterName": "Ism kiriting",
       "phone": "Telefon",
