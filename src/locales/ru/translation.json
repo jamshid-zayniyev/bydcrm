@@ -19,6 +19,13 @@
   "description": "Это многоязычное приложение",
   "delete": "Удалить-?",
   "noData": "Неверно введённые данные",
+  "title": "Удаление",
+  "message": "Вы уверены, что хотите удалить эти данные?",
+  "actions": {
+    "cansel": "Отмена",
+    "ok": "Да"
+  },
+  "noInformation": "Нет информации",
   "buttons": {
     "login": "Войти",
     "signup": "Зарегистрироваться"
@@ -100,6 +107,8 @@
     "addClientObj": {
       "addNewClient": "Добавить нового клиента",
       "oneClient": "Редактирование клиента",
+      "statusFilter": "Barcha holatlar",
+
       "clientName": "Имя клиента",
       "enterName": "Введите имя",
       "phone": "Телефон",
@@ -116,7 +125,9 @@
       "statusObj": {
         "new": "Новый",
         "connected": "Связались",
-        "qualified": "Квалифицирован"
+        "qualified": "Квалифицированный",
+        "negotiable": "Переговоры",
+        "sale": "Продажа"
       },
 
       "notes": "Заметки",

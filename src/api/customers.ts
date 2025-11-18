@@ -12,7 +12,7 @@ export interface Customers {
   sentiment: string;
   source: string;
   updated_at: string;
-  // status?: string;
+  status: number;
   // email?: string;
 }
 
@@ -28,8 +28,19 @@ export interface ApiResponse<T> {
   previous: string | null;
 }
 
-export const getCustomers = async (): Promise<ApiResponse<Customers>> => {
-  const response = await api.get("/users/customers/");
+export interface UsersStatus {
+  id: number;
+  title: string;
+}
+
+export const getCustomers = async (
+  active: number,
+  search: string,
+  status: number | string
+): Promise<ApiResponse<Customers>> => {
+  const response = await api.get(
+    `/users/customers/?page=${active}&search=${search}&status=${status==="all"?"":status}`
+  );
   return response.data;
 };
 
@@ -40,5 +51,10 @@ export const getOneCustomer = async (id: number): Promise<Customers> => {
 
 export const getCarsModels = async (): Promise<CarsModels[]> => {
   const response = await api.get(`/cars/models/`);
+  return response.data;
+};
+
+export const getUsersStatus = async (): Promise<UsersStatus[]> => {
+  const response = await api.get(`/users/status/`);
   return response.data;
 };

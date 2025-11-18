@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useCustomers } from "../../hooks/useCustomers";
+import { useTranslation } from "react-i18next";
 
 interface DeleteModalProps {
   closeDeleteModal: () => void;
@@ -13,6 +14,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
   selectedItemId,
   deleteBtn,
 }) => {
+  const { t } = useTranslation();
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isOpen) {
@@ -36,14 +38,14 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
         <div className="bg-card rounded-lg shadow-lg border border-border max-w-xl animate-in fade-in zoom-in-95">
           {/* Header */}
           <div className="px-6 py-4 border-b border-border">
-            <h2 className="text-lg font-semibold text-foreground">Delete</h2>
+            <h2 className="text-lg font-semibold text-foreground">
+              {t("title")}
+            </h2>
           </div>
 
           {/* Content */}
           <div className="px-6 py-4">
-            <p className="text-muted-foreground">
-              Ushbu ma'lumotni o‘chirishni xohlaysizmi?
-            </p>
+            <p className="text-muted-foreground">{t("message")}</p>
           </div>
 
           {/* Tugmalar */}
@@ -55,7 +57,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
               onClick={closeDeleteModal}
               className="px-4 py-2 rounded-md border border-input bg-background text-foreground hover:bg-muted transition-colors font-medium"
             >
-              Cansel
+              {t("actions.cansel")}
             </button>
             <button
               // onClick={onConfirm}
@@ -66,7 +68,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
               }}
               className="px-4 py-2 rounded-md bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors font-medium text-white"
             >
-              Ok
+              {t("actions.ok")}
             </button>
           </div>
         </div>

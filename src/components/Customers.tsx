@@ -22,14 +22,13 @@ import DeleteModal from "./ui/delete-modal";
 import { PaginationDemo } from "./ui/paginationApi";
 
 export function Customers() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filterStatus, setFilterStatus] = useState<string>("all");
   const [selectedCustomer, setSelectedCustomer] = useState<Customers | null>(
     null
   );
   const { t } = useTranslation();
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
   const [searchFilter, setSearchFilter] = useState("");
+  const [filterStatus, setFilterStatus] = useState("all");
 
   const {
     register,
@@ -50,6 +49,11 @@ export function Customers() {
     loading,
     closeModal,
     carsModels,
+    activePage,
+    usersStatus,
+    pgnCount,
+    fetchUsers,
+    setActivePage,
   } = useCustomers();
 
   const formatPhoneNumber = useCallback((value: string): string => {
@@ -109,31 +113,13 @@ export function Customers() {
     trigger("phone_number");
   }, [trigger]);
 
-  const filteredCustomers = customers.filter((customer) => {
-    const matchesSearch =
-      customer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      customer.phone.includes(searchQuery);
-    const matchesStatus =
-      filterStatus === "all" || customer.status === filterStatus;
-    return matchesSearch && matchesStatus;
-  });
-
   const statusColors: Record<string, string> = {
-    new: "bg-blue-100 text-blue-700 border-blue-200",
-    contacted: "bg-purple-100 text-purple-700 border-purple-200",
-    qualified: "bg-green-100 text-green-700 border-green-200",
-    negotiation: "bg-yellow-100 text-yellow-700 border-yellow-200",
-    won: "bg-emerald-100 text-emerald-700 border-emerald-200",
-    lost: "bg-red-100 text-red-700 border-red-200",
-  };
-
-  const statusLabels: Record<string, string> = {
-    new: "Новый",
-    contacted: "Связались",
-    qualified: "Квалифицирован",
-    negotiation: "Переговоры",
-    won: "Продажа",
-    lost: "Отклонен",
+    1: "bg-blue-100 text-blue-700 border-blue-200",
+    2: "bg-purple-100 text-purple-700 border-purple-200",
+    3: "bg-green-100 text-green-700 border-green-200",
+    4: "bg-yellow-100 text-yellow-700 border-yellow-200",
+    5: "bg-emerald-100 text-emerald-700 border-emerald-200",
+    // lost: "bg-red-100 text-red-700 border-red-200",
   };
 
   const sentimentIcons: Record<string, string> = {
@@ -141,19 +127,6 @@ export function Customers() {
     neutral: "😐",
     negative: "😟",
   };
-
-  // console.log(searchFilter);
-  const filteredData = allCustomers?.filter(
-    ({ full_name, phone_number }) =>
-      full_name
-        .trim()
-        .toLowerCase()
-        .includes(searchFilter.trim().toLowerCase()) ||
-      phone_number
-        .trim()
-        .toLowerCase()
-        .includes(searchFilter.trim().toLowerCase())
-  );
 
   return (
     <div className="space-y-6">
@@ -163,7 +136,7 @@ export function Customers() {
             {t("customers.clientManagement")}
           </h2>
           <p className="text-gray-500 text-sm">
-            {t("customers.totalClients")}: {filteredData.length}
+            {t("customers.totalClients")}: {pgnCount}
           </p>
         </div>
         <button
@@ -183,13 +156,36 @@ export function Customers() {
             <input
               type="text"
               placeholder={t("customers.search")}
-              // value={searchQuery}
-              // onChange={(e) => setSearchQuery(e.target.value)}
-
               value={searchFilter}
-              onChange={(e) => setSearchFilter(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                setSearchFilter(value);
+                fetchUsers(1, value, filterStatus);
+              }}
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#E60012] focus:border-transparent"
             />
+          </div>
+          <div className="flex items-center gap-2">
+            <Filter className="w-5 h-5 text-gray-400" />
+            <select
+              value={filterStatus}
+              // onChange={(e) => setFilterStatus(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                setFilterStatus(value);
+                fetchUsers(1, searchFilter, value);
+              }}
+              className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#E60012] focus:border-transparent"
+            >
+              <option value="all">
+                {t("customers.addClientObj.statusFilter")}
+              </option>
+              {usersStatus.map((el) => (
+                <option key={el?.id} value={el?.id}>
+                  {el?.title}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
       </div>
@@ -197,99 +193,119 @@ export function Customers() {
       {/* Customer List */}
       {loading ? (
         <div className="space-y-4 sm:space-y-6 mt-5">
-          {/* Loading state for BYD Models section */}
-          {/* <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl border border-gray-200 shadow-sm"> */}
           <div className="flex items-center justify-center h-32">
             <div className="text-center">
               <div className="w-8 h-8 border-4 border-[#E60012] border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
               <p className="text-gray-600 text-sm">{t("loading")}</p>
             </div>
           </div>
-          {/* </div> */}
         </div>
-      ) : filteredData.length ? (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {filteredData.map((customer) => (
-            <div
-              key={customer.id}
-              className="bg-white p-5 rounded-xl border border-gray-200 hover:shadow-lg transition-all cursor-pointer"
-              onClick={() => setSelectedCustomer(customer)}
-            >
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex-1">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-gray-900">{customer.full_name}</h3>
-                      {customer.sentiment && (
-                        <span className="text-lg">
-                          {sentimentIcons[customer.sentiment]}
-                        </span>
-                      )}
+      ) : allCustomers.length ? (
+        <>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {allCustomers.map((customer) => (
+              <div
+                key={customer.id}
+                className="bg-white p-5 rounded-xl border border-gray-200 hover:shadow-lg transition-all cursor-pointer"
+                onClick={() => setSelectedCustomer(customer)}
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="text-gray-900">{customer.full_name}</h3>
+                        {customer.sentiment && (
+                          <span className="text-lg">
+                            {sentimentIcons[customer.sentiment]}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex gap-3">
+                        <img
+                          src={Edit}
+                          alt={customer.full_name}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            editBtn(customer.id);
+                          }}
+                        />
+                        <img
+                          src={Delete}
+                          alt={customer.full_name}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openDeleteModal();
+                            setSelectedItemId(customer.id);
+                          }}
+                        />
+                      </div>
                     </div>
-                    <div className="flex gap-3">
-                      <img
-                        src={Edit}
-                        alt={customer.full_name}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          editBtn(customer.id);
-                        }}
-                      />
-                      <img
-                        src={Delete}
-                        alt={customer.full_name}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openDeleteModal();
-                          setSelectedItemId(customer.id);
-                        }}
-                      />
-                    </div>
+                    {customer.status ? (
+                      <span
+                        className={`inline-block px-3 py-1 rounded-lg text-xs border ${
+                          statusColors[customer.status]
+                        }`}
+                      >
+                        {customer.status === 1
+                          ? t("customers.addClientObj.statusObj.new")
+                          : customer.status === 2
+                          ? t("customers.addClientObj.statusObj.connected")
+                          : customer.status === 3
+                          ? t("customers.addClientObj.statusObj.qualified")
+                          : customer.status === 4
+                          ? t("customers.addClientObj.statusObj.negotiable")
+                          : t("customers.addClientObj.statusObj.sale")}
+                      </span>
+                    ) : (
+                      <span className="inline-block px-3 py-1 rounded-lg text-xs border bg-primary text-primary-foreground">
+                        {t("noInformation")}
+                      </span>
+                    )}
                   </div>
-                  {/* <span
-                  className={`inline-block px-3 py-1 rounded-lg text-xs border ${
-                    statusColors[customer.status]
-                  }`}
-                >
-                  {statusLabels[customer.status]}
-                </span> */}
-                </div>
-              </div>
-
-              <div className="space-y-2 mb-3">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <Phone className="w-4 h-4 text-[#E60012]" />
-                  <span>{customer.phone_number}</span>
                 </div>
 
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <MapPin className="w-4 h-4 text-[#E60012]" />
-                  <span>{customer.location}</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <TrendingUp className="w-4 h-4 text-[#E60012]" />
-                  <span>{customer.interested_in}</span>
-                </div>
-              </div>
+                <div className="space-y-2 mb-3">
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <Phone className="w-4 h-4 text-[#E60012]" />
+                    <span>{customer.phone_number}</span>
+                  </div>
 
-              <div className="pt-3 border-t border-gray-100">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-gray-500">
-                    {t("customers.manager")}: {customer.assigned_to}
-                  </span>
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <MapPin className="w-4 h-4 text-[#E60012]" />
+                    <span>{customer.location}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <TrendingUp className="w-4 h-4 text-[#E60012]" />
+                    <span>{customer.interested_in}</span>
+                  </div>
+                </div>
 
-                  {customer.created_at && (
+                <div className="pt-3 border-t border-gray-100">
+                  <div className="flex items-center justify-between text-xs">
                     <span className="text-gray-500">
-                      {t("customers.contact")}:{" "}
-                      {customer.created_at.split("T")[0]}
+                      {t("customers.manager")}: {customer.assigned_to}
                     </span>
-                  )}
+
+                    {customer.created_at && (
+                      <span className="text-gray-500">
+                        {t("customers.contact")}:{" "}
+                        {customer.created_at.split("T")[0]}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-          {/* <PaginationDemo itemsPerPage={10} /> */}
-        </div>
+            ))}
+          </div>
+          <PaginationDemo
+            pgnCount={pgnCount}
+            fetchUsers={fetchUsers}
+            activePage={activePage}
+            setActivePage={setActivePage}
+            searchFilter={searchFilter}
+            filterStatus={filterStatus}
+          />
+        </>
       ) : (
         <div className="flex justify-center">
           <div className="text-center">
@@ -325,14 +341,12 @@ export function Customers() {
                   </label>
                   <input
                     {...register("full_name")}
-                    // type="text"
                     placeholder={t("customers.addClientObj.enterName")}
                     className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
                       errors.full_name
                         ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
                         : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
                     }`}
-                    // className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
                   />
                   {errors.full_name && (
                     <p className="text-[#E60012]">{errors.full_name.message}</p>
@@ -401,7 +415,34 @@ export function Customers() {
                       ))
                     ) : (
                       <option value="" disabled>
-                        Ma'lumot yo'q
+                        {t("noInformation")}
+                      </option>
+                    )}
+                  </select>
+                  {errors.interested_in && (
+                    <p className="text-[#E60012]">
+                      {errors.interested_in.message}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    {t("customers.addClientObj.status")}
+                  </label>
+                  <select
+                    {...register("status")}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
+                  >
+                    {usersStatus.length ? (
+                      usersStatus.map((el) => (
+                        <option key={el?.id} value={el?.id}>
+                          {el?.title}
+                        </option>
+                      ))
+                    ) : (
+                      <option value="" disabled>
+                        {t("noInformation")}
                       </option>
                     )}
                   </select>
@@ -434,7 +475,6 @@ export function Customers() {
               <div className="flex gap-3 pt-4">
                 <button
                   type="submit"
-                  // onClick={handleAddCustomer}
                   className="flex-1 px-4 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors"
                 >
                   {loading
@@ -464,13 +504,6 @@ export function Customers() {
                   <h2 className="text-gray-900 mb-2">
                     {selectedCustomer.full_name}
                   </h2>
-                  {/* <span
-                    className={`inline-block px-3 py-1 rounded-lg text-sm border ${
-                      statusColors[selectedCustomer.status]
-                    }`}
-                  >
-                    {statusLabels[selectedCustomer.status]}
-                  </span> */}
                 </div>
                 <button
                   onClick={() => setSelectedCustomer(null)}
@@ -493,14 +526,6 @@ export function Customers() {
                       {selectedCustomer.phone_number}
                     </span>
                   </div>
-                  {/* {selectedCustomer.email && (
-                    <div className="flex items-center gap-3">
-                      <Mail className="w-5 h-5 text-[#E60012]" />
-                      <span className="text-gray-700">
-                        {selectedCustomer.email}
-                      </span>
-                    </div>
-                  )} */}
                   <div className="flex items-center gap-3">
                     <MapPin className="w-5 h-5 text-[#E60012]" />
                     <span className="text-gray-700">
@@ -519,9 +544,6 @@ export function Customers() {
                     <p className="text-xs text-gray-500 mb-1">
                       {t("customers.person.source")}
                     </p>
-                    {/* <p className="text-sm text-gray-900">
-                      {selectedCustomer.source}
-                    </p> */}
                     <p className="text-sm text-gray-900">
                       {selectedCustomer.source === "o"
                         ? t("customers.addClientObj.sourceObj.online")
@@ -574,9 +596,6 @@ export function Customers() {
                 <button className="flex-1 px-4 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors text-sm">
                   {t("customers.person.call")}
                 </button>
-                {/* <button className="flex-1 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors text-sm">
-                  {t("customers.person.sendEmail")}
-                </button> */}
               </div>
             </div>
           </div>

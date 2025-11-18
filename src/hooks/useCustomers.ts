@@ -11,6 +11,8 @@ import {
   getCarsModels,
   getCustomers,
   getOneCustomer,
+  getUsersStatus,
+  UsersStatus,
 } from "../api/customers";
 
 const createUserSchema = (t: any) =>
@@ -26,6 +28,7 @@ const createUserSchema = (t: any) =>
     source: z.string().optional(),
     interested_in: z.string().optional(),
     notes: z.string().min(1, "To‘liq kiriting"),
+    status: z.string().optional(),
   });
 
 export type User = z.infer<ReturnType<typeof createUserSchema>>;
@@ -36,6 +39,9 @@ export const useCustomers = () => {
   const [selected, setSelected] = useState<number | null>(null);
   const [carsModels, setCarsModels] = useState<CarsModels[]>([]);
   const [isDeleteModal, setDeleteModal] = useState(false);
+  const [pgnCount, setPgnCount] = useState<number | null>(null);
+  const [activePage, setActivePage] = useState(1);
+  const [usersStatus, setUsersStatus] = useState<UsersStatus[]>([]);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -71,6 +77,7 @@ export const useCustomers = () => {
         assigned_to: 2,
         sentiment: "p",
         interested_in: Number(data?.interested_in),
+        status: Number(data?.status),
         // interested_in: 3,
       };
       if (selected === null) {
@@ -108,12 +115,28 @@ export const useCustomers = () => {
     }
   };
 
-  const fetchUsers = async () => {
+  const fetchUsersStatus = async () => {
+    try {
+      const data = await getUsersStatus();
+      setUsersStatus(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchUsers = async (
+    active = 1,
+    search = "",
+    status: string | number = "all"
+  ) => {
     try {
       setLoading(true);
       setError(null);
-      const { results } = await getCustomers();
+      const { results, count } = await getCustomers(active, search, status);
       setCustomers(results);
+      setPgnCount(count);
+
+      setActivePage(active);
     } catch (err) {
       setError("Mashinalarni yuklab boʻlmadi");
       console.error("Error fetching cars:", err);
@@ -133,6 +156,7 @@ export const useCustomers = () => {
         phone_number: data.phone_number,
         source: data.source,
         interested_in: `${data.interested_in}`,
+        status: `${data.status}`,
         notes: data.notes,
       });
       setShowAddModal(true);
@@ -157,6 +181,7 @@ export const useCustomers = () => {
   useEffect(() => {
     fetchUsers();
     fetchCarsModels();
+    fetchUsersStatus();
   }, []);
 
   // const refetch = () => {
@@ -180,6 +205,13 @@ export const useCustomers = () => {
     isDeleteModal,
     closeModal,
     carsModels,
+    usersStatus,
+
+    pgnCount,
+    activePage,
+    fetchUsers,
+    fetchCarsModels,
+    setActivePage,
 
     customers,
     loading,

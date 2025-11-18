@@ -19,6 +19,14 @@
   "description": "Bu ko'p tilli ilova",
   "delete": "O‘chirilsinmi-?",
   "noData": "Notug'ri kiritilgan ma'lumot",
+
+  "title": "O'chirish",
+  "message": "Ushbu ma'lumotni o'chirishni xohlaysizmi?",
+  "actions": {
+    "cansel": "Bekor qilish",
+    "ok": "Ha"
+  },
+  "noInformation": "Ma'lumot yo'q",
   "buttons": {
     "login": "Kirish",
     "signup": "Ro'yxatdan o'tish"
@@ -100,6 +108,7 @@
     "addClientObj": {
       "addNewClient": "Yangi mijoz qo'shish",
       "oneClient": "Mijoz tahrirlash",
+      "statusFilter": "Barcha holatlar",
 
       "clientName": "Mijoz ismi",
       "enterName": "Ism kiriting",
@@ -116,8 +125,10 @@
       "status": "Holat",
       "statusObj": {
         "new": "Yangi",
-        "connected": "Bog‘lanildi",
-        "qualified": "Malakali"
+        "connected": "Aloqa qilindi",
+        "qualified": "Malakali",
+        "negotiable": "Muzokarali",
+        "sale": "Sotish"
       },
       "notes": "Eslatmalar",
       "additionalInfo": "Mijoz haqida qo'shimcha ma'lumot...",
