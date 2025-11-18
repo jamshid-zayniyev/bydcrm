@@ -2,9 +2,11 @@ import { TrendingUp, DollarSign, Calendar, User } from "lucide-react";
 import { sales, customers } from "../data/mockData";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useTranslation } from "react-i18next";
+import { useSales } from "../hooks/useSales";
 
 export function Sales() {
   const { t } = useTranslation();
+  const { sales } = useSales();
   const formatAmount = (amount: number) => {
     return new Intl.NumberFormat("ru-RU", {
       style: "currency",
@@ -15,16 +17,17 @@ export function Sales() {
   };
 
   const statusColors: Record<string, string> = {
-    pending: "bg-yellow-100 text-yellow-700 border-yellow-200",
-    completed: "bg-green-100 text-green-700 border-green-200",
+    cp: "bg-green-100 text-green-700 border-green-200",
+    p: "bg-yellow-100 text-yellow-700 border-yellow-200",
+    r: "bg-blue-100 text-blue-700 border-blue-200",
     cancelled: "bg-red-100 text-red-700 border-red-200",
   };
 
-  const statusLabels: Record<string, string> = {
-    pending: "В обработке",
-    completed: "Завершена",
-    cancelled: "Отменена",
-  };
+  // const statusLabels: Record<string, string> = {
+  //   cp: "Завершена",
+  //   p: "В обработке",
+  //   cancelled: "Отменена",
+  // };
 
   const totalRevenue = sales.reduce((sum, sale) => sum + sale.amount, 0);
   const completedSales = sales.filter((s) => s.status === "completed").length;
@@ -57,6 +60,8 @@ export function Sales() {
       color: "red",
     },
   ];
+
+  console.log(sales);
 
   return (
     <div className="space-y-6">
@@ -131,8 +136,8 @@ export function Sales() {
                       <TrendingUp className="w-5 h-5 text-[#E60012]" />
                     </div>
                     <div>
-                      <h4 className="text-gray-900">{sale.customerName}</h4>
-                      <p className="text-sm text-gray-500">{sale.vehicle}</p>
+                      <h4 className="text-gray-900">{sale.customer_name}</h4>
+                      <p className="text-sm text-gray-500">{sale.car}</p>
                     </div>
                   </div>
 
@@ -140,17 +145,19 @@ export function Sales() {
                     <div className="flex items-center gap-2">
                       <DollarSign className="w-4 h-4 text-gray-400" />
                       <span className="text-sm text-gray-700">
-                        {formatAmount(sale.amount)}
+                        {formatAmount(sale.price)}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4 text-gray-400" />
-                      <span className="text-sm text-gray-700">{sale.date}</span>
+                      <span className="text-sm text-gray-700">
+                        {sale.created_at.toString().split("T")[0]}
+                      </span>
                     </div>
                     <div className="flex items-center gap-2">
                       <User className="w-4 h-4 text-gray-400" />
                       <span className="text-sm text-gray-700">
-                        {sale.salesPerson}
+                        {sale.sold_by}
                       </span>
                     </div>
                   </div>
@@ -161,7 +168,13 @@ export function Sales() {
                     statusColors[sale.status]
                   }`}
                 >
-                  {statusLabels[sale.status]}
+                  {sale.status == "cp"
+                    ? `${t("sales.COMPLETED")}`
+                    : sale.status == "p"
+                    ? `${t("sales.PENDING")}`
+                    : sale.status == "r"
+                    ? `${t("sales.REVISED")}`
+                    : `${t("sales.CANCELLED")}`}
                 </span>
               </div>
             </div>

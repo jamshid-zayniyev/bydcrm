@@ -176,7 +176,11 @@
     "departmentSales": "Savdo bo'limi",
     "transaction": "Shartnomalarni boshqarish va savdo trubkasi",
     "latestTransactions": "Oxirgi shartnomalar",
-    "viewDetails": "Ma’lumotlarni ko‘rish"
+    "viewDetails": "Ma’lumotlarni ko‘rish",
+    "COMPLETED": "Tugadi",
+    "PENDING": "Jarayonda",
+    "REVISED": "Tuzatildi",
+    "CANCELLED": "Bekor qilindi"
   },
   "service": {
     "serviceMaintenance": "Xizmat ko'rsatish",

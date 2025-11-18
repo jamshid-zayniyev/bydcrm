@@ -175,7 +175,11 @@
     "departmentSales": "Отдел продаж",
     "transaction": "Управление сделками и воронка продаж",
     "latestTransactions": "Последние сделки",
-    "viewDetails": "Посмотреть детали"
+    "viewDetails": "Посмотреть детали",
+    "COMPLETED": "Завершена",
+    "PENDING": "В обработке",
+    "REVISED": "Исправлено",
+    "CANCELLED": "Отменена"
   },
   "service": {
     "serviceMaintenance": "Сервисное обслуживание",
