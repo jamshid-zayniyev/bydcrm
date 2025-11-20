@@ -11,10 +11,12 @@ import {
 import { calls } from "../data/mockData";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useTranslation } from "react-i18next";
+import { useCallCenter } from "../hooks/useCallCenter";
 
 export function CallCenter() {
   const [selectedCall, setSelectedCall] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const { callCenter } = useCallCenter();
   const { t } = useTranslation();
 
   const formatDuration = (seconds: number) => {
@@ -60,6 +62,8 @@ export function CallCenter() {
       setIsPlaying(false);
     }, 3000);
   };
+
+  console.log(callCenter);
 
   return (
     <div className="space-y-6">

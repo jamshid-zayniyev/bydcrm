@@ -177,6 +177,10 @@
     "transaction": "Shartnomalarni boshqarish va savdo trubkasi",
     "latestTransactions": "Oxirgi shartnomalar",
     "viewDetails": "Ma’lumotlarni ko‘rish",
+    "total_income": "Umumiy daromad",
+    "completed_trade": "Yakunlangan savdolar",
+    "average_check": "O‘rtacha chek",
+
     "COMPLETED": "Tugadi",
     "PENDING": "Jarayonda",
     "REVISED": "Tuzatildi",

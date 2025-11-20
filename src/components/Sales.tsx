@@ -6,7 +6,7 @@ import { useSales } from "../hooks/useSales";
 
 export function Sales() {
   const { t } = useTranslation();
-  const { sales } = useSales();
+  const { sales, salesStatistics, loading, error } = useSales();
   const formatAmount = (amount: number) => {
     return new Intl.NumberFormat("ru-RU", {
       style: "currency",
@@ -29,39 +29,54 @@ export function Sales() {
   //   cancelled: "Отменена",
   // };
 
-  const totalRevenue = sales.reduce((sum, sale) => sum + sale.amount, 0);
-  const completedSales = sales.filter((s) => s.status === "completed").length;
-  const avgSaleValue = Math.round(totalRevenue / sales.length);
+  // const totalRevenue = sales.reduce((sum, sale) => sum + sale.amount, 0);
+  // const completedSales = sales.filter((s) => s.status === "completed").length;
+  // const avgSaleValue = Math.round(totalRevenue / sales.length);
 
-  const pipeline = [
-    {
-      stage: "Новые лиды",
-      count: customers.filter((c) => c.status === "new").length,
-      color: "blue",
-    },
-    {
-      stage: "Связались",
-      count: customers.filter((c) => c.status === "contacted").length,
-      color: "purple",
-    },
-    {
-      stage: "Квалифицированы",
-      count: customers.filter((c) => c.status === "qualified").length,
-      color: "green",
-    },
-    {
-      stage: "Переговоры",
-      count: customers.filter((c) => c.status === "negotiation").length,
-      color: "yellow",
-    },
-    {
-      stage: "Продажи",
-      count: customers.filter((c) => c.status === "won").length,
-      color: "red",
-    },
-  ];
+  // const pipeline = [
+  //   {
+  //     stage: "Новые лиды",
+  //     count: customers.filter((c) => c.status === "new").length,
+  //     color: "blue",
+  //   },
+  //   {
+  //     stage: "Связались",
+  //     count: customers.filter((c) => c.status === "contacted").length,
+  //     color: "purple",
+  //   },
+  //   {
+  //     stage: "Квалифицированы",
+  //     count: customers.filter((c) => c.status === "qualified").length,
+  //     color: "green",
+  //   },
+  //   {
+  //     stage: "Переговоры",
+  //     count: customers.filter((c) => c.status === "negotiation").length,
+  //     color: "yellow",
+  //   },
+  //   {
+  //     stage: "Продажи",
+  //     count: customers.filter((c) => c.status === "won").length,
+  //     color: "red",
+  //   },
+  // ];
 
-  console.log(sales);
+  // BYD Vehicles loading state
+  if (loading) {
+    return (
+      <div className="space-y-4 sm:space-y-6">
+        {/* Loading state for BYD Models section */}
+        <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl border border-gray-200 shadow-sm">
+          <div className="flex items-center justify-center h-32">
+            <div className="text-center">
+              <div className="w-8 h-8 border-4 border-[#E60012] border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+              <p className="text-gray-600 text-sm">{t("loading")}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -92,9 +107,11 @@ export function Sales() {
             <div className="w-10 h-10 bg-green-50 border-2 border-green-600 rounded-xl flex items-center justify-center">
               <DollarSign className="w-5 h-5 text-green-600" />
             </div>
-            <p className="text-gray-500 text-sm">Общая выручка</p>
+            <p className="text-gray-500 text-sm">{t("sales.total_income")}</p>
           </div>
-          <p className="text-gray-900">{formatAmount(totalRevenue)}</p>
+          <p className="text-gray-900">
+            {formatAmount(+salesStatistics?.total_income)}
+          </p>
         </div>
 
         <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
@@ -102,9 +119,13 @@ export function Sales() {
             <div className="w-10 h-10 bg-red-50 border-2 border-[#E60012] rounded-xl flex items-center justify-center">
               <TrendingUp className="w-5 h-5 text-[#E60012]" />
             </div>
-            <p className="text-gray-500 text-sm">Завершенных продаж</p>
+            <p className="text-gray-500 text-sm">
+              {t("sales.completed_trade")}
+            </p>
           </div>
-          <p className="text-gray-900">{completedSales}</p>
+          <p className="text-gray-900">
+            {formatAmount(+salesStatistics?.completed_trade)}
+          </p>
         </div>
 
         <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
@@ -112,9 +133,11 @@ export function Sales() {
             <div className="w-10 h-10 bg-gray-100 border-2 border-black rounded-xl flex items-center justify-center">
               <DollarSign className="w-5 h-5 text-black" />
             </div>
-            <p className="text-gray-500 text-sm">Средний чек</p>
+            <p className="text-gray-500 text-sm">{t("sales.average_check")}</p>
           </div>
-          <p className="text-gray-900">{formatAmount(avgSaleValue)}</p>
+          <p className="text-gray-900">
+            {formatAmount(+salesStatistics?.average_check)}
+          </p>
         </div>
       </div>
 

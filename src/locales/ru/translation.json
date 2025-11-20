@@ -176,6 +176,10 @@
     "transaction": "Управление сделками и воронка продаж",
     "latestTransactions": "Последние сделки",
     "viewDetails": "Посмотреть детали",
+    "total_income": "Общая выручка",
+    "completed_trade": "Завершенных продаж",
+    "average_check": "Средний чек",
+
     "COMPLETED": "Завершена",
     "PENDING": "В обработке",
     "REVISED": "Исправлено",
