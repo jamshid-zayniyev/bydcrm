@@ -17,12 +17,24 @@ export interface SalesStatistics {
   average_check: string;
 }
 
+export interface SalesBanner {
+  id: number;
+  image: string;
+  title: string;
+  description: string;
+}
+
 export const getSales = async (): Promise<Sales[]> => {
-  const response = await api.get(`/reports/sales-contract/`);
+  const response = await api.get(`/sales/sales-contract/`);
   return response.data;
 };
 
 export const getSalesStatistics = async (): Promise<SalesStatistics> => {
-  const response = await api.get(`/reports/sales-statistics/`);
+  const response = await api.get(`/sales/sales-statistics/`);
+  return response.data;
+};
+
+export const getSalesBanner = async (): Promise<SalesBanner[]> => {
+  const response = await api.get(`/sales/banner/`);
   return response.data;
 };

@@ -170,7 +170,9 @@
     "callHistory": "Qo'ng'iroqlar tarixi",
     "Operator": "Operator",
     "todayTarget": "Bugungi maqsad",
-    "callNumber": "qo'ng'iroqlar"
+    "callNumber": "qo'ng'iroqlar",
+    "outgoing": "Chiquvchi",
+    "incoming": "Kiruvchi"
   },
   "sales": {
     "departmentSales": "Savdo bo'limi",

@@ -14,9 +14,9 @@ import { useTranslation } from "react-i18next";
 import { useCallCenter } from "../hooks/useCallCenter";
 
 export function CallCenter() {
-  const [selectedCall, setSelectedCall] = useState<string | null>(null);
+  const [selectedCall, setSelectedCall] = useState<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const { callCenter } = useCallCenter();
+  const { callCenter, callStatistics, loading } = useCallCenter();
   const { t } = useTranslation();
 
   const formatDuration = (seconds: number) => {
@@ -34,15 +34,15 @@ export function CallCenter() {
   };
 
   const sentimentColors: Record<string, string> = {
-    positive: "bg-green-100 text-green-700 border-green-200",
-    neutral: "bg-gray-100 text-gray-700 border-gray-200",
-    negative: "bg-red-100 text-red-700 border-red-200",
+    p: "bg-green-100 text-green-700 border-green-200",
+    nt: "bg-gray-100 text-gray-700 border-gray-200",
+    n: "bg-red-100 text-red-700 border-red-200",
   };
 
   const sentimentLabels: Record<string, string> = {
-    positive: "Позитивный",
-    neutral: "Нейтральный",
-    negative: "Негативный",
+    p: "Позитивный",
+    nt: "Нейтральный",
+    n: "Негативный",
   };
 
   const totalCalls = calls.length;
@@ -54,7 +54,7 @@ export function CallCenter() {
     calls.reduce((sum, call) => sum + (call.aiScore || 0), 0) / calls.length
   ).toFixed(1);
 
-  const handlePlayRecording = (callId: string) => {
+  const handlePlayRecording = (callId: number) => {
     setSelectedCall(callId);
     setIsPlaying(true);
     // Simulate playing for 3 seconds
@@ -63,7 +63,23 @@ export function CallCenter() {
     }, 3000);
   };
 
-  console.log(callCenter);
+  if (loading) {
+    return (
+      <div className="space-y-4 sm:space-y-6">
+        {/* Loading state for BYD Models section */}
+        <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl border border-gray-200 shadow-sm">
+          <div className="flex items-center justify-center h-32">
+            <div className="text-center">
+              <div className="w-8 h-8 border-4 border-[#E60012] border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+              <p className="text-gray-600 text-sm">{t("loading")}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  console.log(callStatistics);
 
   return (
     <div className="space-y-6">
@@ -89,7 +105,7 @@ export function CallCenter() {
             </div>
             <p className="text-gray-500 text-sm">{t("callCenter.callTotal")}</p>
           </div>
-          <p className="text-gray-900">{totalCalls}</p>
+          <p className="text-gray-900">{callStatistics?.general_calls}</p>
         </div>
 
         <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
@@ -101,7 +117,7 @@ export function CallCenter() {
               {t("callCenter.averageDuration")}
             </p>
           </div>
-          <p className="text-gray-900">{formatDuration(avgDuration)}</p>
+          <p className="text-gray-900">{callStatistics?.average_duration}</p>
         </div>
 
         <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
@@ -111,9 +127,7 @@ export function CallCenter() {
             </div>
             <p className="text-gray-500 text-sm">{t("callCenter.positive")}</p>
           </div>
-          <p className="text-gray-900">
-            {positiveCalls} ({Math.round((positiveCalls / totalCalls) * 100)}%)
-          </p>
+          <p className="text-gray-900">{callStatistics?.positives}</p>
         </div>
 
         <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
@@ -123,7 +137,7 @@ export function CallCenter() {
             </div>
             <p className="text-gray-500 text-sm">{t("callCenter.ai")}</p>
           </div>
-          <p className="text-gray-900">{avgScore}/10</p>
+          <p className="text-gray-900">{callStatistics?.average_ai_score}/10</p>
         </div>
       </div>
 
@@ -150,7 +164,7 @@ export function CallCenter() {
           <h3 className="text-gray-900">{t("callCenter.callHistory")}</h3>
         </div>
         <div className="divide-y divide-gray-200">
-          {calls.map((call) => (
+          {callCenter.map((call) => (
             <div
               key={call.id}
               className="p-5 hover:bg-gray-50 transition-colors"
@@ -174,10 +188,12 @@ export function CallCenter() {
                       />
                     </div>
                     <div>
-                      <h4 className="text-gray-900">{call.customerName}</h4>
+                      <h4 className="text-gray-900">{call.customer_name}</h4>
                       <p className="text-sm text-gray-500">
-                        {call.type === "incoming" ? "Входящий" : "Исходящий"} •{" "}
-                        {formatTime(call.timestamp)}
+                        {call.type === "incoming"
+                          ? t("callCenter.incoming")
+                          : t("callCenter.outgoing")}{" "}
+                        • {formatTime(call.timestamp)}
                       </p>
                     </div>
                   </div>
@@ -185,7 +201,8 @@ export function CallCenter() {
                   <div className="flex flex-wrap gap-2 ml-13">
                     <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs border border-gray-200">
                       <Clock className="w-3 h-3 inline mr-1" />
-                      {formatDuration(call.duration)}
+                      {/* {formatDuration(call.duration)} */}
+                      {call.duration}
                     </span>
                     {call.sentiment && (
                       <span
@@ -194,21 +211,27 @@ export function CallCenter() {
                         }`}
                       >
                         {sentimentLabels[call.sentiment]}
+                        {/* {call.sentiment} */}
+                        {/* {call.sentiment === "p"
+                          ? "Positive"
+                          : call.sentiment === "nt"
+                          ? "Neutral"
+                          : "Negative"} */}
                       </span>
                     )}
-                    {call.aiScore && (
+                    {call.ai_score && (
                       <span className="px-2 py-1 bg-[#E60012]/10 text-[#E60012] rounded text-xs border border-[#E60012]/20">
-                        Оценка ИИ: {call.aiScore}/10
+                        Оценка ИИ: {call.ai_score}/10
                       </span>
                     )}
                   </div>
 
-                  {call.aiNotes && (
+                  {call.ai_notes && (
                     <div className="mt-3 p-3 bg-blue-50 rounded-lg ml-13 border border-blue-200">
                       <p className="text-xs text-blue-700 mb-1">
                         🤖 ИИ Рекомендации:
                       </p>
-                      <p className="text-sm text-gray-700">{call.aiNotes}</p>
+                      <p className="text-sm text-gray-700">{call.ai_notes}</p>
                     </div>
                   )}
                 </div>
@@ -217,7 +240,7 @@ export function CallCenter() {
                   <p className="text-xs text-gray-500">
                     {t("callCenter.Operator")}:
                   </p>
-                  <p className="text-sm text-gray-900">{call.agentName}</p>
+                  <p className="text-sm text-gray-900">{call.agent_name}</p>
                   <div className="flex gap-2 mt-2">
                     {call.recorded && (
                       <button

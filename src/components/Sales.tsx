@@ -6,7 +6,7 @@ import { useSales } from "../hooks/useSales";
 
 export function Sales() {
   const { t } = useTranslation();
-  const { sales, salesStatistics, loading, error } = useSales();
+  const { salesBanner, sales, salesStatistics, loading, error } = useSales();
   const formatAmount = (amount: number) => {
     return new Intl.NumberFormat("ru-RU", {
       style: "currency",
@@ -86,19 +86,21 @@ export function Sales() {
       </div>
 
       {/* Hero Image */}
-      <div className="relative h-48 rounded-xl overflow-hidden">
-        <ImageWithFallback
-          src="https://images.unsplash.com/photo-1617788138017-80ad40651399?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxCWUQlMjBlbGVjdHJpYyUyMFNVVnxlbnwxfHx8fDE3NjAxOTQ4MjB8MA&ixlib=rb-4.1.0&q=80&w=1080"
-          alt="BYD Electric SUV"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#E60012]/90 via-[#E60012]/60 to-transparent flex items-center px-8">
-          <div>
-            <h1 className="text-white mb-2">BYD - Электрическое будущее</h1>
-            <p className="text-white/90 text-sm">Инновации в каждой детали</p>
+      {salesBanner.map((el) => (
+        <div className="relative h-48 rounded-xl overflow-hidden" key={el?.id}>
+          <ImageWithFallback
+            src={el?.image}
+            alt={el?.title}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#E60012]/90 via-[#E60012]/60 to-transparent flex items-center px-8">
+            <div>
+              <h1 className="text-white mb-2">{el?.title}</h1>
+              <p className="text-white/90 text-sm">{el?.description}</p>
+            </div>
           </div>
         </div>
-      </div>
+      ))}
 
       {/* Revenue Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

@@ -1,14 +1,19 @@
 import { useState, useEffect } from "react";
 import {
-  getSales,
-  getSalesStatistics,
-  Sales,
-  SalesStatistics,
-} from "../api/sales";
-import { CallCenter, getCallCenter } from "../api/callCenter";
+  CallCenter,
+  CallStatistics,
+  getCallCenter,
+  getCallStatistics,
+} from "../api/callCenter";
 
 export const useCallCenter = () => {
   const [callCenter, setCallCenter] = useState<CallCenter[]>([]);
+  const [callStatistics, setCallStatistics] = useState<CallStatistics>({
+    general_calls: 0,
+    average_duration: "",
+    positives: 0,
+    average_ai_score: 0,
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -26,8 +31,23 @@ export const useCallCenter = () => {
     }
   };
 
+  const fetchCallStatistics = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await getCallStatistics();
+      setCallStatistics(data);
+    } catch (err) {
+      setError("Mashinalarni yuklab boʻlmadi");
+      console.error("Error fetching cars:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchCallCenter();
+    fetchCallStatistics();
   }, []);
 
   const refetch = () => {
@@ -36,6 +56,7 @@ export const useCallCenter = () => {
 
   return {
     callCenter,
+    callStatistics,
     loading,
     error,
     refetch,

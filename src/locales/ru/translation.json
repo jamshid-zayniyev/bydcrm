@@ -169,7 +169,9 @@
     "callHistory": "История звонков",
     "Operator": "Оператор",
     "todayTarget": "Цель на сегодня",
-    "callNumber": "звонков"
+    "callNumber": "звонков",
+    "outgoing": "Исходящий",
+    "incoming": "Входящий"
   },
   "sales": {
     "departmentSales": "Отдел продаж",
