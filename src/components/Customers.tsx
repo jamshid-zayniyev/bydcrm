@@ -20,6 +20,7 @@ import NoData from "../assets/no-data.svg";
 
 import DeleteModal from "./ui/delete-modal";
 import { PaginationDemo } from "./ui/paginationApi";
+import { count } from "console";
 
 export function Customers() {
   const [selectedCustomer, setSelectedCustomer] = useState<Customers | null>(
@@ -141,7 +142,7 @@ export function Customers() {
         </div>
         <button
           onClick={() => setShowAddModal(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors shadow-sm"
+          className="cursor-pointer flex items-center gap-2 px-4 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors shadow-sm"
         >
           <Plus className="w-4 h-4" />
           <span className="text-sm">{t("customers.addClient")}</span>
@@ -297,14 +298,20 @@ export function Customers() {
               </div>
             ))}
           </div>
-          <PaginationDemo
-            pgnCount={pgnCount}
-            fetchUsers={fetchUsers}
-            activePage={activePage}
-            setActivePage={setActivePage}
-            searchFilter={searchFilter}
-            filterStatus={filterStatus}
-          />
+          {pgnCount && pgnCount > 10 ? (
+            <PaginationDemo
+              pgnCount={pgnCount}
+              fetchUsers={fetchUsers}
+              activePage={activePage}
+              setActivePage={setActivePage}
+              searchFilter={searchFilter}
+              filterStatus={filterStatus}
+              filterService=""
+              filterDate=""
+            />
+          ) : (
+            ""
+          )}
         </>
       ) : (
         <div className="flex justify-center">

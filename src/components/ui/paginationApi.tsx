@@ -4,11 +4,19 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface PaginationDemoProps {
   pgnCount?: number | null;
-  fetchUsers: (page: number, search: string, status: number | string) => void;
+  fetchUsers: (
+    page: number,
+    search: string,
+    status: number | string,
+    service_type: string,
+    filterDate: string
+  ) => void;
   activePage: number;
   setActivePage: (page: number) => void;
   searchFilter: string;
   filterStatus: number | string;
+  filterService: string;
+  filterDate: string;
 }
 
 export function PaginationDemo({
@@ -18,6 +26,8 @@ export function PaginationDemo({
   setActivePage,
   searchFilter,
   filterStatus,
+  filterService,
+  filterDate,
 }: PaginationDemoProps) {
   const totalPage = pgnCount ? Math.ceil(pgnCount / 10) : 0;
 
@@ -26,7 +36,13 @@ export function PaginationDemo({
     if (activePage < totalPage) {
       const nextPage = activePage + 1;
       setActivePage(nextPage);
-      fetchUsers(nextPage, searchFilter, filterStatus);
+      fetchUsers(
+        nextPage,
+        searchFilter,
+        filterStatus,
+        filterService,
+        filterDate
+      );
     }
   };
 
@@ -35,7 +51,13 @@ export function PaginationDemo({
     if (activePage > 1) {
       const prevPage = activePage - 1;
       setActivePage(prevPage);
-      fetchUsers(prevPage, searchFilter, filterStatus);
+      fetchUsers(
+        prevPage,
+        searchFilter,
+        filterStatus,
+        filterService,
+        filterDate
+      );
     }
   };
 
@@ -59,7 +81,15 @@ export function PaginationDemo({
             <button
               key={page}
               disabled={page === activePage}
-              onClick={() => fetchUsers(page, searchFilter, filterStatus)}
+              onClick={() =>
+                fetchUsers(
+                  page,
+                  searchFilter,
+                  filterStatus,
+                  filterService,
+                  filterDate
+                )
+              }
               className={`h-8 w-8 rounded text-sm font-medium transition-colors
              border border-border ${
                page === activePage ? "bg-primary text-primary-foreground" : ""

@@ -1,26 +1,74 @@
-import { Wrench, Calendar, Star, CheckCircle, Clock } from "lucide-react";
+import {
+  Wrench,
+  Calendar,
+  Star,
+  CheckCircle,
+  Clock,
+  Plus,
+  X,
+  Search,
+  Filter,
+} from "lucide-react";
 import { serviceRequests } from "../data/mockData";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useTranslation } from "react-i18next";
+import { useService } from "../hooks/useService";
+import Edit from "../assets/edit.svg";
+import Delete from "../assets/delete.svg";
+import NoData from "../assets/no-data.svg";
+import { useCustomers } from "../hooks/useCustomers";
+import DeleteModal from "./ui/delete-modal";
+import { useState } from "react";
+import { PaginationDemo } from "./ui/paginationApi";
 
 export function Service() {
   const { t } = useTranslation();
+  const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
+  const [searchFilter, setSearchFilter] = useState("");
+  const [filterService, setFilterService] = useState("");
+  const [filterStatus, setFilterStatus] = useState("all");
+  const [filterDate, setFilterDate] = useState("");
+
+  const {
+    loading,
+    service,
+    onSubmit,
+    handleSubmit,
+    register,
+    errors,
+    employees,
+    setShowAddModal,
+    closeModal,
+    showAddModal,
+    editBtn,
+    selected,
+    deleteBtn,
+    closeDeleteModal,
+    openDeleteModal,
+    isDeleteModal,
+    setActivePage,
+    pgnCount,
+    activePage,
+    fetchService,
+  } = useService();
+  const { carsModels, customers } = useCustomers();
   const statusColors: Record<string, string> = {
-    scheduled: "bg-blue-100 text-blue-700 border-blue-200",
-    "in-progress": "bg-yellow-100 text-yellow-700 border-yellow-200",
-    completed: "bg-green-100 text-green-700 border-green-200",
+    s: "bg-blue-100 text-blue-700 border-blue-200",
+    i: "bg-yellow-100 text-yellow-700 border-yellow-200",
+    c: "bg-green-100 text-green-700 border-green-200",
   };
 
   const statusLabels: Record<string, string> = {
-    scheduled: "Запланировано",
-    "in-progress": "В работе",
-    completed: "Завершено",
+    s: "Запланировано",
+    i: "В работе",
+    c: "Завершено",
   };
 
   const statusIcons: Record<string, any> = {
-    scheduled: Calendar,
-    "in-progress": Clock,
-    completed: CheckCircle,
+    s: Calendar,
+    // "in-progress": Clock,
+    i: Clock,
+    c: CheckCircle,
   };
 
   const totalRequests = serviceRequests.length;
@@ -94,77 +142,394 @@ export function Service() {
 
       {/* Service Requests */}
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
-        <div className="p-5 border-b border-gray-200">
-          <h3 className="text-gray-900">{t("service.servicePush")}</h3>
+        <div className="flex flex-col gap-3 p-5 border-b border-gray-200">
+          <div className="flex items-center justify-between gap-2">
+            <h3 className="text-gray-900">{t("service.servicePush")}</h3>
+            <button
+              className="cursor-pointer  flex items-center gap-2 px-4 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors shadow-sm"
+              onClick={() => setShowAddModal(true)}
+            >
+              <Plus className="w-4 h-4" />
+              <span className="text-sm">{t("customers.addClient")}</span>
+            </button>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <div className="flex-1 relative">
+              <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                placeholder="Mijoz ismi va mashina nomi"
+                value={searchFilter}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setSearchFilter(value);
+                  fetchService(
+                    1,
+                    value,
+                    filterStatus,
+                    filterService,
+                    filterDate
+                  );
+                }}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#E60012] focus:border-transparent"
+              />
+            </div>
+            <select
+              className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#E60012] focus:border-transparent"
+              onChange={(e) => {
+                const value = e.target.value;
+                console.log(value);
+
+                setFilterStatus(value);
+                fetchService(1, searchFilter, value, filterService, filterDate);
+              }}
+            >
+              <option value="">status</option>
+              <option value={"i"}>In Progress</option>
+              <option value={"s"}>Scheduled</option>
+              <option value={"c"}>Completed</option>
+            </select>
+
+            <select
+              className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#E60012] focus:border-transparent"
+              onChange={(e) => {
+                const value = e.target.value;
+                setFilterService(value);
+                fetchService(1, searchFilter, filterStatus, value, filterDate);
+              }}
+            >
+              <option value="all">service </option>
+              <option value={"s"}>Scheduled maintenance</option>
+              <option value={"d"}>Diagnostics</option>
+            </select>
+
+            <input
+              type="date"
+              className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#E60012] focus:border-transparent"
+              onChange={(e) => {
+                const value = e.target.value;
+                setFilterDate(value);
+                fetchService(
+                  1,
+                  searchFilter,
+                  filterStatus,
+                  filterService,
+                  value
+                );
+              }}
+            />
+          </div>
         </div>
         <div className="divide-y divide-gray-200">
-          {serviceRequests.map((request) => {
-            const StatusIcon = statusIcons[request.status];
-            return (
-              <div
-                key={request.id}
-                className="p-5 hover:bg-gray-50 transition-colors"
-              >
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <div className="w-10 h-10 bg-red-50 border-2 border-[#E60012] rounded-full flex items-center justify-center">
-                        <Wrench className="w-5 h-5 text-[#E60012]" />
-                      </div>
-                      <div>
-                        <h4 className="text-gray-900">
-                          {request.customerName}
-                        </h4>
-                        <p className="text-sm text-gray-500">
-                          {request.vehicle}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-wrap gap-3 ml-13">
-                      <span className="text-sm text-gray-700">
-                        {request.serviceType}
-                      </span>
-                      <span className="text-sm text-gray-500">
-                        • {request.date}
-                      </span>
-                      <span className="text-sm text-gray-500">
-                        • {t("service.technician")}: {request.technician}
-                      </span>
-                    </div>
-
-                    {request.rating && (
-                      <div className="flex items-center gap-1 mt-2 ml-13">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`w-4 h-4 ${
-                              i < request.rating!
-                                ? "text-yellow-500 fill-yellow-500"
-                                : "text-gray-300"
-                            }`}
-                          />
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <StatusIcon className="w-4 h-4 text-gray-400" />
-                    <span
-                      className={`px-3 py-1 rounded-lg text-sm border ${
-                        statusColors[request.status]
-                      }`}
-                    >
-                      {statusLabels[request.status]}
-                    </span>
-                  </div>
+          {loading ? (
+            <div className="space-y-4 sm:space-y-6 mt-5">
+              <div className="flex items-center justify-center h-32">
+                <div className="text-center">
+                  <div className="w-8 h-8 border-4 border-[#E60012] border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                  <p className="text-gray-600 text-sm">{t("loading")}</p>
                 </div>
               </div>
-            );
-          })}
+            </div>
+          ) : service.length ? (
+            <>
+              {service.map((request) => {
+                const StatusIcon = statusIcons[request.status];
+                return (
+                  <div
+                    key={request.id}
+                    className="p-5 hover:bg-gray-50 transition-colors"
+                  >
+                    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <div className="w-10 h-10 bg-red-50 border-2 border-[#E60012] rounded-full flex items-center justify-center">
+                            <Wrench className="w-5 h-5 text-[#E60012]" />
+                          </div>
+                          <div>
+                            <h4 className="text-gray-900">
+                              {request.customer_name}
+                            </h4>
+                            <p className="text-sm text-gray-500">
+                              {request.vehicle}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-wrap gap-3 ml-13">
+                          <span className="text-sm text-gray-700">
+                            {request.service_type === "s"
+                              ? "Плановое ТО"
+                              : "Диагностика"}
+                          </span>
+                          <span className="text-sm text-gray-500">
+                            • {request.date}
+                          </span>
+                          <span className="text-sm text-gray-500">
+                            • {t("service.technician")}: {request.technician}
+                          </span>
+                        </div>
+
+                        {request.rate && (
+                          <div className="flex items-center gap-1 mt-2 ml-13">
+                            {[...Array(5)].map((_, i) => (
+                              <Star
+                                key={i}
+                                className={`w-4 h-4 ${
+                                  i < request.rate!
+                                    ? "text-yellow-500 fill-yellow-500"
+                                    : "text-gray-300"
+                                }`}
+                              />
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex flex-col flex-col items-center gap-3">
+                        <div className="flex items-center gap-3">
+                          <StatusIcon className="w-4 h-4 text-gray-400" />
+                          <span
+                            className={`px-3 py-1 rounded-lg text-sm border ${
+                              statusColors[request.status]
+                            }`}
+                          >
+                            {statusLabels[request.status]}
+                          </span>
+                        </div>
+
+                        <div className="flex gap-3">
+                          <img
+                            src={Edit}
+                            alt="no img"
+                            onClick={() => {
+                              editBtn(request.id);
+                            }}
+                          />
+                          <img
+                            src={Delete}
+                            alt="no img"
+                            onClick={() => {
+                              openDeleteModal();
+                              setSelectedItemId(request.id);
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+              {pgnCount && pgnCount > 10 ? (
+                <PaginationDemo
+                  pgnCount={pgnCount}
+                  fetchUsers={fetchService}
+                  activePage={activePage}
+                  setActivePage={setActivePage}
+                  searchFilter={searchFilter}
+                  filterStatus={filterStatus}
+                  filterService={filterService}
+                  filterDate={filterDate}
+                />
+              ) : (
+                ""
+              )}
+            </>
+          ) : (
+            <div className="flex justify-center py-4">
+              <div className="text-center">
+                <img src={NoData} alt="no data" />
+                <p className="text-gray-600 text-sm mt-0">{t("noData")}</p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
+
+      {showAddModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 h-full">
+          <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-200 flex items-center justify-between">
+              <h2 className="text-gray-900">
+                {selected
+                  ? `${t("customers.addClientObj.oneClient")}`
+                  : `${t("customers.addClientObj.addNewClient")}`}
+              </h2>
+              <button
+                onClick={closeModal}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    {t("customers.addClientObj.clientName")}
+                  </label>
+                  <input
+                    {...register("customer_name")}
+                    placeholder={t("customers.addClientObj.enterName")}
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                      errors.customer_name
+                        ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
+                        : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
+                    }`}
+                  />
+                  {errors.customer_name && (
+                    <p className="text-[#E60012]">
+                      {errors.customer_name.message}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    customer_id
+                  </label>
+                  <select
+                    {...register("customer_id")}
+                    className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent border-red-500`}
+                  >
+                    {customers.map((customer) => (
+                      <option key={customer.id} value={customer.id}>
+                        {customer.full_name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    vehicle
+                  </label>
+                  <select
+                    {...register("vehicle")}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
+                  >
+                    {carsModels.length ? (
+                      carsModels.map((el) => (
+                        <option key={el?.id} value={el?.id}>
+                          {el?.name}
+                        </option>
+                      ))
+                    ) : (
+                      <option value="" disabled>
+                        {t("noInformation")}
+                      </option>
+                    )}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    service_type
+                  </label>
+                  <select
+                    {...register("service_type")}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
+                  >
+                    <option value={"s"}>Scheduled maintenance</option>
+                    <option value={"d"}>Diagnostics</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    status
+                  </label>
+                  <select
+                    {...register("status")}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
+                  >
+                    <option value={"i"}>In Progress</option>
+                    <option value={"s"}>Scheduled</option>
+                    <option value={"c"}>Completed</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    technician
+                  </label>
+                  <select
+                    {...register("technician")}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
+                  >
+                    {employees.length ? (
+                      employees.map((el) => (
+                        <option key={el?.id} value={el?.id}>
+                          {el?.full_name}
+                        </option>
+                      ))
+                    ) : (
+                      <option value="" disabled>
+                        {t("noInformation")}
+                      </option>
+                    )}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Sana
+                  </label>
+                  <input
+                    type="date"
+                    {...register("date")}
+                    className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                      errors.date ? "border-red-500" : "border-gray-300"
+                    }`}
+                  />
+                  {errors.date && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.date.message}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    rate
+                  </label>
+                  <select
+                    {...register("rate")}
+                    className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                      errors.rate ? "border-red-500" : "border-gray-300"
+                    }`}
+                  >
+                    <option value={1}>⭐</option>
+                    <option value={2}>⭐⭐</option>
+                    <option value={3}>⭐⭐⭐</option>
+                    <option value={4}>⭐⭐⭐⭐</option>
+                    <option value={5}>⭐⭐⭐⭐⭐</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="submit"
+                  className="flex-1 px-4 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors"
+                >
+                  {loading
+                    ? `...${t("customers.addClientObj.addClient")}`
+                    : `${t("customers.addClientObj.addClient")}`}
+                </button>
+                <button
+                  disabled={loading}
+                  onClick={closeModal}
+                  className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                >
+                  {t("customers.addClientObj.cancel")}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Service Schedule */}
       <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
@@ -219,6 +584,13 @@ export function Service() {
           </div>
         </div>
       </div>
+
+      <DeleteModal
+        closeDeleteModal={closeDeleteModal}
+        isOpen={isDeleteModal}
+        selectedItemId={selectedItemId}
+        deleteBtn={deleteBtn}
+      />
     </div>
   );
 }
