@@ -194,7 +194,19 @@
     "writing": "Расписание на неделю",
     "records": "записей",
     "viewReviews": "Посмотреть отзывы",
-    "technician": "Техник"
+
+    "customerName": "Имя клиента",
+    "enterName": "Введите имя",
+    "customerId": "ID клиента",
+    "vehicle": "Транспортное средство",
+    "serviceType": "Тип услуги",
+    "status": "Статус",
+    "technician": "Техник",
+    "date": "Дата",
+    "rate": "Рейтинг",
+    "search": "Имя клиента и название автомобиля",
+    "allStatus": "Все статусы",
+    "allServiceType": "Все типы услуг"
   },
   "kpi": {
     "dashboard_title": "KPI Отдела продаж",

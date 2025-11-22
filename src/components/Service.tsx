@@ -160,7 +160,7 @@ export function Service() {
               <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
-                placeholder="Mijoz ismi va mashina nomi"
+                placeholder={t("service.search")}
                 value={searchFilter}
                 onChange={(e) => {
                   const value = e.target.value;
@@ -186,7 +186,7 @@ export function Service() {
                 fetchService(1, searchFilter, value, filterService, filterDate);
               }}
             >
-              <option value="">status</option>
+              <option value="">{t("service.allStatus")}</option>
               <option value={"i"}>In Progress</option>
               <option value={"s"}>Scheduled</option>
               <option value={"c"}>Completed</option>
@@ -200,7 +200,7 @@ export function Service() {
                 fetchService(1, searchFilter, filterStatus, value, filterDate);
               }}
             >
-              <option value="all">service </option>
+              <option value="all">{t("service.allServiceType")} </option>
               {serives.map((el) => (
                 <option key={el?.id} value={el?.id}>
                   {el?.title}
@@ -372,11 +372,11 @@ export function Service() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm text-gray-700 mb-2">
-                    {t("customers.addClientObj.clientName")}
+                    {t("service.customerName")}
                   </label>
                   <input
                     {...register("customer_name")}
-                    placeholder={t("customers.addClientObj.enterName")}
+                    placeholder={t("service.enterName")}
                     className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
                       errors.customer_name
                         ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
@@ -408,7 +408,7 @@ export function Service() {
 
                 <div>
                   <label className="block text-sm text-gray-700 mb-2">
-                    vehicle
+                    {t("service.vehicle")}
                   </label>
                   <select
                     {...register("vehicle")}
@@ -430,7 +430,7 @@ export function Service() {
 
                 <div>
                   <label className="block text-sm text-gray-700 mb-2">
-                    service_type
+                    {t("service.serviceType")}
                   </label>
                   <select
                     {...register("service_type")}
@@ -446,7 +446,7 @@ export function Service() {
 
                 <div>
                   <label className="block text-sm text-gray-700 mb-2">
-                    status
+                    {t("service.status")}
                   </label>
                   <select
                     {...register("status")}
@@ -460,7 +460,7 @@ export function Service() {
 
                 <div>
                   <label className="block text-sm text-gray-700 mb-2">
-                    technician
+                    {t("service.technician")}
                   </label>
                   <select
                     {...register("technician")}
@@ -482,7 +482,7 @@ export function Service() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Sana
+                    {t("service.date")}
                   </label>
                   <input
                     type="date"
@@ -500,7 +500,7 @@ export function Service() {
 
                 <div>
                   <label className="block text-sm text-gray-700 mb-2">
-                    rate
+                    {t("service.rate")}
                   </label>
                   <select
                     {...register("rate")}

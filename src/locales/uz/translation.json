@@ -195,7 +195,19 @@
     "writing": "Haftalik jadval",
     "records": "yozuvlar",
     "viewReviews": "Sharhlarni ko'rish",
-    "technician": "Texnik"
+
+    "customerName": "Mijoz ismi",
+    "enterName": "Ism kiriting",
+    "customerId": "Mijoz ID",
+    "vehicle": "Mashina",
+    "serviceType": "Xizmat turi",
+    "status": "Holat",
+    "technician": "Texnik",
+    "date": "Sana",
+    "rate": "Reyting",
+    "search": "Mijoz ismi va mashina nomi",
+    "allStatus": "Barcha holatlar",
+    "allServiceType": "Barcha xizmat turi"
   },
   "kpi": {
     "dashboard_title": "Sotuv bo‘limi KPI",
