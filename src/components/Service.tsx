@@ -50,6 +50,7 @@ export function Service() {
     pgnCount,
     activePage,
     fetchService,
+    serives,
   } = useService();
   const { carsModels, customers } = useCustomers();
   const statusColors: Record<string, string> = {
@@ -154,7 +155,7 @@ export function Service() {
             </button>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
             <div className="flex-1 relative">
               <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
@@ -176,7 +177,7 @@ export function Service() {
               />
             </div>
             <select
-              className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#E60012] focus:border-transparent"
+              className="w-[200px] px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#E60012] focus:border-transparent"
               onChange={(e) => {
                 const value = e.target.value;
                 console.log(value);
@@ -200,8 +201,11 @@ export function Service() {
               }}
             >
               <option value="all">service </option>
-              <option value={"s"}>Scheduled maintenance</option>
-              <option value={"d"}>Diagnostics</option>
+              {serives.map((el) => (
+                <option key={el?.id} value={el?.id}>
+                  {el?.title}
+                </option>
+              ))}
             </select>
 
             <input
@@ -258,9 +262,10 @@ export function Service() {
 
                         <div className="flex flex-wrap gap-3 ml-13">
                           <span className="text-sm text-gray-700">
-                            {request.service_type === "s"
+                            {/* {request.service_type === "s"
                               ? "Плановое ТО"
-                              : "Диагностика"}
+                              : "Диагностика"} */}
+                            {request.service_type}
                           </span>
                           <span className="text-sm text-gray-500">
                             • {request.date}
@@ -431,8 +436,11 @@ export function Service() {
                     {...register("service_type")}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
                   >
-                    <option value={"s"}>Scheduled maintenance</option>
-                    <option value={"d"}>Diagnostics</option>
+                    {serives.map((el) => (
+                      <option key={el?.id} value={el?.id}>
+                        {el?.title}
+                      </option>
+                    ))}
                   </select>
                 </div>
 

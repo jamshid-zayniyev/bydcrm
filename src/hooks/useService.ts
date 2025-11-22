@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { api } from "../api/axios";
 import {
   Employees,
+  Service,
   ServiceFormData,
   serviceSchema,
   ServicesType,
@@ -37,6 +38,7 @@ export const useService = () => {
   const [isDeleteModal, setDeleteModal] = useState(false);
   const [activePage, setActivePage] = useState(1);
   const [pgnCount, setPgnCount] = useState<number | null>(null);
+  const [serives, setSerives] = useState<Service[]>([]);
 
   const fetchService = async (
     active = 1,
@@ -99,6 +101,15 @@ export const useService = () => {
     }
   };
 
+  const getSerives = async () => {
+    try {
+      const { data } = await api.get("/serives/types/");
+      setSerives(data);
+    } catch (error) {
+      console.error("Error fetching cars:", error);
+    }
+  };
+
   const closeModal = () => {
     setSelected(null);
     setShowAddModal(false);
@@ -124,6 +135,7 @@ export const useService = () => {
   useEffect(() => {
     fetchService();
     getEmployees();
+    getSerives();
   }, []);
 
   const refetch = () => {
@@ -175,5 +187,6 @@ export const useService = () => {
     pgnCount,
     activePage,
     fetchService,
+    serives,
   };
 };

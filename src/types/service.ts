@@ -20,6 +20,11 @@ export interface Employees {
   email: string;
 }
 
+export interface Service {
+  id: 0;
+  title: "string";
+}
+
 export const serviceSchema = z.object({
   customer_id: z.string().optional(),
   customer_name: z.string().min(1, "Mijoz nomi kiritilishi shart"),
