@@ -195,6 +195,10 @@
     "records": "записей",
     "viewReviews": "Посмотреть отзывы",
 
+    "SCHEDULED": "Запланировано",
+    "IN_PROGRESS": "В работе",
+    "completed": "Завершено",
+
     "customerName": "Имя клиента",
     "enterName": "Введите имя",
     "customerId": "ID клиента",
@@ -206,7 +210,19 @@
     "rate": "Рейтинг",
     "search": "Имя клиента и название автомобиля",
     "allStatus": "Все статусы",
-    "allServiceType": "Все типы услуг"
+    "allServiceType": "Все типы услуг",
+
+    "total_request": "Всего запросов",
+    "completedSt": "Завершено",
+    "averageRating": "Средняя оценка",
+
+    "Monday": "Понедельник",
+    "Tuesday": "Вторник",
+    "Wednesday": "Среда",
+    "Thursday": "Четверг",
+    "Friday": "Пятница",
+    "Saturday": "Суббота",
+    "dayOff": "Выходной день"
   },
   "kpi": {
     "dashboard_title": "KPI Отдела продаж",

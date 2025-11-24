@@ -7,14 +7,14 @@ interface PaginationDemoProps {
   fetchUsers: (
     page: number,
     search: string,
-    status: number | string,
+    status: string,
     service_type: string,
     filterDate: string
   ) => void;
   activePage: number;
   setActivePage: (page: number) => void;
   searchFilter: string;
-  filterStatus: number | string;
+  filterStatus: string;
   filterService: string;
   filterDate: string;
 }

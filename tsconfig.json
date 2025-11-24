@@ -13,7 +13,16 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"] // eng keng tarqalgan va to‘g‘ri variant
+      // yoki quyidagicha batafsil yozish ham mumkin:
+      // "@/*": ["./src/*"],
+      // "@/components/*": ["src/components/*"],
+      // "@/lib/*": ["src/lib/*"]
+    }
   },
   "include": ["src"]
 }

@@ -3,10 +3,12 @@ import { useState, useEffect } from "react";
 import { api } from "../api/axios";
 import {
   Employees,
+  Reports,
   Service,
   ServiceFormData,
   serviceSchema,
   ServicesType,
+  WeeklyStatistic,
 } from "../types/service";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -39,11 +41,17 @@ export const useService = () => {
   const [activePage, setActivePage] = useState(1);
   const [pgnCount, setPgnCount] = useState<number | null>(null);
   const [serives, setSerives] = useState<Service[]>([]);
+  const [weeklyStatistic, setWeeklyStatistic] = useState<WeeklyStatistic[]>([]);
+  const [reports, setReports] = useState<Reports>({
+    total_request: 0,
+    completed: 0,
+    average_rating: 0,
+  });
 
   const fetchService = async (
     active = 1,
     search = "",
-    status: string | number = "all",
+    status: string = "",
     service_type: string = "",
     date: string = ""
   ) => {
@@ -53,15 +61,14 @@ export const useService = () => {
       const {
         data: { results, count },
       } = await api.get(
-        `/serives/?page=${active}&search=${search}&status=${
-          status === "all" ? "" : status
-        }&service_type=${service_type}&date=${date}`
+        `/serives/?page=${active}&search=${search}&status=${status}&service_type=${service_type}&date=${date}`
       );
       setService(results);
 
       setPgnCount(count);
 
       setActivePage(active);
+      getWeeklyStatistic();
     } catch (err) {
       setError("Mashinalarni yuklab boʻlmadi");
       console.error("Error fetching cars:", err);
@@ -132,10 +139,30 @@ export const useService = () => {
     fetchService();
   };
 
+  const getWeeklyStatistic = async () => {
+    try {
+      const { data } = await api.get("/serives/weekly-statistic/");
+      setWeeklyStatistic(data);
+    } catch (error) {
+      console.error("Error fetching cars:", error);
+    }
+  };
+
+  const getReports = async () => {
+    try {
+      const { data } = await api.get("/serives/reports/");
+      setReports(data);
+    } catch (error) {
+      console.error("Error fetching cars:", error);
+    }
+  };
+
   useEffect(() => {
     fetchService();
     getEmployees();
     getSerives();
+    getWeeklyStatistic();
+    getReports();
   }, []);
 
   const refetch = () => {
@@ -188,5 +215,7 @@ export const useService = () => {
     activePage,
     fetchService,
     serives,
+    weeklyStatistic,
+    reports,
   };
 };

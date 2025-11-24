@@ -7,9 +7,7 @@ import {
   Plus,
   X,
   Search,
-  Filter,
 } from "lucide-react";
-import { serviceRequests } from "../data/mockData";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useTranslation } from "react-i18next";
 import { useService } from "../hooks/useService";
@@ -26,7 +24,7 @@ export function Service() {
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
   const [searchFilter, setSearchFilter] = useState("");
   const [filterService, setFilterService] = useState("");
-  const [filterStatus, setFilterStatus] = useState("all");
+  const [filterStatus, setFilterStatus] = useState("");
   const [filterDate, setFilterDate] = useState("");
 
   const {
@@ -51,6 +49,8 @@ export function Service() {
     activePage,
     fetchService,
     serives,
+    weeklyStatistic,
+    reports,
   } = useService();
   const { carsModels, customers } = useCustomers();
   const statusColors: Record<string, string> = {
@@ -60,27 +60,16 @@ export function Service() {
   };
 
   const statusLabels: Record<string, string> = {
-    s: "Запланировано",
-    i: "В работе",
-    c: "Завершено",
+    s: t("service.SCHEDULED"),
+    i: t("service.IN_PROGRESS"),
+    c: t("service.completed"),
   };
 
   const statusIcons: Record<string, any> = {
     s: Calendar,
-    // "in-progress": Clock,
     i: Clock,
     c: CheckCircle,
   };
-
-  const totalRequests = serviceRequests.length;
-  const completedRequests = serviceRequests.filter(
-    (r) => r.status === "completed"
-  ).length;
-  const avgRating =
-    serviceRequests
-      .filter((r) => r.rating)
-      .reduce((sum, r) => sum + (r.rating || 0), 0) /
-    serviceRequests.filter((r) => r.rating).length;
 
   return (
     <div className="space-y-6">
@@ -115,9 +104,11 @@ export function Service() {
             <div className="w-10 h-10 bg-red-50 border-2 border-[#E60012] rounded-xl flex items-center justify-center">
               <Wrench className="w-5 h-5 text-[#E60012]" />
             </div>
-            <p className="text-gray-500 text-sm">Всего запросов</p>
+            <p className="text-gray-500 text-sm">
+              {t("service.total_request")}
+            </p>
           </div>
-          <p className="text-gray-900">{totalRequests}</p>
+          <p className="text-gray-900">{reports?.total_request}</p>
         </div>
 
         <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
@@ -125,9 +116,9 @@ export function Service() {
             <div className="w-10 h-10 bg-green-50 border-2 border-green-600 rounded-xl flex items-center justify-center">
               <CheckCircle className="w-5 h-5 text-green-600" />
             </div>
-            <p className="text-gray-500 text-sm">Завершено</p>
+            <p className="text-gray-500 text-sm">{t("service.completed")}</p>
           </div>
-          <p className="text-gray-900">{completedRequests}</p>
+          <p className="text-gray-900">{reports?.completed}</p>
         </div>
 
         <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
@@ -135,9 +126,11 @@ export function Service() {
             <div className="w-10 h-10 bg-yellow-50 border-2 border-yellow-600 rounded-xl flex items-center justify-center">
               <Star className="w-5 h-5 text-yellow-600" />
             </div>
-            <p className="text-gray-500 text-sm">Средняя оценка</p>
+            <p className="text-gray-500 text-sm">
+              {t("service.averageRating")}
+            </p>
           </div>
-          <p className="text-gray-900">{avgRating.toFixed(1)}/5</p>
+          <p className="text-gray-900">{reports?.average_rating}/5</p>
         </div>
       </div>
 
@@ -187,9 +180,9 @@ export function Service() {
               }}
             >
               <option value="">{t("service.allStatus")}</option>
-              <option value={"i"}>In Progress</option>
-              <option value={"s"}>Scheduled</option>
-              <option value={"c"}>Completed</option>
+              <option value={"i"}>{t("service.IN_PROGRESS")}</option>
+              <option value={"s"}>{t("service.SCHEDULED")}</option>
+              <option value={"c"}>{t("service.completed")}</option>
             </select>
 
             <select
@@ -200,7 +193,7 @@ export function Service() {
                 fetchService(1, searchFilter, filterStatus, value, filterDate);
               }}
             >
-              <option value="all">{t("service.allServiceType")} </option>
+              <option value="">{t("service.allServiceType")} </option>
               {serives.map((el) => (
                 <option key={el?.id} value={el?.id}>
                   {el?.title}
@@ -452,9 +445,9 @@ export function Service() {
                     {...register("status")}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
                   >
-                    <option value={"i"}>In Progress</option>
-                    <option value={"s"}>Scheduled</option>
-                    <option value={"c"}>Completed</option>
+                    <option value={"i"}>{t("service.IN_PROGRESS")}</option>
+                    <option value={"s"}>{t("service.SCHEDULED")}</option>
+                    <option value={"c"}>{t("service.completed")}</option>
                   </select>
                 </div>
 
@@ -543,7 +536,7 @@ export function Service() {
       <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
         <h3 className="text-gray-900 mb-4">{t("service.writing")}</h3>
         <div className="space-y-3">
-          {[
+          {/* {[
             "Понедельник",
             "Вторник",
             "Среда",
@@ -569,7 +562,41 @@ export function Service() {
                 </div>
               </div>
             );
-          })}
+          })} */}
+
+          {weeklyStatistic.map(({ day, created, percent }, idx) => (
+            // const count = Math.floor(Math.random() * 5) + 1;
+            // const percentage = (count / 5) * 100;
+            // return (
+            <div key={idx}>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-gray-700">
+                  {day === "Monday"
+                    ? t("service.Monday")
+                    : day === "Tuesday"
+                    ? t("service.Tuesday")
+                    : day === "Wednesday"
+                    ? t("service.Wednesday")
+                    : day === "Thursday"
+                    ? t("service.Thursday")
+                    : day === "Friday"
+                    ? t("service.Friday")
+                    : day === "Saturday"
+                    ? t("service.Saturday")
+                    : t("service.dayOff")}
+                </span>
+                <span className="text-sm text-gray-900">
+                  {created} {t("service.records")}
+                </span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div
+                  className="bg-[#E60012] h-2 rounded-full transition-all"
+                  style={{ width: `${percent}%` }}
+                ></div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 

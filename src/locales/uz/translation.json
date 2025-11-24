@@ -196,6 +196,10 @@
     "records": "yozuvlar",
     "viewReviews": "Sharhlarni ko'rish",
 
+    "SCHEDULED": "Rejalashtirilgan",
+    "IN_PROGRESS": "Jarayonda",
+    "completed": "Tugallangan",
+
     "customerName": "Mijoz ismi",
     "enterName": "Ism kiriting",
     "customerId": "Mijoz ID",
@@ -207,7 +211,19 @@
     "rate": "Reyting",
     "search": "Mijoz ismi va mashina nomi",
     "allStatus": "Barcha holatlar",
-    "allServiceType": "Barcha xizmat turi"
+    "allServiceType": "Barcha xizmat turi",
+
+    "total_request": "Jami so'rovlar",
+    "completedSt": "Tugallandi",
+    "averageRating": "O'rtacha reyting",
+
+    "Monday": "Dushanba",
+    "Tuesday": "Seshanba",
+    "Wednesday": "Chorshanba",
+    "Thursday": "Payshanba",
+    "Friday": "Juma",
+    "Saturday": "Shanba",
+    "dayOff": "Dam olish kuni"
   },
   "kpi": {
     "dashboard_title": "Sotuv bo‘limi KPI",

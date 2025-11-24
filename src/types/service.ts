@@ -20,9 +20,23 @@ export interface Employees {
   email: string;
 }
 
+export interface WeeklyStatistic {
+  day: string;
+  date: string;
+  created: number;
+  completed: number;
+  percent: number;
+}
+
+export interface Reports {
+  total_request: number;
+  completed: number;
+  average_rating: number;
+}
+
 export interface Service {
-  id: 0;
-  title: "string";
+  id: number;
+  title: string;
 }
 
 export const serviceSchema = z.object({
@@ -30,7 +44,7 @@ export const serviceSchema = z.object({
   customer_name: z.string().min(1, "Mijoz nomi kiritilishi shart"),
   date: z.string().min(1, "Sana tanlanishi shart"),
   rate: z.string().optional(),
-  service_type: z.string().optional(),
+  service_type: z.number().optional(),
   status: z.string().optional(),
   technician: z.string().optional(),
   vehicle: z.string().optional(),
