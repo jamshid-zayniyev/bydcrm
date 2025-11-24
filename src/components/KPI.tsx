@@ -941,7 +941,7 @@ export function KPI() {
                       <Progress value={stage.conversion} className="h-8" />
                       <div className="absolute inset-0 flex items-center justify-center text-sm font-medium">
                         {idx < salesFunnelData.length - 1 && (
-                          <span className="text-muted-foreground">
+                          <span className="text-muted">
                             Конверсия в след. этап:{" "}
                             {Math.round(
                               (salesFunnelData[idx + 1].count / stage.count) *
