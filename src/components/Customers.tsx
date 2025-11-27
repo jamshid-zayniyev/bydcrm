@@ -4,12 +4,10 @@ import {
   Filter,
   Plus,
   Phone,
-  Mail,
   MapPin,
   TrendingUp,
   X,
 } from "lucide-react";
-import { customers } from "../data/mockData";
 
 import { useTranslation } from "react-i18next";
 import { useCustomers } from "../hooks/useCustomers";
@@ -20,7 +18,6 @@ import NoData from "../assets/no-data.svg";
 
 import DeleteModal from "./ui/delete-modal";
 import { PaginationDemo } from "./ui/paginationApi";
-import { count } from "console";
 
 export function Customers() {
   const [selectedCustomer, setSelectedCustomer] = useState<Customers | null>(
@@ -123,11 +120,11 @@ export function Customers() {
     // lost: "bg-red-100 text-red-700 border-red-200",
   };
 
-  const sentimentIcons: Record<string, string> = {
-    positive: "😊",
-    neutral: "😐",
-    negative: "😟",
-  };
+  // const sentimentIcons: Record<string, string> = {
+  //   p: "😊",
+  //   n: "😐",
+  //   negative: "😟",
+  // };
 
   return (
     <div className="space-y-6">
@@ -215,11 +212,11 @@ export function Customers() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2 mb-1">
                         <h3 className="text-gray-900">{customer.full_name}</h3>
-                        {customer.sentiment && (
+                        {/* {customer.sentiment && (
                           <span className="text-lg">
                             {sentimentIcons[customer.sentiment]}
                           </span>
-                        )}
+                        )} */}
                       </div>
                       <div className="flex gap-3">
                         <img
@@ -459,7 +456,36 @@ export function Customers() {
                     </p>
                   )}
                 </div>
+
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    {t("customers.addClientObj.location")}
+                  </label>
+                  <select
+                    {...register("location")}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
+                  >
+                    <option value="1">Qarshi</option>
+                    {/* {usersStatus.length ? (
+                      usersStatus.map((el) => (
+                        <option key={el?.id} value={el?.id}>
+                          {el?.title}
+                        </option>
+                      ))
+                    ) : (
+                      <option value="" disabled>
+                        {t("noInformation")}
+                      </option>
+                    )} */}
+                  </select>
+                  {errors.interested_in && (
+                    <p className="text-[#E60012]">
+                      {errors.interested_in.message}
+                    </p>
+                  )}
+                </div>
               </div>
+
               <div>
                 <label className="block text-sm text-gray-700 mb-2">
                   {t("customers.addClientObj.notes")}

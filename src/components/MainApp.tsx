@@ -1,17 +1,18 @@
-import { Routes, Route } from 'react-router-dom';
-import { useState } from 'react';
-import { Sidebar } from './Sidebar';
-import { Header } from './Header';
-import { Dashboard } from './Dashboard';
-import { Customers } from './Customers';
-import { CallCenter } from './CallCenter';
-import { Sales } from './Sales';
-import { Service } from './Service';
-import { KPI } from './KPI';
-import { AIRecommendations } from './AIRecommendations';
-import { QRScanner } from './QRScanner';
-import { Reviews } from './Reviews';
-import { useAuthContext } from '../contexts/AuthContext';
+import { Routes, Route } from "react-router-dom";
+import { useState } from "react";
+import { Sidebar } from "./Sidebar";
+import { Header } from "./Header";
+import { Dashboard } from "./Dashboard";
+import { Customers } from "./Customers";
+import { CallCenter } from "./CallCenter";
+import { Sales } from "./Sales";
+import { Service } from "./Service";
+import { KPI } from "./KPI";
+import { AIRecommendations } from "./AIRecommendations";
+import { QRScanner } from "./QRScanner";
+import { Reviews } from "./Reviews";
+import { useAuthContext } from "../contexts/AuthContext";
+import Cars from "./Cars";
 
 export function MainApp() {
   const { user } = useAuthContext();
@@ -27,15 +28,15 @@ export function MainApp() {
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
           {/* Overlay */}
-          <div 
+          <div
             className="absolute inset-0 bg-black bg-opacity-50 transition-opacity"
             onClick={() => setSidebarOpen(false)}
           ></div>
-          
+
           {/* Sidebar */}
           <div className="absolute top-0 left-0 w-80 h-full transform transition-transform duration-300 ease-in-out">
-            <Sidebar 
-              userRole={user?.role} 
+            <Sidebar
+              userRole={user?.role}
               isMobile={true}
               onClose={handleSidebarClose}
             />
@@ -62,6 +63,8 @@ export function MainApp() {
             <Route path="/ai" element={<AIRecommendations />} />
             <Route path="/qr" element={<QRScanner />} />
             <Route path="/reviews" element={<Reviews />} />
+            <Route path="/cars" element={<Cars />} />
+
             <Route path="/" element={<Dashboard />} />
           </Routes>
         </main>

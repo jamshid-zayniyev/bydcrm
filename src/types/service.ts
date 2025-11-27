@@ -44,7 +44,7 @@ export const serviceSchema = z.object({
   customer_name: z.string().min(1, "Mijoz nomi kiritilishi shart"),
   date: z.string().min(1, "Sana tanlanishi shart"),
   rate: z.string().optional(),
-  service_type: z.number().optional(),
+  service_type: z.string().optional(),
   status: z.string().optional(),
   technician: z.string().optional(),
   vehicle: z.string().optional(),

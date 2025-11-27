@@ -46,7 +46,8 @@
     "kpi": "Xodimlar KPI",
     "ai": "AI Tavsiyalar",
     "qr": "QR Ro‘yxatdan o‘tish",
-    "reviews": "Sharhlar"
+    "reviews": "Sharhlar",
+    "cars": "Avtomobillar"
   },
   "dashboard": {
     "controlPanel": "BYD Qarshi - Boshqaruv paneli",
@@ -123,6 +124,7 @@
       },
       "interestedModel": "Qiziqayotgan model",
       "status": "Holat",
+      "location": "Joylashuv",
       "statusObj": {
         "new": "Yangi",
         "connected": "Aloqa qilindi",

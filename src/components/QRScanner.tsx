@@ -2,6 +2,7 @@ import { QrCode, Camera, UserPlus, CheckCircle } from "lucide-react";
 import { useState } from "react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useTranslation } from "react-i18next";
+import QrCodeScanner from "./ui/qrCodeScanner";
 
 export function QRScanner() {
   const { t } = useTranslation();
@@ -36,6 +37,8 @@ export function QRScanner() {
       alert("Пожалуйста, заполните все обязательные поля");
     }
   };
+
+  console.log(isScanning);
 
   return (
     <div className="space-y-6">

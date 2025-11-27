@@ -88,6 +88,13 @@ export function Sidebar({ userRole, isMobile = false, onClose }: SidebarProps) {
       icon: Star,
       roles: ["s", "e"],
     },
+    {
+      id: "cars",
+      path: "/cars",
+      label: t("nav.cars"),
+      icon: Car,
+      roles: ["s", "e"],
+    },
   ];
 
   // ... qolgan kod o'zgarmadi

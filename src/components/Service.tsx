@@ -284,7 +284,7 @@ export function Service() {
                         )}
                       </div>
 
-                      <div className="flex flex-col flex-col items-center gap-3">
+                      <div className="flex flex-col flex-col lg:items-end items-center gap-3">
                         <div className="flex items-center gap-3">
                           <StatusIcon className="w-4 h-4 text-gray-400" />
                           <span

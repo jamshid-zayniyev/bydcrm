@@ -84,6 +84,7 @@ export const useService = () => {
         customer_id: Number(data?.customer_id),
         vehicle: Number(data?.vehicle),
         technician: Number(data?.technician),
+        service_type: Number(data?.service_type),
         rate: Number(data?.rate),
       };
 
@@ -180,7 +181,7 @@ export const useService = () => {
         customer_name: data.customer_name,
         date: data.date,
         rate: `${data.rate}`,
-        service_type: data.service_type,
+        service_type: `${data.service_type}`,
         status: data.status,
         technician: `${data.technician}`,
         vehicle: `${data.vehicle}`,

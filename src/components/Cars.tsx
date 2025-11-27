@@ -1,62 +1,31 @@
-import { useState } from "react";
-import {
-  Users,
-  Phone,
-  TrendingUp,
-  Star,
-  ArrowUp,
-  ArrowDown,
-  Car,
-} from "lucide-react";
-import {
-  BarChart,
-  Bar,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-} from "recharts";
-import { customers, calls, sales, kpiData } from "../data/mockData";
+import { useCars } from "@/hooks/useCars";
+import { Car, Plus, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import {
   Dialog,
   DialogContent,
-  DialogTitle,
   DialogDescription,
+  DialogTitle,
 } from "./ui/dialog";
-import { useTranslation } from "react-i18next";
-import { useCars } from "../hooks/useCars";
+import { useState } from "react";
 import { Car as CarType } from "../api/cars";
-import { useWeekStatistics } from "../hooks/useWeekStatistics";
-import { useMonthStatistics } from "../hooks/useMonthStatistics";
-import { useDayStatistics } from "../hooks/useDayStatistics";
-import { usePieChart } from "../hooks/usePieChart";
+import EditDelete from "./ui/edit-delete";
 
-type DataItem = {
-  name: string;
-  value: number;
-  color?: string;
-};
-
-export function Dashboard() {
+const Cars = () => {
   const [selectedVehicle, setSelectedVehicle] = useState<CarType | null>(null);
+  const [showAddModal, setShowAddModal] = useState(false);
+
+  const closeModal = () => {
+    setShowAddModal(false);
+  };
+
   const { t } = useTranslation();
   const {
     cars: bydVehicles,
     loading: carsLoading,
     error: carsError,
   } = useCars();
-
-  const { weekStatistics, error } = useWeekStatistics();
-  const { monthStatistics, error: monthError } = useMonthStatistics();
-  const { dayStatistics, error: dayError } = useDayStatistics();
-  const { pieChart, error: pieError } = usePieChart();
 
   const vehicleImages: Record<string, string> = {
     "1": "https://images.unsplash.com/photo-1669198074495-d04dae22bb90?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxCWUQlMjBTb25nJTIwUGx1cyUyMFNVVnxlbnwxfHx8fDE3NjAzMzA3ODN8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
@@ -65,59 +34,6 @@ export function Dashboard() {
     "4": "https://images.unsplash.com/photo-1745393404775-ae350c1677ef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb21wYWN0JTIwZWxlY3RyaWMlMjBjYXJ8ZW58MXx8fHwxNzYwMzMwNzg4fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
     "5": "https://images.unsplash.com/photo-1710880135020-e0af9cc79dcc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzcG9ydHMlMjBlbGVjdHJpYyUyMHNlZGFufGVufDF8fHx8MTc2MDMzMDc4OHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
   };
-
-  const stats = [
-    {
-      label: t("dashboard.clients"),
-      value: customers.length,
-      change: "+12%",
-      isPositive: true,
-      icon: Users,
-      color: "red",
-    },
-    {
-      label: t("dashboard.callsToday"),
-      value: calls.length,
-      change: "+8%",
-      isPositive: true,
-      icon: Phone,
-      color: "black",
-    },
-    {
-      label: t("dashboard.sales"),
-      value: sales.length,
-      change: "+24%",
-      isPositive: true,
-      icon: TrendingUp,
-      color: "red",
-    },
-    {
-      label: t("dashboard.star"),
-      value: "4.6",
-      change: "+0.3",
-      isPositive: true,
-      icon: Star,
-      color: "black",
-    },
-  ];
-
-  const salesData = monthStatistics;
-
-  const callsData = weekStatistics;
-
-  const dailySalesData = dayStatistics;
-
-  const colors: Record<string, string> = {
-    Онлайн: "#E60012",
-    Телефон: "#000000",
-    Визит: "#6b7280",
-    Рекомендации: "#ef4444",
-  };
-
-  const leadSourceData: DataItem[] = pieChart.map((item) => ({
-    ...item,
-    color: colors[item.name],
-  }));
 
   const formatPrice = (price: number) => {
     return `${(price / 1000000).toFixed(0)} ${t("dashboard.cars.mln")}`;
@@ -141,275 +57,7 @@ export function Dashboard() {
   }
 
   return (
-    <div className="space-y-4 sm:space-y-6">
-      {/* Hero Section with Image */}
-      <div className="relative h-32 sm:h-40 md:h-48 rounded-lg sm:rounded-xl overflow-hidden">
-        <ImageWithFallback
-          src="https://images.unsplash.com/photo-1727098353953-929512ce7b90?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxCWUQlMjBlbGVjdHJpYyUyMGNhcnxlbnwxfHx8fDE3NjAxOTAyNjd8MA&ixlib=rb-4.1.0&q=80&w=1080"
-          alt="BYD Electric Car"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent">
-          <div className="h-full flex flex-col justify-center px-4 sm:px-6 md:px-8">
-            <h1 className="text-white mb-1 sm:mb-2 text-lg sm:text-xl md:text-2xl">
-              {t("dashboard.controlPanel")}
-            </h1>
-            <p className="text-gray-200 text-xs sm:text-sm">
-              {t("dashboard.crmSystem")}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Stats Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        {stats.map((stat, index) => {
-          const Icon = stat.icon;
-          const colorClasses = {
-            red: "bg-red-50 text-[#E60012] border-[#E60012]",
-            black: "bg-gray-100 text-black border-black",
-          }[stat.color];
-
-          return (
-            <div
-              key={index}
-              className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
-            >
-              <div className="flex items-start justify-between mb-3 sm:mb-4">
-                <div
-                  className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center border-2 ${colorClasses}`}
-                >
-                  <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
-                </div>
-                <div
-                  className={`flex items-center gap-1 text-xs sm:text-sm ${
-                    stat.isPositive ? "text-green-600" : "text-red-600"
-                  }`}
-                >
-                  {stat.isPositive ? (
-                    <ArrowUp className="w-3 h-3 sm:w-4 sm:h-4" />
-                  ) : (
-                    <ArrowDown className="w-3 h-3 sm:w-4 sm:h-4" />
-                  )}
-                  <span className="hidden sm:inline">{stat.change}</span>
-                </div>
-              </div>
-              <p className="text-gray-500 text-xs sm:text-sm mb-1">
-                {stat.label}
-              </p>
-              <p className="text-gray-900 text-lg sm:text-xl">{stat.value}</p>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Sales Analytics - Row 1 */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-        {/* Sales Chart */}
-        <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl border border-gray-200 shadow-sm">
-          <h3 className="text-gray-900 mb-3 sm:mb-4 text-base sm:text-lg">
-            {t("dashboard.salesMonth")}
-          </h3>
-          <ResponsiveContainer width="100%" height={250}>
-            {monthError ? (
-              <div className="text-center py-8">
-                <div className="text-red-500 text-lg mb-2">⚠️</div>
-                <p className="text-gray-700 mb-4">{monthError}</p>
-                <button
-                  onClick={() => window.location.reload()}
-                  className="bg-[#E60012] text-white px-4 py-2 rounded-lg hover:bg-[#c4000f] transition-colors"
-                >
-                  Qayta yuklash
-                </button>
-              </div>
-            ) : (
-              <BarChart data={salesData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis dataKey="month" tick={{ fontSize: 12 }} />
-                <YAxis tick={{ fontSize: 12 }} />
-                <Tooltip />
-                <Bar dataKey="sales" fill="#E60012" radius={[8, 8, 0, 0]} />
-              </BarChart>
-            )}
-          </ResponsiveContainer>
-        </div>
-
-        {/* Daily Sales Chart */}
-        <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl border border-gray-200 shadow-sm">
-          <h3 className="text-gray-900 mb-3 sm:mb-4 text-base sm:text-lg">
-            {t("dashboard.salesDay")}
-          </h3>
-          <ResponsiveContainer width="100%" height={250}>
-            {dayError ? (
-              <div className="text-center py-8">
-                <div className="text-red-500 text-lg mb-2">⚠️</div>
-                <p className="text-gray-700 mb-4">{dayError}</p>
-                <button
-                  onClick={() => window.location.reload()}
-                  className="bg-[#E60012] text-white px-4 py-2 rounded-lg hover:bg-[#c4000f] transition-colors"
-                >
-                  Qayta yuklash
-                </button>
-              </div>
-            ) : (
-              <BarChart data={dailySalesData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis dataKey="day" tick={{ fontSize: 12 }} />
-                <YAxis tick={{ fontSize: 12 }} />
-                <Tooltip />
-                <Bar dataKey="sales" fill="#000000" radius={[8, 8, 0, 0]} />
-              </BarChart>
-            )}
-          </ResponsiveContainer>
-        </div>
-      </div>
-
-      {/* Analytics - Row 2 */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-        {/* Calls Chart */}
-        <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl border border-gray-200 shadow-sm">
-          <h3 className="text-gray-900 mb-3 sm:mb-4 text-base sm:text-lg">
-            {t("dashboard.callsMonth")}
-          </h3>
-          <ResponsiveContainer width="100%" height={250}>
-            {error ? (
-              <div className="text-center py-8">
-                <div className="text-red-500 text-lg mb-2">⚠️</div>
-                <p className="text-gray-700 mb-4">{error}</p>
-                <button
-                  onClick={() => window.location.reload()}
-                  className="bg-[#E60012] text-white px-4 py-2 rounded-lg hover:bg-[#c4000f] transition-colors"
-                >
-                  Qayta yuklash
-                </button>
-              </div>
-            ) : (
-              <LineChart data={callsData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis dataKey="day" tick={{ fontSize: 12 }} />
-                <YAxis tick={{ fontSize: 12 }} />
-                <Tooltip />
-                <Line
-                  type="monotone"
-                  dataKey="calls"
-                  stroke="#E60012"
-                  strokeWidth={2}
-                />
-              </LineChart>
-            )}
-          </ResponsiveContainer>
-        </div>
-
-        {/* Lead Sources */}
-        <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl border border-gray-200 shadow-sm">
-          <h3 className="text-gray-900 mb-3 sm:mb-4 text-base sm:text-lg">
-            {t("dashboard.clientSources")}
-          </h3>
-
-          {pieError ? (
-            <div className="text-center py-8">
-              <div className="text-red-500 text-lg mb-2">⚠️</div>
-              <p className="text-gray-700 mb-4">{error}</p>
-              <button
-                onClick={() => window.location.reload()}
-                className="bg-[#E60012] text-white px-4 py-2 rounded-lg hover:bg-[#c4000f] transition-colors"
-              >
-                Qayta yuklash
-              </button>
-            </div>
-          ) : (
-            <>
-              <ResponsiveContainer width="100%" height={200}>
-                <PieChart>
-                  <Pie
-                    data={leadSourceData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={90}
-                    paddingAngle={5}
-                    dataKey="value"
-                  >
-                    {leadSourceData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
-              <div className="grid grid-cols-2 gap-2 mt-4">
-                {leadSourceData.map((source, index) => (
-                  <div key={index} className="flex items-center gap-2">
-                    <div
-                      className="w-3 h-3 rounded-full"
-                      style={{ backgroundColor: source.color }}
-                    ></div>
-                    <span className="text-xs text-gray-600">
-                      {source.name}: {source.value}%
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-
-      {/* Top Performers */}
-      <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl border border-gray-200 shadow-sm">
-        <h3 className="text-gray-900 mb-3 sm:mb-4 text-base sm:text-lg">
-          {t("dashboard.best.title")}
-        </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {kpiData
-            .filter((emp) => emp.salesClosed)
-            .sort((a, b) => (b.salesClosed || 0) - (a.salesClosed || 0))
-            .slice(0, 6)
-            .map((employee, index) => (
-              <div
-                key={employee.employeeId}
-                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      index === 0
-                        ? "bg-[#E60012] text-white"
-                        : index === 1
-                        ? "bg-gray-800 text-white"
-                        : index === 2
-                        ? "bg-gray-600 text-white"
-                        : "bg-gray-200 text-gray-700"
-                    }`}
-                  >
-                    {index + 1}
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-900">
-                      {employee.employeeName}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      {employee.department}
-                    </p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm text-gray-900">
-                    {employee.salesClosed} {t("dashboard.best.sales")}
-                  </p>
-                  <div className="flex items-center gap-1 mt-1">
-                    <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
-                    <span className="text-xs text-gray-600">
-                      {employee.customerSatisfaction?.toFixed(1)}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
-        </div>
-      </div>
-
-      {/* BYD Models Section - API dan ma'lumotlar bilan */}
+    <>
       <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl border border-gray-200 shadow-sm">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-3">
           <div>
@@ -424,8 +72,12 @@ export function Dashboard() {
           </div>
           <div className="flex items-center gap-2">
             <Car className="w-4 h-4 sm:w-5 sm:h-5 text-[#E60012]" />
-            <div className="px-3 py-1 bg-gradient-to-r from-[#E60012] to-[#b00010] text-white rounded-lg text-xs sm:text-sm shadow-sm">
-              {t("dashboard.warehouse.warehouseUpdated")}
+            <div
+              className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-[#E60012] to-[#b00010] text-white rounded-lg text-xs sm:text-sm shadow-sm"
+              onClick={() => setShowAddModal(true)}
+            >
+              <Plus className="w-4 h-4" />
+              <span className="text-sm">Yangi aftomobil qo'shish</span>
             </div>
           </div>
         </div>
@@ -547,6 +199,7 @@ export function Dashboard() {
                         ))}
                       </div>
                     </div>
+                    <EditDelete />
                   </div>
                 </div>
               );
@@ -819,6 +472,160 @@ export function Dashboard() {
           )}
         </DialogContent>
       </Dialog>
-    </div>
+
+      {showAddModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-200 flex items-center justify-between">
+              <h2 className="text-gray-900">
+                {/* {selected
+                ? `${t("customers.addClientObj.oneClient")}`
+                : `${t("customers.addClientObj.addNewClient")}`} */}
+                yopish
+              </h2>
+              <button
+                onClick={closeModal}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+
+            <form className="p-6 space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    Mashina nomi
+                  </label>
+                  <input
+                    // {...register("full_name")}
+                    placeholder={t("customers.addClientObj.enterName")}
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    Mashina turi
+                  </label>
+                  <input
+                    placeholder="+998 XX XXX XX XX"
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
+                    // onChange={handlePhoneChange}
+                    // onBlur={handlePhoneBlur}
+                  />
+                  {/* {errors.phone_number && (
+              <p className="text-[#E60012]">{errors.phone_number.message}</p>
+            )} */}
+                </div>
+
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    Narxi
+                  </label>
+                  <input
+                    placeholder="+998 XX XXX XX XX"
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
+                    // onChange={handlePhoneChange}
+                    // onBlur={handlePhoneBlur}
+                  />
+                  {/* {errors.phone_number && (
+              <p className="text-[#E60012]">{errors.phone_number.message}</p>
+            )} */}
+                </div>
+
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    Range
+                  </label>
+                  <input
+                    placeholder="+998 XX XXX XX XX"
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
+                    // onChange={handlePhoneChange}
+                    // onBlur={handlePhoneBlur}
+                  />
+                  {/* {errors.phone_number && (
+              <p className="text-[#E60012]">{errors.phone_number.message}</p>
+            )} */}
+                </div>
+
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    Akumlator kuchi
+                  </label>
+                  <input
+                    placeholder="Akumlator kuchi"
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
+                    // onChange={handlePhoneChange}
+                    // onBlur={handlePhoneBlur}
+                  />
+                  {/* {errors.phone_number && (
+              <p className="text-[#E60012]">{errors.phone_number.message}</p>
+            )} */}
+                </div>
+
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    Tezlanish
+                  </label>
+                  <input
+                    placeholder="Tezlanish"
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
+                    // onChange={handlePhoneChange}
+                    // onBlur={handlePhoneBlur}
+                  />
+                  {/* {errors.phone_number && (
+              <p className="text-[#E60012]">{errors.phone_number.message}</p>
+            )} */}
+                </div>
+
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    Featured
+                  </label>
+                  <input
+                    placeholder="Featured"
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
+                  />
+                  {/* {errors.source && (
+              <p className="text-[#E60012]">{errors.source.message}</p>
+            )} */}
+                </div>
+
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    Images
+                  </label>
+                  <input
+                    placeholder="Tezlanish"
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
+                    type="file"
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="submit"
+                  className="flex-1 px-4 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors"
+                >
+                  {t("customers.addClientObj.addClient")}
+                  {/* {loading
+              ? `...${t("customers.addClientObj.addClient")}`
+              : `${t("customers.addClientObj.addClient")}`} */}
+                </button>
+                <button
+                  // disabled={loading}
+                  onClick={closeModal}
+                  className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                >
+                  {t("customers.addClientObj.cancel")}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </>
   );
-}
+};
+export default Cars;

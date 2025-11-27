@@ -29,6 +29,7 @@ const createUserSchema = (t: any) =>
     interested_in: z.string().optional(),
     notes: z.string().min(1, "To‘liq kiriting"),
     status: z.string().optional(),
+    location: z.string().optional(),
   });
 
 export type User = z.infer<ReturnType<typeof createUserSchema>>;
@@ -73,9 +74,9 @@ export const useCustomers = () => {
 
       let newData = {
         ...data,
-        location: "Qarshi",
-        assigned_to: 2,
-        sentiment: "p",
+        // location: "Qarshi",
+        // assigned_to: 2,
+        // sentiment: "p",
         interested_in: Number(data?.interested_in),
         status: Number(data?.status),
         // interested_in: 3,

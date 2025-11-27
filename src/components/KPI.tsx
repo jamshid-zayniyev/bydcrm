@@ -1227,7 +1227,7 @@ export function KPI() {
 
                 {/* Performance Tab */}
                 <TabsContent value="performance" className="space-y-4">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4">
                     <Card>
                       <CardHeader>
                         <CardTitle className="text-base">
