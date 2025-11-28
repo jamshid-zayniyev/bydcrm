@@ -12,14 +12,16 @@ export interface CarVariant {
 }
 
 export interface Car {
-  id: string;
+  id: number;
+  image: string;
   model: string;
   base_price: number;
   total_available: number;
   description: string;
   features: string[];
-  brand_color: string;
   variants: CarVariant[];
+  brand_color_rgb: string;
+  brand_color: string;
 }
 
 export const carsApi = {

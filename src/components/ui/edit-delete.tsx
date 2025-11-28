@@ -1,7 +1,18 @@
 import Edit from "../../assets/edit.svg";
 import Delete from "../../assets/delete.svg";
 
-const EditDelete = () => {
+interface EditDeleteProps {
+  openDeleteModal: () => void;
+  setSelectedItemId: (id: number | null) => void;
+  id: number;
+  editBtn: (id: number) => void;
+}
+const EditDelete = ({
+  openDeleteModal,
+  setSelectedItemId,
+  id,
+  editBtn,
+}: EditDeleteProps) => {
   return (
     <div className="flex justify-center gap-4">
       {/* <button
@@ -14,8 +25,23 @@ const EditDelete = () => {
         Delete
       </button> */}
 
-      <img src={Edit} alt="no image?" />
-      <img src={Delete} alt="no image?" />
+      <img
+        src={Edit}
+        alt="no image?"
+        onClick={(e) => {
+          e.stopPropagation();
+          editBtn(id);
+        }}
+      />
+      <img
+        src={Delete}
+        alt="no image?"
+        onClick={(e) => {
+          e.stopPropagation();
+          openDeleteModal();
+          setSelectedItemId(id);
+        }}
+      />
     </div>
   );
 };

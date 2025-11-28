@@ -11,21 +11,44 @@ import {
 import { useState } from "react";
 import { Car as CarType } from "../api/cars";
 import EditDelete from "./ui/edit-delete";
+import { useAllCars } from "../hooks/useAllCars";
+import { ColorSelect } from "./ui/color-select";
+import { Controller } from "react-hook-form";
+import DeleteModal from "./ui/delete-modal";
 
 const Cars = () => {
   const [selectedVehicle, setSelectedVehicle] = useState<CarType | null>(null);
-  const [showAddModal, setShowAddModal] = useState(false);
+  // const [selectedColor, setSelectedColor] = useState<number | undefined>(
+  //   undefined
+  // );
+  const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
 
-  const closeModal = () => {
-    setShowAddModal(false);
-  };
-
-  const { t } = useTranslation();
   const {
+    register,
+    errors,
+    handleSubmit,
+    onSubmit,
+    colors,
+    uploadLoading,
+    previewImage,
+    handleImageChange,
+    handleRemoveImage,
+    watch,
+    control,
     cars: bydVehicles,
+    closeModal,
+    setShowAddModal,
+    showAddModal,
     loading: carsLoading,
     error: carsError,
-  } = useCars();
+    closeDeleteModal,
+    deleteBtn,
+    openDeleteModal,
+    isDeleteModal,
+    editBtn,
+  } = useAllCars();
+
+  const { t } = useTranslation();
 
   const vehicleImages: Record<string, string> = {
     "1": "https://images.unsplash.com/photo-1669198074495-d04dae22bb90?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxCWUQlMjBTb25nJTIwUGx1cyUyMFNVVnxlbnwxfHx8fDE3NjAzMzA3ODN8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
@@ -39,11 +62,9 @@ const Cars = () => {
     return `${(price / 1000000).toFixed(0)} ${t("dashboard.cars.mln")}`;
   };
 
-  // BYD Vehicles loading state
   if (carsLoading) {
     return (
       <div className="space-y-4 sm:space-y-6">
-        {/* Loading state for BYD Models section */}
         <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl border border-gray-200 shadow-sm">
           <div className="flex items-center justify-center h-32">
             <div className="text-center">
@@ -121,7 +142,7 @@ const Cars = () => {
                   {/* Vehicle Image */}
                   <div className="relative h-40 sm:h-48 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
                     <ImageWithFallback
-                      src={vehicleImages[vehicle.id] || "/default-car.jpg"}
+                      src={vehicle.image ? vehicle.image : "/default-car.jpg"}
                       alt={vehicle.model}
                       className="w-full h-full object-cover"
                     />
@@ -155,14 +176,20 @@ const Cars = () => {
                         {t("dashboard.cars.availableForm.price")}
                       </p>
                       <p className="text-sm text-[#E60012]">
-                        {formatPrice(
-                          Math.min(...vehicle.variants.map((v) => v.price))
-                        )}{" "}
-                        -{" "}
-                        {formatPrice(
-                          Math.max(...vehicle.variants.map((v) => v.price))
-                        )}{" "}
-                        {t("dashboard.cars.sum")}
+                        {vehicle?.variants.length ? (
+                          <>
+                            {formatPrice(
+                              Math.min(...vehicle.variants.map((v) => v.price))
+                            )}{" "}
+                            -{" "}
+                            {formatPrice(
+                              Math.max(...vehicle.variants.map((v) => v.price))
+                            )}{" "}
+                            {t("dashboard.cars.sum")}
+                          </>
+                        ) : (
+                          formatPrice(vehicle?.base_price)
+                        )}
                       </p>
                     </div>
 
@@ -172,34 +199,65 @@ const Cars = () => {
                         {t("dashboard.cars.colors")}
                       </p>
                       <div className="space-y-2">
-                        {colorStats.map((colorStat, idx) => (
+                        {colorStats.length === 0 ? (
                           <div
-                            key={idx}
                             className="flex items-center justify-between"
+                            style={{ padding: "16px 0" }}
                           >
                             <div className="flex items-center gap-2">
                               <div
                                 className="w-6 h-6 rounded-full border-2 border-gray-300 shadow-sm"
-                                style={{ backgroundColor: colorStat.colorHex }}
+                                style={{
+                                  backgroundColor: vehicle.brand_color_rgb,
+                                }}
                               ></div>
                               <span className="text-xs text-gray-700">
-                                {colorStat.color}
+                                {vehicle?.brand_color}
                               </span>
                             </div>
                             <span
-                              className={`px-2 py-1 rounded text-xs ${
-                                colorStat.count > 1
-                                  ? "bg-green-100 text-green-700"
-                                  : "bg-yellow-100 text-yellow-700"
-                              }`}
+                              className={`px-2 py-1 rounded text-xs bg-yellow-100 text-yellow-700`}
                             >
-                              {colorStat.count} шт
+                              1 шт
                             </span>
                           </div>
-                        ))}
+                        ) : (
+                          colorStats.map((colorStat, idx) => (
+                            <div
+                              key={idx}
+                              className="flex items-center justify-between"
+                            >
+                              <div className="flex items-center gap-2">
+                                <div
+                                  className="w-6 h-6 rounded-full border-2 border-gray-300 shadow-sm"
+                                  style={{
+                                    backgroundColor: colorStat.colorHex,
+                                  }}
+                                ></div>
+                                <span className="text-xs text-gray-700">
+                                  {colorStat.color}
+                                </span>
+                              </div>
+                              <span
+                                className={`px-2 py-1 rounded text-xs ${
+                                  colorStat.count > 1
+                                    ? "bg-green-100 text-green-700"
+                                    : "bg-yellow-100 text-yellow-700"
+                                }`}
+                              >
+                                {colorStat.count} шт
+                              </span>
+                            </div>
+                          ))
+                        )}
                       </div>
                     </div>
-                    <EditDelete />
+                    <EditDelete
+                      openDeleteModal={openDeleteModal}
+                      setSelectedItemId={setSelectedItemId}
+                      id={vehicle.id}
+                      editBtn={editBtn}
+                    />
                   </div>
                 </div>
               );
@@ -208,7 +266,6 @@ const Cars = () => {
         )}
       </div>
 
-      {/* Vehicle Details Modal - API dan ma'lumotlar bilan */}
       <Dialog
         open={!!selectedVehicle}
         onOpenChange={() => setSelectedVehicle(null)}
@@ -217,13 +274,13 @@ const Cars = () => {
           {selectedVehicle && (
             <div className="relative">
               {/* Accessibility - Hidden title and description for screen readers */}
-              <DialogTitle className="sr-only">
+              {/* <DialogTitle className="sr-only">
                 {selectedVehicle.model}
               </DialogTitle>
               <DialogDescription className="sr-only">
                 Подробная информация об автомобиле {selectedVehicle.model},
                 включая доступные комплектации, цвета и характеристики
-              </DialogDescription>
+              </DialogDescription> */}
 
               {/* Hero Section with Image and Gradient */}
               <div className="relative h-48 sm:h-64 md:h-72 overflow-hidden">
@@ -234,7 +291,6 @@ const Cars = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
 
-                {/* Title Overlay */}
                 <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 text-white">
                   <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
                     <div
@@ -391,7 +447,10 @@ const Cars = () => {
                     <span className="text-[#E60012]">📋</span>
                     {t("dashboard.cars.available")}
                   </h4>
-                  <div className="border border-gray-200 rounded-lg sm:rounded-xl overflow-hidden bg-white">
+                  <div
+                    className="border border-gray-200 rounded-lg sm:rounded-xl overflow-hidden bg-white"
+                    style={{ maxWidth: "462px", overflow: "hidden" }}
+                  >
                     <div className="overflow-x-auto">
                       <table className="w-full text-sm">
                         <thead className="bg-gradient-to-r from-gray-50 to-white border-b border-gray-200">
@@ -474,7 +533,11 @@ const Cars = () => {
       </Dialog>
 
       {showAddModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div
+          className="fixed inset-0 flex items-center justify-center p-4 z-50 bg-black/50 backdrop-blur"
+          // className="fixed inset-0 flex items-center justify-center p-4 z-50"
+          // style={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}
+        >
           <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-gray-200 flex items-center justify-between">
               <h2 className="text-gray-900">
@@ -491,116 +554,296 @@ const Cars = () => {
               </button>
             </div>
 
-            <form className="p-6 space-y-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm text-gray-700 mb-2">
-                    Mashina nomi
+                    Model
                   </label>
                   <input
-                    // {...register("full_name")}
+                    {...register("model")}
                     placeholder={t("customers.addClientObj.enterName")}
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                      errors.model
+                        ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
+                        : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
+                    }`}
                   />
+                  {errors.model && (
+                    <p className="text-[#E60012]">{errors.model.message}</p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm text-gray-700 mb-2">
-                    Mashina turi
+                    Asosiy narx
                   </label>
                   <input
-                    placeholder="+998 XX XXX XX XX"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
-                    // onChange={handlePhoneChange}
-                    // onBlur={handlePhoneBlur}
+                    {...register("base_price", { valueAsNumber: true })}
+                    placeholder="base_price"
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                      errors.base_price
+                        ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
+                        : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
+                    }`}
+                    type="number"
                   />
-                  {/* {errors.phone_number && (
-              <p className="text-[#E60012]">{errors.phone_number.message}</p>
-            )} */}
+                  {errors.base_price && (
+                    <p className="text-[#E60012]">
+                      {errors.base_price.message}
+                    </p>
+                  )}
                 </div>
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    Jami mavjud
+                  </label>
+                  <input
+                    {...register("total_available", { valueAsNumber: true })}
+                    placeholder="total_available"
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                      errors.base_price
+                        ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
+                        : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
+                    }`}
+                    type="number"
+                  />
+                  {errors.total_available && (
+                    <p className="text-[#E60012]">
+                      {errors.total_available.message}
+                    </p>
+                  )}
+                </div>
+
+                {/* <label className="block text-sm text-gray-700 mb-2">
+                    Brand rangi
+                  </label> */}
+
+                {/* <select
+                    {...register("brand_color")}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
+                  >
+                    {colors.length ? (
+                      colors.map((el) => (
+                        <option
+                          key={el?.id}
+                          value={el?.id}
+                          style={{ color: el?.rgb }}
+                        >
+                          <div
+                            style={{
+                              backgroundColor: el?.rgb,
+                              width: "30px",
+                              height: "30px",
+                            }}
+                          >
+                            ● {el?.rgb}
+                          </div>{" "}
+                          {el?.title}
+                        </option>
+                      ))
+                    ) : (
+                      <option value="" disabled>
+                        {t("noInformation")}
+                      </option>
+                    )}
+
+                  </select> */}
+
+                {/* <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() => setOpen(!open)}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012] flex items-center justify-between bg-white"
+                    >
+                      {colors.find((c) => c.id === selected) && (
+                        <div className="flex items-center gap-2">
+                          <div
+                            style={{
+                              backgroundColor: colors.find(
+                                (c) => c.id === selected
+                              )?.rgb,
+                              width: "20px",
+                              height: "20px",
+                              borderRadius: "4px",
+                            }}
+                          />
+                          <span>
+                            {colors.find((c) => c.id === selected)?.title}
+                          </span>
+                        </div>
+                      )}
+                    </button>
+
+                    {open && (
+                      <div className="absolute top-full left-0 right-0 mt-1 border border-gray-300 rounded-lg bg-white shadow-lg z-10">
+                        {colors.map((el) => (
+                          <button
+                            key={el.id}
+                            type="button"
+                            onClick={() => {
+                              setValue("brand_color", el.id);
+                              setOpen(false);
+                            }}
+                            className="w-full px-4 py-2 flex items-center gap-2 hover:bg-gray-100 text-left"
+                          >
+                            <div
+                              style={{
+                                backgroundColor: el.rgb,
+                                width: "20px",
+                                height: "20px",
+                                borderRadius: "4px",
+                              }}
+                            />
+                            <span>{el.title}</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                    <input type="hidden" {...register("brand_color")} />
+                  </div> */}
 
                 <div>
                   <label className="block text-sm text-gray-700 mb-2">
-                    Narxi
+                    Brend Rangi
                   </label>
-                  <input
-                    placeholder="+998 XX XXX XX XX"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
-                    // onChange={handlePhoneChange}
-                    // onBlur={handlePhoneBlur}
+                  {/* <ColorSelect
+                    colors={colors}
+                    value={selectedColor}
+                    onChange={setSelectedColor}
+                    placeholder="Rang tanlang..."
+                  /> */}
+                  <Controller
+                    name="brand_color"
+                    control={control}
+                    rules={{ required: "Rangni tanlash majburiy" }}
+                    render={({ field, fieldState }) => (
+                      <>
+                        <ColorSelect
+                          colors={colors}
+                          value={field.value}
+                          onChange={field.onChange}
+                          placeholder="Rang tanlang..."
+                        />
+                        {/* {fieldState.error && (
+                          <p className="text-[#E60012] text-sm mt-1">
+                            {fieldState.error.message}
+                          </p>
+                        )} */}
+                      </>
+                    )}
                   />
-                  {/* {errors.phone_number && (
-              <p className="text-[#E60012]">{errors.phone_number.message}</p>
-            )} */}
                 </div>
+
+                {/* Selected Color Preview */}
+                {/* {selectedColor && (
+                    <div className="space-y-4">
+                      <div className="border-t border-gray-200 pt-6">
+                        <h2 className="text-sm font-semibold text-gray-700 mb-4">
+                          Tanlangan Rang
+                        </h2>
+                        <div className="flex gap-4 items-center">
+                          <div
+                            className="w-24 h-24 rounded-lg border-2 border-gray-300 shadow-md"
+                            style={{
+                              backgroundColor: MOCK_COLORS.find(
+                                (c) => c.id === selectedColor
+                              )?.rgb,
+                            }}
+                          />
+                          <div>
+                            <p className="text-sm text-gray-600 mb-1">Nomi:</p>
+                            <p className="font-semibold text-gray-900">
+                              {
+                                MOCK_COLORS.find((c) => c.id === selectedColor)
+                                  ?.title
+                              }
+                            </p>
+                            <p className="text-sm text-gray-600 mt-3">
+                              RGB Kodi:
+                            </p>
+                            <p className="font-mono text-gray-900">
+                              {
+                                MOCK_COLORS.find((c) => c.id === selectedColor)
+                                  ?.rgb
+                              }
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )} */}
 
                 <div>
                   <label className="block text-sm text-gray-700 mb-2">
-                    Range
+                    description_uz
                   </label>
                   <input
-                    placeholder="+998 XX XXX XX XX"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
-                    // onChange={handlePhoneChange}
-                    // onBlur={handlePhoneBlur}
-                  />
-                  {/* {errors.phone_number && (
-              <p className="text-[#E60012]">{errors.phone_number.message}</p>
-            )} */}
-                </div>
-
-                <div>
-                  <label className="block text-sm text-gray-700 mb-2">
-                    Akumlator kuchi
-                  </label>
-                  <input
-                    placeholder="Akumlator kuchi"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
-                    // onChange={handlePhoneChange}
-                    // onBlur={handlePhoneBlur}
-                  />
-                  {/* {errors.phone_number && (
-              <p className="text-[#E60012]">{errors.phone_number.message}</p>
-            )} */}
-                </div>
-
-                <div>
-                  <label className="block text-sm text-gray-700 mb-2">
-                    Tezlanish
-                  </label>
-                  <input
-                    placeholder="Tezlanish"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
-                    // onChange={handlePhoneChange}
-                    // onBlur={handlePhoneBlur}
-                  />
-                  {/* {errors.phone_number && (
-              <p className="text-[#E60012]">{errors.phone_number.message}</p>
-            )} */}
-                </div>
-
-                <div>
-                  <label className="block text-sm text-gray-700 mb-2">
-                    Featured
-                  </label>
-                  <input
-                    placeholder="Featured"
+                    {...register("description_uz")}
+                    placeholder="total_available"
                     className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
                   />
-                  {/* {errors.source && (
-              <p className="text-[#E60012]">{errors.source.message}</p>
-            )} */}
                 </div>
-
                 <div>
                   <label className="block text-sm text-gray-700 mb-2">
-                    Images
+                    description_ru
                   </label>
                   <input
-                    placeholder="Tezlanish"
+                    {...register("description_ru")}
+                    placeholder="total_available"
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
+                  />
+                </div>
+
+                {/* Soddaroq image upload */}
+                <div className="md:col-span-2">
+                  <label className="block text-sm text-gray-700 mb-2">
+                    Rasm yuklash
+                  </label>
+
+                  {previewImage && (
+                    <div className="mb-3">
+                      <img
+                        src={previewImage}
+                        alt="Preview"
+                        className="w-40 h-40 object-cover rounded-lg border border-gray-300"
+                      />
+                    </div>
+                  )}
+
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
+                  />
+
+                  <input
+                    type="file"
+                    {...register("image")}
+                    className="hidden"
+                  />
+                </div>
+                {/* <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    Image
+                  </label>
+                  <input
+                    {...register("image")}
+                    placeholder="total_available"
                     className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
                     type="file"
                   />
-                </div>
+                </div> */}
+                {/* <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    description_uz
+                  </label>
+                  <textarea
+                    rows={3}
+                    placeholder={t("customers.addClientObj.additionalInfo")}
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
+                  ></textarea>
+                </div> */}
               </div>
 
               <div className="flex gap-3 pt-4">
@@ -625,6 +868,13 @@ const Cars = () => {
           </div>
         </div>
       )}
+
+      <DeleteModal
+        closeDeleteModal={closeDeleteModal}
+        isOpen={isDeleteModal}
+        selectedItemId={selectedItemId}
+        deleteBtn={deleteBtn}
+      />
     </>
   );
 };
