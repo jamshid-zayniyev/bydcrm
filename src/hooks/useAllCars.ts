@@ -12,11 +12,27 @@ const createCarSchema = (t: any) =>
   z.object({
     model: z.string().min(1, "Model nomi majburiy"),
     base_price: z.number().positive("Boshlang'ich narx musbat bo'lishi kerak"),
-    total_available: z.number().int().nonnegative("Umumiy son noto'g'ri"),
-    description_uz: z.string(),
-    description_ru: z.string(),
-    brand_color: z.string().optional(),
-    image: z.instanceof(File).optional(),
+    total_available: z.number().positive("Sonni bo'lishi shart"),
+    // base_price: z.coerce
+    //   .number()
+    //   .positive("Boshlang'ich narx musbat bo'lishi kerak"),
+    // total_available: z.coerce
+    //   .number()
+    //   .int()
+    //   .nonnegative("Umumiy son noto'g'ri"),
+    description_uz: z.string().min(1, "description_uz nomi majburiy"),
+    description_ru: z.string().min(1, "description_ru nomi majburiy"),
+    brand_color: z.string().min(1, "Rangni tanlash majburiy"),
+    image: z
+      .any()
+      .refine((file) => {
+        // Yangi yaratishda: file majburiy
+        // Tahrirlashda: file yoki string bo'lishi mumkin
+        return (
+          file instanceof File || typeof file === "string" || file === undefined
+        );
+      }, "Rasm yuklash majburiy")
+      .optional(),
   });
 
 export type CarSchema = z.infer<ReturnType<typeof createCarSchema>>;
@@ -24,7 +40,6 @@ export type CarSchema = z.infer<ReturnType<typeof createCarSchema>>;
 export const useAllCars = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [uploadLoading, setUploadLoading] = useState(false);
   const { t } = useTranslation();
   const carSchema = createCarSchema(t);
   const [colors, setColors] = useState<CarsColor[]>([]);
@@ -33,6 +48,7 @@ export const useAllCars = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [isDeleteModal, setDeleteModal] = useState(false);
   const [selected, setSelected] = useState<number | null>(null);
+  const [uploadLoading, setUploadLoading] = useState(false);
 
   const {
     register,
@@ -46,11 +62,12 @@ export const useAllCars = () => {
     resolver: zodResolver(carSchema),
     defaultValues: {
       model: "",
-      // base_price: 0,
-      // total_available: 0,
+      base_price: 0,
+      total_available: 0,
       description_uz: "",
       description_ru: "",
-      // brand_color: "",
+      brand_color: "",
+      image: undefined,
     },
   });
 
@@ -59,12 +76,15 @@ export const useAllCars = () => {
 
   // Image preview yaratish
   useEffect(() => {
-    if (imageFile && imageFile instanceof File) {
+    if (imageFile instanceof File) {
       const reader = new FileReader();
       reader.onload = (e) => {
         setPreviewImage(e.target?.result as string);
       };
       reader.readAsDataURL(imageFile);
+    } else if (typeof imageFile === "string" && imageFile) {
+      // Agar mavjud rasm URL bo'lsa
+      setPreviewImage(imageFile);
     } else {
       setPreviewImage("");
     }
@@ -94,14 +114,15 @@ export const useAllCars = () => {
       formData.append("total_available", data.total_available.toString());
       formData.append("description_uz", data.description_uz);
       formData.append("description_ru", data.description_ru);
+      formData.append("brand_color", `${data.brand_color}`);
 
-      if (data.brand_color) {
-        formData.append("brand_color", data.brand_color);
-      }
-
-      if (data.image) {
+      // Image ni qayta ishlash - MUHIM O'ZGARISH
+      if (data.image instanceof File) {
+        // Faqat yangi rasm tanlangan bo'lsa yuborish
         formData.append("image", data.image);
       }
+      // Agar data.image string (mavjud URL) bo'lsa, image fieldni YUBORMAYMIZ
+      // Backend mavjud rasmni o'zi saqlab qoladi
 
       if (selected === null) {
         await api.post("/cars/crm/create/", formData, {
@@ -110,7 +131,7 @@ export const useAllCars = () => {
           },
         });
       } else {
-        await api.put(`/cars/crm/${selected}`, formData, {
+        await api.put(`/cars/crm/${selected}/`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -132,8 +153,8 @@ export const useAllCars = () => {
 
     reset({
       model: "",
-      base_price: undefined,
-      total_available: undefined,
+      base_price: 0,
+      total_available: 0,
       description_uz: "",
       description_ru: "",
       brand_color: "",
@@ -154,13 +175,40 @@ export const useAllCars = () => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      // File hajmini tekshirish (5MB)
+      if (file.size > 10 * 1024 * 1024) {
+        window.alert("Rasm hajmi 5MB dan oshmasligi kerak");
+        return;
+      }
+
+      // File turini tekshirish
+      if (!file.type.startsWith("image/")) {
+        window.alert("Faqat rasm fayllari qabul qilinadi");
+        return;
+      }
+
       setValue("image", file);
     }
   };
 
   const handleRemoveImage = () => {
-    setValue("image", undefined);
-    setPreviewImage("");
+    // Agar edit rejimida bo'lsak
+    if (selected !== null) {
+      // Mavjud rasm URL ni qidirish
+      const car = cars.find((c) => c.id === selected);
+      if (car?.image && !(watch("image") instanceof File)) {
+        // Eski rasm URL ni qayta o'rnatish
+        setValue("image", car.image);
+        setPreviewImage(car.image);
+      } else {
+        setValue("image", undefined);
+        setPreviewImage("");
+      }
+    } else {
+      // Yangi yaratishda
+      setValue("image", undefined);
+      setPreviewImage("");
+    }
   };
 
   useEffect(() => {
@@ -189,14 +237,24 @@ export const useAllCars = () => {
     try {
       setSelected(id);
       let { data } = await api.get(`/cars/crm/${id}/`);
+      console.log(data);
+
+      // Image ni qayta ishlash
+      let imageValue: any = undefined;
+      if (data.image) {
+        // Agar backend image URL qaytarsa, uni string sifatida saqlash
+        imageValue = data.image;
+      }
+
       reset({
-        model: data.model || "",
-        base_price: data.base_price || 0,
-        total_available: data.total_available || 0,
-        description_uz: data.description_uz || "",
-        description_ru: data.description_ru || "",
-        brand_color: data.brand_color || "",
-        image: undefined, // Image ni yangilash uchun bo'sh qoldiramiz
+        model: data.model,
+        base_price: data.base_price,
+        total_available: data.total_available,
+        description_uz: data.description_uz,
+        description_ru: data.description_ru,
+        brand_color: `${data.brand_color}`,
+        image: imageValue,
+        // image: undefined, // Image ni yangilash uchun bo'sh qoldiramiz
       });
 
       // Agar image bo'lsa, preview ni o'rnatish
@@ -213,9 +271,9 @@ export const useAllCars = () => {
   return {
     loading,
     error,
-    uploadLoading,
     refetch,
     register,
+    uploadLoading,
     errors,
     handleSubmit,
     onSubmit,
@@ -234,5 +292,6 @@ export const useAllCars = () => {
     openDeleteModal,
     isDeleteModal,
     editBtn,
+    selected,
   };
 };
