@@ -2,12 +2,7 @@ import { useCars } from "@/hooks/useCars";
 import { Car, Plus, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "./ui/dialog";
+import { Dialog, DialogContent } from "./ui/dialog";
 import { useState } from "react";
 import { Car as CarType } from "../api/cars";
 import EditDelete from "./ui/edit-delete";
@@ -15,6 +10,14 @@ import { useAllCars } from "../hooks/useAllCars";
 import { ColorSelect } from "./ui/color-select";
 import { Controller } from "react-hook-form";
 import DeleteModal from "./ui/delete-modal";
+import Features from "./ui/features";
+
+import { useFeatures } from "@/hooks/useFeatures";
+import { useVariants } from "@/hooks/useVariants";
+import Variants from "./ui/variants";
+import Loading from "./ui/loading";
+import Nodata from "./ui/no-data";
+import DeleteDialog from "./ui/delete-dialog";
 
 const Cars = () => {
   const [selectedVehicle, setSelectedVehicle] = useState<CarType | null>(null);
@@ -50,15 +53,63 @@ const Cars = () => {
     selected,
   } = useAllCars();
 
-  const { t } = useTranslation();
+  const {
+    showAddModal: showAddModalFeatures,
+    setShowAddModal: setShowAddModalFeatures,
+    closeModal: closeModalFeatures,
+    handleSubmit: handleSubmitFeatures,
+    onSubmit: onSubmitFeatures,
+    register: registerFeatures,
+    errors: errorsFeatures,
+    fetchFeatures,
+    featuresData,
+    loading: featuresLoading,
+    openDeleteModal: openDeleteModalFeatures,
+    editBtn: editBtnFeatures,
 
-  const vehicleImages: Record<string, string> = {
-    "1": "https://images.unsplash.com/photo-1669198074495-d04dae22bb90?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxCWUQlMjBTb25nJTIwUGx1cyUyMFNVVnxlbnwxfHx8fDE3NjAzMzA3ODN8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    "2": "https://images.unsplash.com/photo-1733149085731-30ff1d334f9d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBlbGVjdHJpYyUyMHNlZGFufGVufDF8fHx8MTc2MDMzMDc4N3ww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    "3": "https://images.unsplash.com/photo-1622333847289-41e8172e650a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbGVjdHJpYyUyMFNVViUyMGNyb3Nzb3ZlcnxlbnwxfHx8fDE3NjAzMzA3ODh8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    "4": "https://images.unsplash.com/photo-1745393404775-ae350c1677ef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb21wYWN0JTIwZWxlY3RyaWMlMjBjYXJ8ZW58MXx8fHwxNzYwMzMwNzg4fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    "5": "https://images.unsplash.com/photo-1710880135020-e0af9cc79dcc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzcG9ydHMlMjBlbGVjdHJpYyUyMHNlZGFufGVufDF8fHx8MTc2MDMzMDc4OHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-  };
+    setSelectedItemId: setSelectedItemIdFeatures,
+    selectedItemId: selectedItemIdFeatures,
+
+    closeDeleteModal: closeDeleteModalFeatures,
+    isDeleteModal: isDeleteModalFeatures,
+    deleteBtn: deleteBtnFeatures,
+  } = useFeatures(selectedVehicle?.id);
+
+  const {
+    // Form
+    handleSubmit: handleSubmitVariants,
+    onSubmit: onSubmitVariants,
+    errors: errorsVariants,
+    register: registerVariants,
+    control: controlVariants,
+    // setValue: setValueVariants,
+    // watch: watchVariants,
+
+    // Modal
+    setShowAddModal: setShowAddModalVariants,
+    showAddModal: showAddModalVariants,
+    closeModal: closeModalVariants,
+
+    // getData
+    fetchVariables,
+    variantsData,
+
+    loading: loadingVariants,
+
+    // Edit and Delete
+    editBtn: editBtnVariants,
+    openDeleteModal: openDeleteModalVariants,
+    closeDeleteModal: closeDeleteModalVariants,
+    isDeleteModal: isDeleteModalVariants,
+    deleteBtn: deleteBtnVariants,
+
+    selected: selectedVariants,
+
+    setSelectedItemId: setSelectedItemIdVariants,
+    selectedItemId: selectedItemIdVariants,
+  } = useVariants(selectedVehicle?.id);
+
+  const { t } = useTranslation();
 
   const formatPrice = (price: number) => {
     return `${(price / 1000000).toFixed(0)} ${t("dashboard.cars.mln")}`;
@@ -139,7 +190,11 @@ const Cars = () => {
                 <div
                   key={vehicle.id}
                   className="border-2 border-gray-200 rounded-lg sm:rounded-xl overflow-hidden hover:border-[#E60012] transition-all hover:shadow-lg cursor-pointer"
-                  onClick={() => setSelectedVehicle(vehicle)}
+                  onClick={() => {
+                    setSelectedVehicle(vehicle);
+                    fetchFeatures(vehicle.id);
+                    fetchVariables(vehicle.id);
+                  }}
                 >
                   {/* Vehicle Image */}
                   <div className="relative h-40 sm:h-48 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
@@ -287,7 +342,11 @@ const Cars = () => {
               {/* Hero Section with Image and Gradient */}
               <div className="relative h-48 sm:h-64 md:h-72 overflow-hidden">
                 <ImageWithFallback
-                  src={vehicleImages[selectedVehicle.id] || "/default-car.jpg"}
+                  src={`${
+                    selectedVehicle.image
+                      ? selectedVehicle.image
+                      : "/default-car.jpg"
+                  }`}
                   alt={selectedVehicle.model}
                   className="w-full h-full object-cover"
                 />
@@ -303,7 +362,7 @@ const Cars = () => {
                       } shadow-lg`}
                     ></div>
                     <h2 className="text-white text-lg sm:text-xl md:text-2xl">
-                      {selectedVehicle.model}
+                      {selectedVehicle.model} {selectedVehicle.id}
                     </h2>
                   </div>
                   <p className="text-white/90 text-xs sm:text-sm mb-2 sm:mb-3">
@@ -372,22 +431,52 @@ const Cars = () => {
                 <div className="grid grid-cols-1 gap-4 sm:gap-6">
                   {/* Features */}
                   <div>
-                    <h4 className="text-gray-900 mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
-                      <span className="text-[#E60012]">⚡</span>
-                      {t("dashboard.cars.key")}
-                    </h4>
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-gray-900 flex items-center gap-2 text-sm sm:text-base">
+                        <span className="text-[#E60012]">⚡</span>
+                        <span>{t("dashboard.cars.key")}</span>
+                      </h4>
+
+                      <button
+                        className="flex items-center cursor-pointer bg-[#E60012] text-white px-4 py-2 rounded-lg hover:bg-[#c4000f] transition-colors"
+                        onClick={() => setShowAddModalFeatures(true)}
+                      >
+                        <Plus className="w-4 h-4" />
+                      </button>
+                    </div>
                     <div className="space-y-2">
-                      {selectedVehicle.features.map((feature, idx) => (
-                        <div
-                          key={idx}
-                          className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-700 bg-gray-50 p-2 sm:p-3 rounded-lg hover:bg-gray-100 transition-colors"
-                        >
-                          <div className="w-5 h-5 rounded-full bg-[#E60012] flex items-center justify-center flex-shrink-0">
-                            <span className="text-white text-xs">✓</span>
+                      {featuresLoading ? (
+                        <Loading />
+                      ) : featuresData.length ? (
+                        featuresData.map(({ id, description }) => (
+                          <div
+                            key={id}
+                            className="flex items-center justify-between sm:gap-3 text-xs sm:text-sm text-gray-700 bg-gray-50 p-2 sm:p-3 rounded-lg hover:bg-gray-100 transition-colors"
+                          >
+                            <div className="flex items-center gap-2">
+                              <div className="w-5 h-5 rounded-full bg-[#E60012] flex items-center justify-center flex-shrink-0">
+                                <span className="text-white text-xs">✓</span>
+                              </div>
+                              <span>{description}</span>
+                            </div>
+                            <EditDelete
+                              openDeleteModal={openDeleteModalFeatures}
+                              setSelectedItemId={setSelectedItemIdFeatures}
+                              id={id}
+                              editBtn={editBtnFeatures}
+                            />
+
+                            <DeleteDialog
+                              closeDeleteModal={closeDeleteModalFeatures}
+                              isOpen={isDeleteModalFeatures}
+                              selectedItemId={selectedItemIdFeatures}
+                              deleteBtn={deleteBtnFeatures}
+                            />
                           </div>
-                          <span>{feature}</span>
-                        </div>
-                      ))}
+                        ))
+                      ) : (
+                        <Nodata />
+                      )}
                     </div>
                   </div>
 
@@ -445,10 +534,20 @@ const Cars = () => {
 
                 {/* Variants Table */}
                 <div>
-                  <h4 className="text-gray-900 mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
-                    <span className="text-[#E60012]">📋</span>
-                    {t("dashboard.cars.available")}
-                  </h4>
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="text-gray-900 flex items-center gap-2 text-sm sm:text-base">
+                      <span className="text-[#E60012]">📋</span>
+                      {t("dashboard.cars.available")}
+                    </h4>
+
+                    <button
+                      className="flex items-center cursor-pointer bg-[#E60012] text-white px-4 py-2 rounded-lg hover:bg-[#c4000f] transition-colors"
+                      onClick={() => setShowAddModalVariants(true)}
+                    >
+                      <Plus className="w-4 h-4" />
+                    </button>
+                  </div>
+
                   <div
                     className="border border-gray-200 rounded-lg sm:rounded-xl overflow-hidden bg-white"
                     style={{ maxWidth: "462px", overflow: "hidden" }}
@@ -475,54 +574,91 @@ const Cars = () => {
                             <th className="text-right py-3 px-4 text-xs text-gray-600">
                               {t("dashboard.cars.availableForm.warehouse")}
                             </th>
+                            <th className="text-right py-3 px-4 text-xs text-gray-600">
+                              Action
+                            </th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100">
-                          {selectedVehicle.variants.map((variant) => (
-                            <tr
-                              key={variant.id}
-                              className="hover:bg-gray-50 transition-colors"
-                            >
-                              <td className="py-3 px-4 text-gray-900">
-                                {variant.series}
-                              </td>
-                              <td className="py-3 px-4">
-                                <div className="flex items-center gap-2">
-                                  <div
-                                    className="w-5 h-5 rounded-full border-2 border-gray-300 shadow-sm"
-                                    style={{
-                                      backgroundColor: variant.colorHex,
-                                    }}
-                                  ></div>
-                                  <span className="text-gray-700 text-xs">
-                                    {variant.color}
-                                  </span>
-                                </div>
-                              </td>
-                              <td className="py-3 px-4 text-gray-700 text-xs">
-                                {variant.battery}
-                              </td>
-                              <td className="py-3 px-4 text-gray-700 text-xs">
-                                {variant.range}
-                              </td>
-                              <td className="py-3 px-4 text-right text-[#E60012]">
-                                {formatPrice(variant.price)}
-                              </td>
-                              <td className="py-3 px-4 text-right">
-                                <span
-                                  className={`inline-block px-2 py-1 rounded-lg text-xs ${
-                                    variant.stock > 1
-                                      ? "bg-green-100 text-green-700"
-                                      : variant.stock === 1
-                                      ? "bg-yellow-100 text-yellow-700"
-                                      : "bg-red-100 text-red-700"
-                                  }`}
-                                >
-                                  {variant.stock}
-                                </span>
+                          {loadingVariants ? (
+                            <tr>
+                              <td colSpan={7}>
+                                <Loading />
                               </td>
                             </tr>
-                          ))}
+                          ) : (
+                            <>
+                              {variantsData.length ? (
+                                variantsData.map((variant) => (
+                                  <tr
+                                    key={variant.id}
+                                    className="hover:bg-gray-50 transition-colors"
+                                  >
+                                    <td className="py-3 px-4 text-gray-900">
+                                      {variant.series}
+                                    </td>
+                                    <td className="py-3 px-4">
+                                      <div className="flex items-center gap-2">
+                                        <div
+                                          className="w-5 h-5 rounded-full border-2 border-gray-300 shadow-sm"
+                                          style={{
+                                            backgroundColor: variant.colorHex,
+                                          }}
+                                        ></div>
+                                        <span className="text-gray-700 text-xs">
+                                          {variant.color}
+                                        </span>
+                                      </div>
+                                    </td>
+                                    <td className="py-3 px-4 text-gray-700 text-xs">
+                                      {variant.battery}
+                                    </td>
+                                    <td className="py-3 px-4 text-gray-700 text-xs">
+                                      {variant.range}
+                                    </td>
+                                    <td className="py-3 px-4 text-right text-[#E60012]">
+                                      {formatPrice(variant.price)}
+                                    </td>
+                                    <td className="py-3 px-4 text-right">
+                                      <span
+                                        className={`inline-block px-2 py-1 rounded-lg text-xs ${
+                                          variant.stock > 1
+                                            ? "bg-green-100 text-green-700"
+                                            : variant.stock === 1
+                                            ? "bg-yellow-100 text-yellow-700"
+                                            : "bg-red-100 text-red-700"
+                                        }`}
+                                      >
+                                        {variant.stock}
+                                      </span>
+                                    </td>
+                                    <td className="py-3 px-4 text-right">
+                                      <span
+                                        className={`inline-block px-2 py-1 rounded-lg text-xs`}
+                                      >
+                                        <EditDelete
+                                          id={variant.id}
+                                          editBtn={editBtnVariants}
+                                          openDeleteModal={
+                                            openDeleteModalVariants
+                                          }
+                                          setSelectedItemId={
+                                            setSelectedItemIdVariants
+                                          }
+                                        />
+                                      </span>
+                                    </td>
+                                  </tr>
+                                ))
+                              ) : (
+                                <tr>
+                                  <td colSpan={7}>
+                                    <Nodata />
+                                  </td>
+                                </tr>
+                              )}
+                            </>
+                          )}
                         </tbody>
                       </table>
                     </div>
@@ -535,17 +671,10 @@ const Cars = () => {
       </Dialog>
 
       {showAddModal && (
-        <div
-          className="fixed inset-0 flex items-center justify-center p-4 z-50 bg-black/50 backdrop-blur"
-          // className="fixed inset-0 flex items-center justify-center p-4 z-50"
-          // style={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}
-        >
+        <div className="fixed inset-0 flex items-center justify-center p-4 z-50 bg-black/50 backdrop-blur">
           <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-gray-200 flex items-center justify-between">
               <h2 className="text-gray-900">
-                {/* {selected
-                ? `${t("customers.addClientObj.oneClient")}`
-                : `${t("customers.addClientObj.addNewClient")}`} */}
                 {selected === null ? "Add" : "tahrirlash"}
               </h2>
               <button
@@ -616,104 +745,11 @@ const Cars = () => {
                   )}
                 </div>
 
-                {/* <label className="block text-sm text-gray-700 mb-2">
-                    Brand rangi
-                  </label> */}
-
-                {/* <select
-                    {...register("brand_color")}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
-                  >
-                    {colors.length ? (
-                      colors.map((el) => (
-                        <option
-                          key={el?.id}
-                          value={el?.id}
-                          style={{ color: el?.rgb }}
-                        >
-                          <div
-                            style={{
-                              backgroundColor: el?.rgb,
-                              width: "30px",
-                              height: "30px",
-                            }}
-                          >
-                            ● {el?.rgb}
-                          </div>{" "}
-                          {el?.title}
-                        </option>
-                      ))
-                    ) : (
-                      <option value="" disabled>
-                        {t("noInformation")}
-                      </option>
-                    )}
-
-                  </select> */}
-
-                {/* <div className="relative">
-                    <button
-                      type="button"
-                      onClick={() => setOpen(!open)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012] flex items-center justify-between bg-white"
-                    >
-                      {colors.find((c) => c.id === selected) && (
-                        <div className="flex items-center gap-2">
-                          <div
-                            style={{
-                              backgroundColor: colors.find(
-                                (c) => c.id === selected
-                              )?.rgb,
-                              width: "20px",
-                              height: "20px",
-                              borderRadius: "4px",
-                            }}
-                          />
-                          <span>
-                            {colors.find((c) => c.id === selected)?.title}
-                          </span>
-                        </div>
-                      )}
-                    </button>
-
-                    {open && (
-                      <div className="absolute top-full left-0 right-0 mt-1 border border-gray-300 rounded-lg bg-white shadow-lg z-10">
-                        {colors.map((el) => (
-                          <button
-                            key={el.id}
-                            type="button"
-                            onClick={() => {
-                              setValue("brand_color", el.id);
-                              setOpen(false);
-                            }}
-                            className="w-full px-4 py-2 flex items-center gap-2 hover:bg-gray-100 text-left"
-                          >
-                            <div
-                              style={{
-                                backgroundColor: el.rgb,
-                                width: "20px",
-                                height: "20px",
-                                borderRadius: "4px",
-                              }}
-                            />
-                            <span>{el.title}</span>
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                    <input type="hidden" {...register("brand_color")} />
-                  </div> */}
-
                 <div>
                   <label className="block text-sm text-gray-700 mb-2">
                     Brend Rangi
                   </label>
-                  {/* <ColorSelect
-                    colors={colors}
-                    value={selectedColor}
-                    onChange={setSelectedColor}
-                    placeholder="Rang tanlang..."
-                  /> */}
+
                   <Controller
                     name="brand_color"
                     control={control}
@@ -724,6 +760,7 @@ const Cars = () => {
                           value={field.value ? field.value.toString() : ""}
                           onChange={field.onChange}
                           placeholder="Rang tanlang..."
+                          errorsColor={!!errors.brand_color}
                         />
                         {errors.brand_color && (
                           <p className="text-[#E60012] text-sm mt-1">
@@ -734,45 +771,6 @@ const Cars = () => {
                     )}
                   />
                 </div>
-
-                {/* Selected Color Preview */}
-                {/* {selectedColor && (
-                    <div className="space-y-4">
-                      <div className="border-t border-gray-200 pt-6">
-                        <h2 className="text-sm font-semibold text-gray-700 mb-4">
-                          Tanlangan Rang
-                        </h2>
-                        <div className="flex gap-4 items-center">
-                          <div
-                            className="w-24 h-24 rounded-lg border-2 border-gray-300 shadow-md"
-                            style={{
-                              backgroundColor: MOCK_COLORS.find(
-                                (c) => c.id === selectedColor
-                              )?.rgb,
-                            }}
-                          />
-                          <div>
-                            <p className="text-sm text-gray-600 mb-1">Nomi:</p>
-                            <p className="font-semibold text-gray-900">
-                              {
-                                MOCK_COLORS.find((c) => c.id === selectedColor)
-                                  ?.title
-                              }
-                            </p>
-                            <p className="text-sm text-gray-600 mt-3">
-                              RGB Kodi:
-                            </p>
-                            <p className="font-mono text-gray-900">
-                              {
-                                MOCK_COLORS.find((c) => c.id === selectedColor)
-                                  ?.rgb
-                              }
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )} */}
 
                 <div>
                   <label className="block text-sm text-gray-700 mb-2">
@@ -906,16 +904,13 @@ const Cars = () => {
                 <button
                   type="submit"
                   className="flex-1 px-4 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors"
-                  disabled={loading}
+                  disabled={uploadLoading}
                 >
                   {uploadLoading ? "Yuklanmoqda..." : "Saqlash"}
-                  {/* {loading
-              ? `...${t("customers.addClientObj.addClient")}`
-              : `${t("customers.addClientObj.addClient")}`} */}
                 </button>
                 <button
                   type="button"
-                  // disabled={loading}
+                  disabled={uploadLoading}
                   onClick={closeModal}
                   className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
                 >
@@ -927,11 +922,49 @@ const Cars = () => {
         </div>
       )}
 
+      {showAddModalFeatures && (
+        <Features
+          open={showAddModalFeatures}
+          onOpenChange={closeModalFeatures}
+          handleSubmit={handleSubmitFeatures}
+          onSubmit={onSubmitFeatures}
+          register={registerFeatures}
+          errors={errorsFeatures}
+        />
+      )}
+
+      {showAddModalVariants && (
+        <Variants
+          // Modal
+          open={showAddModalVariants}
+          onOpenChange={closeModalVariants}
+          // Form
+          handleSubmit={handleSubmitVariants}
+          onSubmit={onSubmitVariants}
+          register={registerVariants}
+          errors={errorsVariants}
+          control={controlVariants}
+          // setValue={setValueVariants}
+          // watch={watchVariants}
+
+          // ColorData
+          colors={colors}
+          selected={selectedVariants}
+        />
+      )}
+
       <DeleteModal
         closeDeleteModal={closeDeleteModal}
         isOpen={isDeleteModal}
         selectedItemId={selectedItemId}
         deleteBtn={deleteBtn}
+      />
+
+      <DeleteDialog
+        closeDeleteModal={closeDeleteModalVariants}
+        isOpen={isDeleteModalVariants}
+        selectedItemId={selectedItemIdVariants}
+        deleteBtn={deleteBtnVariants}
       />
     </>
   );

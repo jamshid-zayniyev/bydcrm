@@ -14,6 +14,7 @@ interface ColorSelectProps {
   value?: string;
   onChange?: (colorId: string) => void;
   placeholder?: string;
+  errorsColor?: boolean;
 }
 
 export function ColorSelect({
@@ -21,6 +22,7 @@ export function ColorSelect({
   value,
   onChange,
   placeholder = "Rang tanlang",
+  errorsColor,
 }: ColorSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -29,6 +31,8 @@ export function ColorSelect({
   // string ni number ga o'girib topamiz
   const numericValue = value ? parseInt(value) : undefined;
   const selectedColor = colors.find((c) => c.id === numericValue);
+
+  console.log(numericValue);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -50,6 +54,7 @@ export function ColorSelect({
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-left flex items-center justify-between hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#E60012] transition-all"
+        style={errorsColor ? { border: "1px solid #E60012" } : {}}
       >
         <div className="flex items-center gap-3">
           {selectedColor ? (
@@ -59,7 +64,15 @@ export function ColorSelect({
                 style={{ backgroundColor: selectedColor.rgb }}
                 title={selectedColor.rgb}
               />
-              <span className="font-medium text-gray-900">
+              <span
+                className="font-medium text-gray-900"
+                style={{
+                  overflow: "hidden",
+                  display: "-webkit-box",
+                  WebkitLineClamp: 1,
+                  WebkitBoxOrient: "vertical",
+                }}
+              >
                 {selectedColor.title}
               </span>
               {/* <span className="text-xs text-gray-500">

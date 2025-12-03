@@ -1,41 +1,10 @@
 import { api } from "@/api/axios";
 import { Car, carsApi } from "@/api/cars";
-import { CarsColor } from "@/types/cars";
+import { CarSchema, CarsColor, createCarSchema } from "@/types/cars";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-
-import z from "zod";
-
-const createCarSchema = (t: any) =>
-  z.object({
-    model: z.string().min(1, "Model nomi majburiy"),
-    base_price: z.number().positive("Boshlang'ich narx musbat bo'lishi kerak"),
-    total_available: z.number().positive("Sonni bo'lishi shart"),
-    // base_price: z.coerce
-    //   .number()
-    //   .positive("Boshlang'ich narx musbat bo'lishi kerak"),
-    // total_available: z.coerce
-    //   .number()
-    //   .int()
-    //   .nonnegative("Umumiy son noto'g'ri"),
-    description_uz: z.string().min(1, "description_uz nomi majburiy"),
-    description_ru: z.string().min(1, "description_ru nomi majburiy"),
-    brand_color: z.string().min(1, "Rangni tanlash majburiy"),
-    image: z
-      .any()
-      .refine((file) => {
-        // Yangi yaratishda: file majburiy
-        // Tahrirlashda: file yoki string bo'lishi mumkin
-        return (
-          file instanceof File || typeof file === "string" || file === undefined
-        );
-      }, "Rasm yuklash majburiy")
-      .optional(),
-  });
-
-export type CarSchema = z.infer<ReturnType<typeof createCarSchema>>;
 
 export const useAllCars = () => {
   const [loading, setLoading] = useState(true);
