@@ -1,6 +1,7 @@
 import { api } from "@/api/axios";
 import {
   CarsColorArray,
+  CarsSeries,
   createVariantsSchema,
   GetVariants,
   VariantsSchema,
@@ -22,6 +23,7 @@ export const useVariants = (carId?: number) => {
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
 
   const [variantsColor, setVariantsColor] = useState<CarsColorArray[]>([]);
+  const [carsSeries, setCarsSeries] = useState<CarsSeries[]>([]);
 
   const {
     register,
@@ -50,6 +52,7 @@ export const useVariants = (carId?: number) => {
       let newData = {
         ...data,
         car: carId,
+        series: Number(data?.series),
         color: Number(data?.color),
         price: Number(data?.price),
         stock: Number(data?.stock),
@@ -75,9 +78,10 @@ export const useVariants = (carId?: number) => {
       setLoading(true);
       // setError(null);
       const { data } = await api.get(`/cars/variants/${id}/`);
-      console.log(data);
 
-      setVariantsData(data);
+      console.log(data[0]);
+
+      setVariantsData(data[0]?.variants);
     } catch (err) {
       // setError("Mashinalarni yuklab boʻlmadi");
       console.error("Error fetching cars:", err);
@@ -147,6 +151,18 @@ export const useVariants = (carId?: number) => {
     }
   };
 
+  const getCarsSeries = async (id: number) => {
+    try {
+      setLoading(true);
+      const { data } = await api.get(`/cars/series/${id}/`);
+      setCarsSeries(data);
+    } catch (err) {
+      console.error("Error fetching cars:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     // Form
     handleSubmit,
@@ -182,5 +198,8 @@ export const useVariants = (carId?: number) => {
     // getDataColor
     getColors,
     variantsColor,
+
+    getCarsSeries,
+    carsSeries,
   };
 };

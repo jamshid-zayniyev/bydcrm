@@ -42,7 +42,7 @@ export interface GetFeatures {
 
 export const createVariantsSchema = (t: any) =>
   z.object({
-    series: z.string().min(1, "series nomi majburiy"),
+    series: z.string().min(1, "Series tanlash majburiy"),
     color: z.string().min(1, "Rangni tanlash majburiy"),
     battery_uz: z.string().min(1, "battery_uz nomi majburiy"),
     battery_ru: z.string().min(1, "battery_ru nomi majburiy"),
@@ -69,4 +69,10 @@ export interface GetVariants {
   range: string;
   series: string;
   stock: number;
+}
+
+export interface CarsSeries {
+  id: number;
+  car: number;
+  name: string;
 }

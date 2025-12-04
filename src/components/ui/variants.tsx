@@ -1,8 +1,9 @@
 import { X } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./dialog";
-import { CarsColor, VariantsSchema } from "@/types/cars";
+import { CarsColor, CarsSeries, VariantsSchema } from "@/types/cars";
 import { Controller, UseFormReturn } from "react-hook-form";
 import { ColorSelect } from "./color-select";
+import { useTranslation } from "react-i18next";
 
 type VariantsProps = {
   open: boolean;
@@ -18,6 +19,8 @@ type VariantsProps = {
 
   selected: number | null;
   // isSubmitting: boolean;
+
+  carsSeries: CarsSeries[];
 };
 
 const Variants = ({
@@ -37,7 +40,12 @@ const Variants = ({
   // ColorData
   colors,
   selected,
+
+  carsSeries = [],
 }: VariantsProps) => {
+  console.log(carsSeries[0].name);
+  const { t } = useTranslation();
+
   // const formatPrice = (value: string) => {
   //   if (!value) return "";
 
@@ -77,18 +85,39 @@ const Variants = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm text-gray-700 mb-2">series</label>
-              <input
-                {...register("series")}
-                placeholder="total_available"
-                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+              <select
+                {...register("series", {
+                  required: "Seriyani tanlash majburiy", // Zod yoki RHF validation
+                })}
+                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012] ${
                   errors.series
-                    ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
-                    : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
+                    ? "border-[#E60012] focus:border-[#E60012]"
+                    : "border-gray-300"
                 }`}
-                type="text"
-              />
+                // Agar tahrirlash rejimida bo'lsa, qiymat avtomatik to'ldiriladi (RHF boshqaradi)
+              >
+                {/* Placeholder – tanlanmagan holatda ko‘rinadi */}
+                <option value="" disabled selected hidden>
+                  Seriyani tanlang...
+                </option>
+
+                {/* Ma'lumotlar yuklanmagan yoki bo'sh bo'lsa */}
+                {carsSeries && carsSeries.length > 0 ? (
+                  carsSeries.map((el) => (
+                    <option key={el.id} value={el.id}>
+                      {el.name}
+                    </option>
+                  ))
+                ) : (
+                  <option disabled>Yuklanmoqda yoki ma'lumot yo‘q</option>
+                )}
+              </select>
+
+              {/* XATO XABARI – SIZ SO‘RAGAN QISM */}
               {errors.series && (
-                <p className="text-[#E60012]">{errors.series.message}</p>
+                <p className="text-[#E60012] text-sm mt-1">
+                  {errors.series.message || "Seriyani tanlash majburiy"}
+                </p>
               )}
             </div>
 

@@ -56,7 +56,7 @@ export function Dashboard() {
   const { weekStatistics, error } = useWeekStatistics();
   const { monthStatistics, error: monthError } = useMonthStatistics();
   const { dayStatistics, error: dayError } = useDayStatistics();
-  const { pieChart, error: pieError } = usePieChart();
+  const { pieChart, error: pieError, bestSeller } = usePieChart();
 
   const vehicleImages: Record<string, string> = {
     "1": "https://images.unsplash.com/photo-1669198074495-d04dae22bb90?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxCWUQlMjBTb25nJTIwUGx1cyUyMFNVVnxlbnwxfHx8fDE3NjAzMzA3ODN8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
@@ -91,14 +91,14 @@ export function Dashboard() {
       icon: TrendingUp,
       color: "red",
     },
-    {
-      label: t("dashboard.star"),
-      value: "4.6",
-      change: "+0.3",
-      isPositive: true,
-      icon: Star,
-      color: "black",
-    },
+    // {
+    //   label: t("dashboard.star"),
+    //   value: "4.6",
+    //   change: "+0.3",
+    //   isPositive: true,
+    //   icon: Star,
+    //   color: "black",
+    // },
   ];
 
   const salesData = monthStatistics;
@@ -162,7 +162,7 @@ export function Dashboard() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
         {stats.map((stat, index) => {
           const Icon = stat.icon;
           const colorClasses = {
@@ -361,51 +361,43 @@ export function Dashboard() {
           {t("dashboard.best.title")}
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {kpiData
-            .filter((emp) => emp.salesClosed)
-            .sort((a, b) => (b.salesClosed || 0) - (a.salesClosed || 0))
-            .slice(0, 6)
-            .map((employee, index) => (
-              <div
-                key={employee.employeeId}
-                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      index === 0
-                        ? "bg-[#E60012] text-white"
-                        : index === 1
-                        ? "bg-gray-800 text-white"
-                        : index === 2
-                        ? "bg-gray-600 text-white"
-                        : "bg-gray-200 text-gray-700"
-                    }`}
-                  >
-                    {index + 1}
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-900">
-                      {employee.employeeName}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      {employee.department}
-                    </p>
-                  </div>
+          {bestSeller.map((employee, index) => (
+            <div
+              key={index}
+              className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <div
+                  className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                    index === 0
+                      ? "bg-[#E60012] text-white"
+                      : index === 1
+                      ? "bg-gray-800 text-white"
+                      : index === 2
+                      ? "bg-gray-600 text-white"
+                      : "bg-gray-200 text-gray-700"
+                  }`}
+                >
+                  {index + 1}
                 </div>
-                <div className="text-right">
-                  <p className="text-sm text-gray-900">
-                    {employee.salesClosed} {t("dashboard.best.sales")}
-                  </p>
-                  <div className="flex items-center gap-1 mt-1">
-                    <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
-                    <span className="text-xs text-gray-600">
-                      {employee.customerSatisfaction?.toFixed(1)}
-                    </span>
-                  </div>
+                <div>
+                  <p className="text-sm text-gray-900">{employee?.full_name}</p>
+                  {/* <p className="text-xs text-gray-500">{employee.department}</p> */}
                 </div>
               </div>
-            ))}
+              <div className="text-right">
+                <p className="text-sm text-gray-900">
+                  {employee.total_sales} {t("dashboard.best.sales")}
+                </p>
+                {/* <div className="flex items-center gap-1 mt-1">
+                  <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
+                  <span className="text-xs text-gray-600">
+                    {employee.customerSatisfaction?.toFixed(1)}
+                  </span>
+                </div> */}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 

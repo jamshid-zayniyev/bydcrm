@@ -113,6 +113,9 @@ const Cars = () => {
     // getDataColor
     getColors,
     variantsColor,
+
+    getCarsSeries,
+    carsSeries,
   } = useVariants(selectedVehicle?.id);
 
   const { t } = useTranslation();
@@ -203,6 +206,7 @@ const Cars = () => {
                     fetchFeatures(vehicle.id);
                     fetchVariables(vehicle.id);
                     getColors(vehicle.id);
+                    getCarsSeries(vehicle.id);
                   }}
                 >
                   {/* Vehicle Image */}
@@ -990,6 +994,7 @@ const Cars = () => {
           // ColorData
           colors={colors}
           selected={selectedVariants}
+          carsSeries={carsSeries}
         />
       )}
 
