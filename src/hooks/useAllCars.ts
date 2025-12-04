@@ -262,5 +262,6 @@ export const useAllCars = () => {
     isDeleteModal,
     editBtn,
     selected,
+    fetchCars,
   };
 };

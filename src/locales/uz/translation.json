@@ -22,6 +22,8 @@
 
   "title": "O'chirish",
   "message": "Ushbu ma'lumotni o'chirishni xohlaysizmi?",
+
+  "pcs": "dona",
   "actions": {
     "cansel": "Bekor qilish",
     "ok": "Ha"

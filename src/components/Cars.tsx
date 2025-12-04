@@ -51,6 +51,8 @@ const Cars = () => {
     isDeleteModal,
     editBtn,
     selected,
+
+    fetchCars,
   } = useAllCars();
 
   const {
@@ -119,20 +121,20 @@ const Cars = () => {
     return `${(price / 1000000).toFixed(0)} ${t("dashboard.cars.mln")}`;
   };
 
-  if (carsLoading) {
-    return (
-      <div className="space-y-4 sm:space-y-6">
-        <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl border border-gray-200 shadow-sm">
-          <div className="flex items-center justify-center h-32">
-            <div className="text-center">
-              <div className="w-8 h-8 border-4 border-[#E60012] border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-              <p className="text-gray-600 text-sm">{t("loading")}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // if (carsLoading) {
+  //   return (
+  //     <div className="space-y-4 sm:space-y-6">
+  //       <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl border border-gray-200 shadow-sm">
+  //         <div className="flex items-center justify-center h-32">
+  //           <div className="text-center">
+  //             <div className="w-8 h-8 border-4 border-[#E60012] border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+  //             <p className="text-gray-600 text-sm">{t("loading")}</p>
+  //           </div>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <>
@@ -171,6 +173,8 @@ const Cars = () => {
               Qayta yuklash
             </button>
           </div>
+        ) : loading ? (
+          <Loading />
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {bydVehicles.map((vehicle) => {
@@ -260,7 +264,10 @@ const Cars = () => {
                       <p className="text-xs text-gray-500 mb-2">
                         {t("dashboard.cars.colors")}
                       </p>
-                      <div className="space-y-2">
+                      <div
+                        className="space-y-2"
+                        style={{ height: "75px", overflowY: "auto" }}
+                      >
                         {colorStats.length === 0 ? (
                           <div
                             className="flex items-center justify-between"
@@ -280,7 +287,7 @@ const Cars = () => {
                             <span
                               className={`px-2 py-1 rounded text-xs bg-yellow-100 text-yellow-700`}
                             >
-                              1 шт
+                              1 {t("pcs")}
                             </span>
                           </div>
                         ) : (
@@ -307,7 +314,7 @@ const Cars = () => {
                                     : "bg-yellow-100 text-yellow-700"
                                 }`}
                               >
-                                {colorStat.count} шт
+                                {colorStat.count} {t("pcs")}
                               </span>
                             </div>
                           ))
@@ -330,7 +337,11 @@ const Cars = () => {
 
       <Dialog
         open={!!selectedVehicle}
-        onOpenChange={() => setSelectedVehicle(null)}
+        onOpenChange={() => {
+          setSelectedVehicle(null);
+
+          fetchCars();
+        }}
       >
         <DialogContent className="max-w-5xl w-[95vw] sm:w-full max-h-[90vh] overflow-y-auto p-0">
           {selectedVehicle && (
@@ -533,7 +544,7 @@ const Cars = () => {
                                   : "bg-yellow-100 text-yellow-700"
                               }`}
                             >
-                              {colorStat.stock} шт
+                              {colorStat.stock} {t("pcs")}
                             </span>
                           </div>
                         ))
@@ -553,7 +564,7 @@ const Cars = () => {
                         //     </span>
                         //   </div>
                         //   <span className="px-3 py-1 rounded-lg text-sm bg-yellow-100 text-yellow-700">
-                        //     1 шт
+                        //     1 {t("pcs")}
                         //   </span>
                         // </div>
                       )}
