@@ -107,6 +107,10 @@ const Cars = () => {
 
     setSelectedItemId: setSelectedItemIdVariants,
     selectedItemId: selectedItemIdVariants,
+
+    // getDataColor
+    getColors,
+    variantsColor,
   } = useVariants(selectedVehicle?.id);
 
   const { t } = useTranslation();
@@ -194,6 +198,7 @@ const Cars = () => {
                     setSelectedVehicle(vehicle);
                     fetchFeatures(vehicle.id);
                     fetchVariables(vehicle.id);
+                    getColors(vehicle.id);
                   }}
                 >
                   {/* Vehicle Image */}
@@ -420,7 +425,8 @@ const Cars = () => {
                     <p className="text-base sm:text-xl text-[#E60012]">
                       {formatPrice(
                         Math.min(
-                          ...selectedVehicle.variants.map((v) => v.price)
+                          // ...selectedVehicle.variants.map((v) => v.price)
+                          selectedVehicle?.base_price
                         )
                       )}
                     </p>
@@ -487,23 +493,24 @@ const Cars = () => {
                       {t("dashboard.cars.colors")}
                     </h4>
                     <div className="space-y-2">
-                      {selectedVehicle.variants
-                        .reduce((acc, variant) => {
-                          const existing = acc.find(
-                            (item) => item.color === variant.color
-                          );
-                          if (existing) {
-                            existing.count += variant.stock;
-                          } else {
-                            acc.push({
-                              color: variant.color,
-                              colorHex: variant.colorHex,
-                              count: variant.stock,
-                            });
-                          }
-                          return acc;
-                        }, [] as Array<{ color: string; colorHex: string; count: number }>)
-                        .map((colorStat, idx) => (
+                      {variantsColor.length ? (
+                        // selectedVehicle.variants
+                        //   .reduce((acc, variant) => {
+                        //     const existing = acc.find(
+                        //       (item) => item.color === variant.color
+                        //     );
+                        //     if (existing) {
+                        //       existing.count += variant.stock;
+                        //     } else {
+                        //       acc.push({
+                        //         color: variant.color,
+                        //         colorHex: variant.colorHex,
+                        //         count: variant.stock,
+                        //       });
+                        //     }
+                        //     return acc;
+                        //   }, [] as Array<{ color: string; colorHex: string; count: number }>)
+                        variantsColor.map((colorStat, idx) => (
                           <div
                             key={idx}
                             className="flex items-center justify-between p-2 sm:p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
@@ -511,7 +518,9 @@ const Cars = () => {
                             <div className="flex items-center gap-2 sm:gap-3">
                               <div
                                 className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-3 border-white shadow-md ring-2 ring-gray-200"
-                                style={{ backgroundColor: colorStat.colorHex }}
+                                style={{
+                                  backgroundColor: colorStat.colorHex,
+                                }}
                               ></div>
                               <span className="text-xs sm:text-sm text-gray-900">
                                 {colorStat.color}
@@ -519,15 +528,35 @@ const Cars = () => {
                             </div>
                             <span
                               className={`px-3 py-1 rounded-lg text-sm ${
-                                colorStat.count > 1
+                                colorStat.stock > 1
                                   ? "bg-green-100 text-green-700"
                                   : "bg-yellow-100 text-yellow-700"
                               }`}
                             >
-                              {colorStat.count} шт
+                              {colorStat.stock} шт
                             </span>
                           </div>
-                        ))}
+                        ))
+                      ) : (
+                        <Nodata />
+                        // <div className="flex items-center justify-between p-2 sm:p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                        //   <div className="flex items-center gap-2 sm:gap-3">
+                        //     <div
+                        //       className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-3 border-white shadow-md ring-2 ring-gray-200"
+                        //       style={{
+                        //         backgroundColor:
+                        //           selectedVehicle?.brand_color_rgb,
+                        //       }}
+                        //     ></div>
+                        //     <span className="text-xs sm:text-sm text-gray-900">
+                        //       {selectedVehicle?.brand_color}
+                        //     </span>
+                        //   </div>
+                        //   <span className="px-3 py-1 rounded-lg text-sm bg-yellow-100 text-yellow-700">
+                        //     1 шт
+                        //   </span>
+                        // </div>
+                      )}
                     </div>
                   </div>
                 </div>

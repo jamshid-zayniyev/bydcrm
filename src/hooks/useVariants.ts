@@ -1,5 +1,6 @@
 import { api } from "@/api/axios";
 import {
+  CarsColorArray,
   createVariantsSchema,
   GetVariants,
   VariantsSchema,
@@ -19,6 +20,8 @@ export const useVariants = (carId?: number) => {
 
   const [isDeleteModal, setDeleteModal] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
+
+  const [variantsColor, setVariantsColor] = useState<CarsColorArray[]>([]);
 
   const {
     register,
@@ -60,6 +63,7 @@ export const useVariants = (carId?: number) => {
 
       if (carId) {
         await fetchVariables(carId);
+        await getColors(carId);
       }
     } catch (error) {
       console.log(error);
@@ -129,6 +133,20 @@ export const useVariants = (carId?: number) => {
     }
   };
 
+  const getColors = async (id: number) => {
+    try {
+      setLoading(true);
+      // setError(null);
+      const { data } = await api.get(`/cars/variants/colors/${id}/`);
+      setVariantsColor(data);
+    } catch (err) {
+      // setError("Mashinalarni yuklab boʻlmadi");
+      console.error("Error fetching cars:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     // Form
     handleSubmit,
@@ -160,5 +178,9 @@ export const useVariants = (carId?: number) => {
     deleteBtn,
 
     selected,
+
+    // getDataColor
+    getColors,
+    variantsColor,
   };
 };

@@ -53,6 +53,13 @@ export const createVariantsSchema = (t: any) =>
   });
 export type VariantsSchema = z.infer<ReturnType<typeof createVariantsSchema>>;
 
+export interface CarsColorArray {
+  color: string;
+  colorHex: string;
+  id: number;
+  stock: number;
+}
+
 export interface GetVariants {
   id: number;
   battery: string;
