@@ -378,7 +378,7 @@ const Cars = () => {
                       } shadow-lg`}
                     ></div>
                     <h2 className="text-white text-lg sm:text-xl md:text-2xl">
-                      {selectedVehicle.model} {selectedVehicle.id}
+                      {selectedVehicle.model}
                     </h2>
                   </div>
                   <p className="text-white/90 text-xs sm:text-sm mb-2 sm:mb-3">
