@@ -871,11 +871,11 @@ const Cars = () => {
                   </label>
 
                   {previewImage && (
-                    <div className="mb-3 relative inline-block">
+                    <div className="mb-3 relative inline-block w-full">
                       <img
                         src={previewImage}
                         alt="Preview"
-                        className="w-40 h-40 object-cover rounded-lg border border-gray-300"
+                        className="w-40 h-40 object-cover rounded-lg border border-gray-300 w-full"
                       />
                       {watch("image") instanceof File && (
                         <button

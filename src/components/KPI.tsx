@@ -56,6 +56,7 @@ import {
   Radar,
 } from "recharts";
 import { useTranslation } from "react-i18next";
+import useKPI from "@/hooks/useKPI";
 
 interface SalesmanKPI {
   id: string;
@@ -114,6 +115,8 @@ export function KPI() {
   const [reportPeriod, setReportPeriod] = useState("monthly");
   const [selectedEmployee, setSelectedEmployee] = useState<string | null>(null);
   const { t } = useTranslation();
+
+  const {} = useKPI();
 
   // Mock data for salespeople
   const salesTeam: SalesmanKPI[] = [
@@ -415,54 +418,8 @@ export function KPI() {
         </div>
       </div>
 
-      {/* Filters */}
-      <Card>
-        <CardContent className="pt-6">
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="flex-1">
-              <label className="text-sm mb-2 block font-medium">
-                {t("kpi.roleEmployee")}
-              </label>
-              <Select value={selectedRole} onValueChange={setSelectedRole}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {salesRoles.map((role) => (
-                    <SelectItem key={role.value} value={role.value}>
-                      {role.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex-1">
-              <label className="text-sm mb-2 block font-medium">
-                {t("kpi.reporting")}
-              </label>
-              <Select value={reportPeriod} onValueChange={setReportPeriod}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="monthly">
-                    {t("kpi.reportPeriods.monthly")}
-                  </SelectItem>
-                  <SelectItem value="quarterly">
-                    {t("kpi.reportPeriods.quarterly")}
-                  </SelectItem>
-                  <SelectItem value="yearly">
-                    {t("kpi.reportPeriods.yearly")}
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
       {/* Overview Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
         <Card className="border-l-4 border-l-[#E60012]">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-2">
@@ -511,7 +468,7 @@ export function KPI() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-blue-500">
+        {/* <Card className="border-l-4 border-l-blue-500">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-2">
               <div>
@@ -557,7 +514,7 @@ export function KPI() {
               {t("kpi.target")}: 4.5
             </p>
           </CardContent>
-        </Card>
+        </Card> */}
       </div>
 
       {/* Main Tabs */}
@@ -702,6 +659,52 @@ export function KPI() {
 
         {/* Employees Tab */}
         <TabsContent value="employees" className="space-y-4">
+          {/* Filters */}
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex-1">
+                  <label className="text-sm mb-2 block font-medium">
+                    {t("kpi.roleEmployee")}
+                  </label>
+                  <Select value={selectedRole} onValueChange={setSelectedRole}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {salesRoles.map((role) => (
+                        <SelectItem key={role.value} value={role.value}>
+                          {role.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="flex-1">
+                  <label className="text-sm mb-2 block font-medium">
+                    {t("kpi.reporting")}
+                  </label>
+                  <Select value={reportPeriod} onValueChange={setReportPeriod}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="monthly">
+                        {t("kpi.reportPeriods.monthly")}
+                      </SelectItem>
+                      <SelectItem value="quarterly">
+                        {t("kpi.reportPeriods.quarterly")}
+                      </SelectItem>
+                      <SelectItem value="yearly">
+                        {t("kpi.reportPeriods.yearly")}
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {filteredEmployees.map((employee) => (
               <Card

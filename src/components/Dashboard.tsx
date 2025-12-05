@@ -56,7 +56,7 @@ export function Dashboard() {
   const { weekStatistics, error } = useWeekStatistics();
   const { monthStatistics, error: monthError } = useMonthStatistics();
   const { dayStatistics, error: dayError } = useDayStatistics();
-  const { pieChart, error: pieError, bestSeller } = usePieChart();
+  const { pieChart, error: pieError, bestSeller, reports } = usePieChart();
 
   const vehicleImages: Record<string, string> = {
     "1": "https://images.unsplash.com/photo-1669198074495-d04dae22bb90?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxCWUQlMjBTb25nJTIwUGx1cyUyMFNVVnxlbnwxfHx8fDE3NjAzMzA3ODN8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
@@ -69,24 +69,24 @@ export function Dashboard() {
   const stats = [
     {
       label: t("dashboard.clients"),
-      value: customers.length,
-      change: "+12%",
+      value: reports?.customers?.last_month,
+      change: `${reports?.customers?.percent_change}%`,
       isPositive: true,
       icon: Users,
       color: "red",
     },
     {
       label: t("dashboard.callsToday"),
-      value: calls.length,
-      change: "+8%",
+      value: reports?.calls?.today,
+      change: `${reports?.calls?.percent_change}%`,
       isPositive: true,
       icon: Phone,
       color: "black",
     },
     {
       label: t("dashboard.sales"),
-      value: sales.length,
-      change: "+24%",
+      value: reports?.sales?.last_month,
+      change: `${reports?.sales?.percent_change}%`,
       isPositive: true,
       icon: TrendingUp,
       color: "red",
