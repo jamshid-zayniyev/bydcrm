@@ -57,6 +57,7 @@ import {
 } from "recharts";
 import { useTranslation } from "react-i18next";
 import useKPI from "@/hooks/useKPI";
+import { formatPrice } from "@/hooks/mlnNumber";
 
 interface SalesmanKPI {
   id: string;
@@ -427,7 +428,7 @@ export function KPI() {
                 <p className="text-sm text-muted-foreground mb-1">
                   Всего продаж
                 </p>
-                <p className="text-3xl">32</p>
+                <p className="text-3xl">{kpiMonthly?.current_sales}</p>
               </div>
               <div className="h-12 w-12 rounded-full bg-red-100 flex items-center justify-center">
                 <Car className="h-6 w-6 text-[#E60012]" />
@@ -435,12 +436,17 @@ export function KPI() {
             </div>
             <div className="flex items-center gap-1 mt-2 text-sm">
               <TrendingUp className="h-4 w-4 text-green-600" />
-              <span className="text-green-600">+14.3%</span>
+              <span className="text-green-600">
+                {kpiMonthly?.percent_change}%
+              </span>
               <span className="text-muted-foreground">vs прошлый месяц</span>
             </div>
-            <Progress value={106} className="mt-3 h-2" />
+            <Progress
+              value={kpiMonthly?.achievement_percent}
+              className="mt-3 h-2"
+            />
             <p className="text-xs text-muted-foreground mt-1">
-              {t("kpi.target")}: 30 авто
+              {t("kpi.target")}: {kpiMonthly?.target} авто
             </p>
           </CardContent>
         </Card>
@@ -450,7 +456,9 @@ export function KPI() {
             <div className="flex items-center justify-between mb-2">
               <div>
                 <p className="text-sm text-muted-foreground mb-1">Выручка</p>
-                <p className="text-3xl">1,120</p>
+                <p className="text-3xl">
+                  {formatPrice(kpiRevenue?.revenue_current)}
+                </p>
               </div>
               <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center">
                 <DollarSign className="h-6 w-6 text-green-600" />
@@ -458,12 +466,17 @@ export function KPI() {
             </div>
             <div className="flex items-center gap-1 mt-2 text-sm">
               <TrendingUp className="h-4 w-4 text-green-600" />
-              <span className="text-green-600">+6.7%</span>
+              <span className="text-green-600">
+                {kpiRevenue?.percent_change}%
+              </span>
               <span className="text-muted-foreground">млн ₸</span>
             </div>
-            <Progress value={106.7} className="mt-3 h-2" />
+            <Progress
+              value={kpiRevenue?.achievement_percent}
+              className="mt-3 h-2"
+            />
             <p className="text-xs text-muted-foreground mt-1">
-              {t("kpi.target")}: 1,050 млн ₸
+              {t("kpi.target")}:{formatPrice(kpiRevenue?.target)}₸
             </p>
           </CardContent>
         </Card>

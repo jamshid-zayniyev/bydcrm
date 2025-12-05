@@ -3,6 +3,7 @@ export interface kpiMonthly {
   current_sales: number;
   previous_sales: number;
   percent_change: number;
+  achievement_percent: number;
   target: number;
 }
 
