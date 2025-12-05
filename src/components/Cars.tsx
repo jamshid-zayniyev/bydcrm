@@ -116,6 +116,9 @@ const Cars = () => {
 
     getCarsSeries,
     carsSeries,
+
+    seriesCount,
+    position,
   } = useVariants(selectedVehicle?.id);
 
   const { t } = useTranslation();
@@ -408,7 +411,8 @@ const Cars = () => {
                       {t("dashboard.cars.position")}
                     </p>
                     <p className="text-xl sm:text-2xl text-[#E60012]">
-                      {selectedVehicle.variants.length}
+                      {/* {selectedVehicle.variants.length} */}
+                      {position}
                     </p>
                   </div>
                   <div className="bg-gradient-to-br from-gray-50 to-white p-3 sm:p-4 rounded-lg sm:rounded-xl border border-gray-200">
@@ -416,10 +420,11 @@ const Cars = () => {
                       {t("dashboard.cars.series")}
                     </p>
                     <p className="text-xl sm:text-2xl text-gray-900">
-                      {
+                      {/* {
                         new Set(selectedVehicle.variants.map((v) => v.series))
                           .size
-                      }
+                      } */}
+                      {seriesCount}
                     </p>
                   </div>
                   <div className="bg-gradient-to-br from-gray-50 to-white p-3 sm:p-4 rounded-lg sm:rounded-xl border border-gray-200">
@@ -427,10 +432,11 @@ const Cars = () => {
                       {t("dashboard.cars.flowers")}
                     </p>
                     <p className="text-xl sm:text-2xl text-gray-900">
-                      {
+                      {/* {
                         new Set(selectedVehicle.variants.map((v) => v.color))
                           .size
-                      }
+                      } */}
+                      {variantsColor.length}
                     </p>
                   </div>
                   <div className="bg-gradient-to-br from-red-50 to-white p-3 sm:p-4 rounded-lg sm:rounded-xl border border-red-100">

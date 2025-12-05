@@ -24,6 +24,8 @@ export const useVariants = (carId?: number) => {
 
   const [variantsColor, setVariantsColor] = useState<CarsColorArray[]>([]);
   const [carsSeries, setCarsSeries] = useState<CarsSeries[]>([]);
+  const [seriesCount, setSeriesCount] = useState<string>("");
+  const [position, setPosition] = useState<string>("");
 
   const {
     register,
@@ -82,6 +84,10 @@ export const useVariants = (carId?: number) => {
       console.log(data[0]);
 
       setVariantsData(data[0]?.variants);
+
+      setSeriesCount(data[0]?.series_count);
+
+      setPosition(data[0]?.position);
     } catch (err) {
       // setError("Mashinalarni yuklab boʻlmadi");
       console.error("Error fetching cars:", err);
@@ -134,6 +140,7 @@ export const useVariants = (carId?: number) => {
     closeDeleteModal();
     if (carId) {
       await fetchVariables(carId);
+      await getColors(carId);
     }
   };
 
@@ -201,5 +208,8 @@ export const useVariants = (carId?: number) => {
 
     getCarsSeries,
     carsSeries,
+
+    seriesCount,
+    position,
   };
 };
