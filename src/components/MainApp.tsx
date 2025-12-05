@@ -29,7 +29,7 @@ export function MainApp() {
         <div className="fixed inset-0 z-50 lg:hidden">
           {/* Overlay */}
           <div
-            className="absolute inset-0 bg-black bg-opacity-50 transition-opacity"
+            className="absolute inset-0 bg-opacity-50 transition-opacity bg-black/50"
             onClick={() => setSidebarOpen(false)}
           ></div>
 

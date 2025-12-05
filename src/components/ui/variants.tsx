@@ -43,30 +43,8 @@ const Variants = ({
 
   carsSeries = [],
 }: VariantsProps) => {
-  console.log(carsSeries[0].name);
   const { t } = useTranslation();
 
-  // const formatPrice = (value: string) => {
-  //   if (!value) return "";
-
-  //   // Faqat raqam va nuqtani qoldirish
-  //   let cleaned = value.replace(/[^\d.,]/g, "");
-  //   cleaned = cleaned.replace(/,/g, ".");
-
-  //   return cleaned;
-  // };
-
-  // const displayPrice = (value: string) => {
-  //   if (!value) return "";
-
-  //   const num = parseFloat(value.replace(/,/g, "."));
-  //   if (isNaN(num)) return value;
-
-  //   return num.toLocaleString("en-US", {
-  //     minimumFractionDigits: 0,
-  //     maximumFractionDigits: 2,
-  //   });
-  // };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-lg">

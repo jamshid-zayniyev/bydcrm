@@ -1,31 +1,37 @@
 import { api } from "@/api/axios";
-import { SalesStatistiks } from "@/types/kpi";
+import { kpiMonthly, kpiRevenue } from "@/types/kpi";
 import { useEffect, useState } from "react";
 
 const useKPI = () => {
-  const [KPI, setKPI] = useState<SalesStatistiks[]>([]);
-
-  const fetchKPI = async () => {
+  const [kpiMonthly, setKpiMonthly] = useState<kpiMonthly>();
+  const [kpiRevenue, setKpiRevenue] = useState<kpiRevenue>();
+  const getKpiMonthly = async () => {
     try {
-      // setLoading(true);
-      // setError(null);
-      const { data } = await api.get("/kpi/sales-performance");
-      // setCars(data);
-      console.log(data);
-    } catch (err) {
-      // setError("Mashinalarni yuklab boʻlmadi");
-      console.error("Error fetching cars:", err);
+      let { data } = await api.get("/kpi/monthly/");
+      setKpiMonthly(data);
+    } catch (error) {
+      console.log(error);
     }
-    // finally {
-    //   setLoading(false);
-    // }
+  };
+
+  const getKpiRevenue = async () => {
+    try {
+      let { data } = await api.get("/kpi/revenue/");
+      setKpiRevenue(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
-    fetchKPI();
+    getKpiMonthly();
+    getKpiRevenue();
   }, []);
 
-  return {};
+  return {
+    kpiMonthly,
+    kpiRevenue,
+  };
 };
 
 export default useKPI;

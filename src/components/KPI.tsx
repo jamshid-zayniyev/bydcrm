@@ -116,7 +116,7 @@ export function KPI() {
   const [selectedEmployee, setSelectedEmployee] = useState<string | null>(null);
   const { t } = useTranslation();
 
-  const {} = useKPI();
+  const { kpiMonthly, kpiRevenue } = useKPI();
 
   // Mock data for salespeople
   const salesTeam: SalesmanKPI[] = [
@@ -526,7 +526,7 @@ export function KPI() {
           <TabsTrigger value="employees">
             {t("kpi.employees.employeesName")}
           </TabsTrigger>
-          <TabsTrigger value="funnel">{t("kpi.funnel.funnelName")}</TabsTrigger>
+          {/* <TabsTrigger value="funnel">{t("kpi.funnel.funnelName")}</TabsTrigger> */}
           <TabsTrigger value="analytics">
             {t("kpi.analytics.analyticsName")}
           </TabsTrigger>
@@ -799,7 +799,7 @@ export function KPI() {
                       </>
                     )}
 
-                    <div className="space-y-1">
+                    {/* <div className="space-y-1">
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-muted-foreground flex items-center gap-1">
                           <Target className="h-3 w-3" />
@@ -835,9 +835,9 @@ export function KPI() {
                         }
                         className="h-1.5"
                       />
-                    </div>
+                    </div> */}
 
-                    <div className="space-y-1">
+                    {/* <div className="space-y-1">
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-muted-foreground flex items-center gap-1">
                           <ThumbsUp className="h-3 w-3" />
@@ -872,7 +872,7 @@ export function KPI() {
                         }
                         className="h-1.5"
                       />
-                    </div>
+                    </div> */}
                   </div>
 
                   {/* Monthly Trend Chart */}
@@ -924,7 +924,7 @@ export function KPI() {
         </TabsContent>
 
         {/* Funnel Tab */}
-        <TabsContent value="funnel" className="space-y-4">
+        {/* <TabsContent value="funnel" className="space-y-4">
           <Card>
             <CardHeader>
               <CardTitle>Воронка продаж (текущий месяц)</CardTitle>
@@ -1024,7 +1024,7 @@ export function KPI() {
               </CardContent>
             </Card>
           </div>
-        </TabsContent>
+        </TabsContent> */}
 
         {/* Analytics Tab */}
         <TabsContent value="analytics" className="space-y-4">

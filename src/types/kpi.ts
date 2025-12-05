@@ -1,9 +1,18 @@
-export interface SalesStatistiks {
+export interface kpiMonthly {
   month: string;
-  month_label: string;
-  sales: number;
-  revenue: number;
+  current_sales: number;
+  previous_sales: number;
+  percent_change: number;
   target: number;
+}
+
+export interface kpiRevenue {
+  month: string;
+  revenue_current: number;
+  revenue_previous: number;
+  percent_change: number;
+  target: number;
+  achievement_percent: number;
 }
 
 export interface Reports {

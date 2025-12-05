@@ -234,13 +234,13 @@ const Cars = () => {
                           {vehicle.description}
                         </p>
                       </div>
-                      <div
+                      {/* <div
                         className={`w-3 h-3 rounded-full flex-shrink-0 mt-1 ${
                           vehicle.brand_color === "#E60012"
                             ? "bg-[#E60012]"
                             : "bg-black"
                         }`}
-                      ></div>
+                      ></div> */}
                     </div>
 
                     {/* Price */}
