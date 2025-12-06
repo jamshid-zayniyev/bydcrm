@@ -40,6 +40,13 @@ export function Sidebar({ userRole, isMobile = false, onClose }: SidebarProps) {
       roles: ["s", "e"],
     },
     {
+      id: "cars",
+      path: "/cars",
+      label: t("nav.warehouse"),
+      icon: Car,
+      roles: ["s", "e"],
+    },
+    {
       id: "calls",
       path: "/calls",
       label: t("nav.calls"),
@@ -86,13 +93,6 @@ export function Sidebar({ userRole, isMobile = false, onClose }: SidebarProps) {
       path: "/reviews",
       label: t("nav.reviews"),
       icon: Star,
-      roles: ["s", "e"],
-    },
-    {
-      id: "cars",
-      path: "/cars",
-      label: t("nav.cars"),
-      icon: Car,
       roles: ["s", "e"],
     },
   ];

@@ -5,7 +5,6 @@ import {
   TrendingUp,
   PlayCircle,
   Download,
-  X,
   Mic,
 } from "lucide-react";
 import { calls } from "../data/mockData";

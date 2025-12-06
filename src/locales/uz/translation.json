@@ -49,7 +49,8 @@
     "ai": "AI Tavsiyalar",
     "qr": "QR Ro‘yxatdan o‘tish",
     "reviews": "Sharhlar",
-    "cars": "Avtomobillar"
+    "cars": "Avtomobillar",
+    "warehouse":"Ombor"
   },
   "dashboard": {
     "controlPanel": "BYD Qarshi - Boshqaruv paneli",
@@ -235,6 +236,14 @@
     "export": "Eksport",
     "addGoal": "Maqsad qo‘shish",
     "roleEmployee": "Xodim roli",
+
+    "totalSalaes": "Jami savdo",
+    "month": "o'tgan oyga nisbatan",
+    "car": "avto",
+
+    "revenue": "Daromad",
+    "mln": "mln",
+
     "roles": {
       "all": "Barcha rollar",
       "sales": "Sotuv bo'yicha menejer",
@@ -379,5 +388,8 @@
       "title": "BYD sifati - har bir sharhda",
       "description": "Biz har bir mijozning fikrini qadrlaymiz. Sizning sharhlaringiz bizga yaxshiroq bo'lishga va BYD avtomobillarining ajoyib xizmatini taqdim etishga yordam beradi."
     }
+  },
+  "cars": {
+    "carsObj": "Yangi aftomobil qo'shish"
   }
 }

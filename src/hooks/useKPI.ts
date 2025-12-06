@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 const useKPI = () => {
   const [kpiMonthly, setKpiMonthly] = useState<kpiMonthly>();
   const [kpiRevenue, setKpiRevenue] = useState<kpiRevenue>();
+  // const [kpiStaffReports, setKpiStaffReports] = useState([]);
   const getKpiMonthly = async () => {
     try {
       let { data } = await api.get("/kpi/monthly/");
@@ -23,9 +24,21 @@ const useKPI = () => {
     }
   };
 
+  const getKpiStaffReports = async () => {
+    try {
+      let { data } = await api.get("/kpi/staff-reports/");
+      console.log(data);
+
+      // setKpiStaffReports(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getKpiMonthly();
     getKpiRevenue();
+    getKpiStaffReports();
   }, []);
 
   return {

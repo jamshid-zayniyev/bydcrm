@@ -426,7 +426,7 @@ export function KPI() {
             <div className="flex items-center justify-between mb-2">
               <div>
                 <p className="text-sm text-muted-foreground mb-1">
-                  Всего продаж
+                  {t("kpi.totalSalaes")}
                 </p>
                 <p className="text-3xl">{kpiMonthly?.current_sales}</p>
               </div>
@@ -439,14 +439,14 @@ export function KPI() {
               <span className="text-green-600">
                 {kpiMonthly?.percent_change}%
               </span>
-              <span className="text-muted-foreground">vs прошлый месяц</span>
+              <span className="text-muted-foreground">{t("kpi.month")}</span>
             </div>
             <Progress
               value={kpiMonthly?.achievement_percent}
               className="mt-3 h-2"
             />
             <p className="text-xs text-muted-foreground mt-1">
-              {t("kpi.target")}: {kpiMonthly?.target} авто
+              {t("kpi.target")}: {kpiMonthly?.target} {t("kpi.car")}
             </p>
           </CardContent>
         </Card>
@@ -455,7 +455,9 @@ export function KPI() {
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-2">
               <div>
-                <p className="text-sm text-muted-foreground mb-1">Выручка</p>
+                <p className="text-sm text-muted-foreground mb-1">
+                  {t("kpi.revenue")}
+                </p>
                 <p className="text-3xl">
                   {formatPrice(kpiRevenue?.revenue_current)}
                 </p>
@@ -469,14 +471,14 @@ export function KPI() {
               <span className="text-green-600">
                 {kpiRevenue?.percent_change}%
               </span>
-              <span className="text-muted-foreground">млн ₸</span>
+              {/* <span className="text-muted-foreground">млн ₸</span> */}
             </div>
             <Progress
               value={kpiRevenue?.achievement_percent}
               className="mt-3 h-2"
             />
             <p className="text-xs text-muted-foreground mt-1">
-              {t("kpi.target")}:{formatPrice(kpiRevenue?.target)}₸
+              {t("kpi.target")}: {formatPrice(kpiRevenue?.target)}
             </p>
           </CardContent>
         </Card>
@@ -532,7 +534,7 @@ export function KPI() {
 
       {/* Main Tabs */}
       <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="overview">
             {t("kpi.review.reviewName")}
           </TabsTrigger>
@@ -540,9 +542,9 @@ export function KPI() {
             {t("kpi.employees.employeesName")}
           </TabsTrigger>
           {/* <TabsTrigger value="funnel">{t("kpi.funnel.funnelName")}</TabsTrigger> */}
-          <TabsTrigger value="analytics">
+          {/* <TabsTrigger value="analytics">
             {t("kpi.analytics.analyticsName")}
-          </TabsTrigger>
+          </TabsTrigger> */}
         </TabsList>
 
         {/* Overview Tab */}
@@ -632,11 +634,11 @@ export function KPI() {
               </CardHeader>
               <CardContent>
                 <p className="text-2xl mb-2">35 млн ₸</p>
-                <Progress value={116.7} className="h-2 mb-2" />
+                {/* <Progress value={116.7} className="h-2 mb-2" />
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">Цель: 30 млн</span>
                   <span className="text-green-600">+16.7%</span>
-                </div>
+                </div> */}
               </CardContent>
             </Card>
 
@@ -646,11 +648,11 @@ export function KPI() {
               </CardHeader>
               <CardContent>
                 <p className="text-2xl mb-2">120 шт</p>
-                <Progress value={100} className="h-2 mb-2" />
+                {/* <Progress value={100} className="h-2 mb-2" />
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">Цель: 120 шт</span>
                   <span className="text-green-600">100%</span>
-                </div>
+                </div> */}
               </CardContent>
             </Card>
 
@@ -660,11 +662,11 @@ export function KPI() {
               </CardHeader>
               <CardContent>
                 <p className="text-2xl mb-2">20 шт</p>
-                <Progress value={90.9} className="h-2 mb-2" />
+                {/* <Progress value={90.9} className="h-2 mb-2" />
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">Цель: 22 шт</span>
                   <span className="text-yellow-600">90.9%</span>
-                </div>
+                </div> */}
               </CardContent>
             </Card>
           </div>
@@ -850,7 +852,7 @@ export function KPI() {
                       />
                     </div> */}
 
-                    {/* <div className="space-y-1">
+                    <div className="space-y-1">
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-muted-foreground flex items-center gap-1">
                           <ThumbsUp className="h-3 w-3" />
@@ -885,7 +887,7 @@ export function KPI() {
                         }
                         className="h-1.5"
                       />
-                    </div> */}
+                    </div>
                   </div>
 
                   {/* Monthly Trend Chart */}
@@ -1040,7 +1042,7 @@ export function KPI() {
         </TabsContent> */}
 
         {/* Analytics Tab */}
-        <TabsContent value="analytics" className="space-y-4">
+        {/* <TabsContent value="analytics" className="space-y-4">
           <Card>
             <CardHeader>
               <CardTitle>{t("kpi.analytics.salesAnalysis")}</CardTitle>
@@ -1127,7 +1129,7 @@ export function KPI() {
               </CardContent>
             </Card>
           </div>
-        </TabsContent>
+        </TabsContent> */}
       </Tabs>
 
       {/* Detailed Report Dialog */}
@@ -1159,7 +1161,7 @@ export function KPI() {
           {selectedEmployeeData && (
             <div className="space-y-6 mt-4">
               {/* Quick Stats */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 {selectedEmployeeData.role === "Менеджер по продажам" && (
                   <>
                     <Card>
@@ -1196,7 +1198,7 @@ export function KPI() {
                   </>
                 )}
 
-                <Card>
+                {/* <Card>
                   <CardContent className="pt-4">
                     <div className="flex items-center justify-between">
                       <Target className="h-8 w-8 text-blue-600" />
@@ -1210,7 +1212,7 @@ export function KPI() {
                       </div>
                     </div>
                   </CardContent>
-                </Card>
+                </Card> */}
 
                 <Card>
                   <CardContent className="pt-4">
@@ -1232,11 +1234,14 @@ export function KPI() {
 
               {/* Detailed Tabs */}
               <Tabs defaultValue="performance" className="space-y-4">
-                <TabsList className="grid w-full grid-cols-4">
+                <TabsList
+                  className="grid w-full"
+                  style={{ gridTemplateColumns: "repeat(3, minmax(0, 1fr))" }}
+                >
                   <TabsTrigger value="performance">
                     Производительность
                   </TabsTrigger>
-                  <TabsTrigger value="skills">Навыки</TabsTrigger>
+                  {/* <TabsTrigger value="skills">Навыки</TabsTrigger> */}
                   <TabsTrigger value="history">История</TabsTrigger>
                   <TabsTrigger value="achievements">Достижения</TabsTrigger>
                 </TabsList>
@@ -1263,11 +1268,11 @@ export function KPI() {
                               fill="#3b82f6"
                               name="Звонки"
                             />
-                            <Bar
+                            {/* <Bar
                               dataKey="встречи"
                               fill="#10b981"
                               name="Встречи"
-                            />
+                            /> */}
                             <Line
                               type="monotone"
                               dataKey="продажи"
@@ -1413,7 +1418,7 @@ export function KPI() {
                           </>
                         )}
 
-                        <div>
+                        {/* <div>
                           <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-2">
                               <Target className="h-5 w-5 text-blue-600" />
@@ -1475,7 +1480,7 @@ export function KPI() {
                               className="h-3"
                             />
                           )}
-                        </div>
+                        </div> */}
 
                         <div>
                           <div className="flex items-center justify-between mb-2">
@@ -1560,7 +1565,7 @@ export function KPI() {
                 </TabsContent>
 
                 {/* Skills Tab */}
-                <TabsContent value="skills" className="space-y-4">
+                {/* <TabsContent value="skills" className="space-y-4">
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     <Card>
                       <CardHeader>
@@ -1644,7 +1649,7 @@ export function KPI() {
                       </div>
                     </CardContent>
                   </Card>
-                </TabsContent>
+                </TabsContent> */}
 
                 {/* History Tab */}
                 <TabsContent value="history" className="space-y-4">
@@ -1747,7 +1752,7 @@ export function KPI() {
 
                 {/* Achievements Tab */}
                 <TabsContent value="achievements" className="space-y-4">
-                  <Card>
+                  {/* <Card>
                     <CardHeader>
                       <CardTitle className="text-base">
                         Награды и достижения
@@ -1780,9 +1785,9 @@ export function KPI() {
                         })}
                       </div>
                     </CardContent>
-                  </Card>
+                  </Card> */}
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4">
                     <Card>
                       <CardHeader>
                         <CardTitle className="text-base">
@@ -1821,7 +1826,7 @@ export function KPI() {
                       </CardContent>
                     </Card>
 
-                    <Card>
+                    {/* <Card>
                       <CardHeader>
                         <CardTitle className="text-base">Рекорды</CardTitle>
                       </CardHeader>
@@ -1860,7 +1865,7 @@ export function KPI() {
                           </div>
                         </div>
                       </CardContent>
-                    </Card>
+                    </Card> */}
                   </div>
                 </TabsContent>
               </Tabs>

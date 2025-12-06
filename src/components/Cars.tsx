@@ -163,7 +163,7 @@ const Cars = () => {
               onClick={() => setShowAddModal(true)}
             >
               <Plus className="w-4 h-4" />
-              <span className="text-sm">Yangi aftomobil qo'shish</span>
+              <span className="text-sm">{t("cars.carsObj")}</span>
             </div>
           </div>
         </div>
