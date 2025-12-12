@@ -423,6 +423,12 @@
     "imageUploadError": "Rasm yuklash majburiy!"
   },
   "test-drive": {
-    "filter": "Ism familya, telefon va email bo‘yicha qidirish..."
+    "filter": "Ism familya, telefon va email bo‘yicha qidirish...",
+    "customer": "Mijoz",
+    "email": "Email",
+    "empolees": "Sotuvchi",
+    "status": "Holat",
+    "select": "Seriyani tanlang...",
+    "emailPlaceholder": "example@gmail.com"
   }
 }

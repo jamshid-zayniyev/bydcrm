@@ -421,6 +421,12 @@
     "imageUploadError": "Загрузка изображения обязательна!"
   },
   "test-drive": {
-    "filter": "Поиск по имени, фамилии, телефону и email..."
+    "filter": "Поиск по имени, фамилии, телефону и email...",
+    "customer": "Клиент",
+    "email": "Электронная почта",
+    "empolees": "Продавец",
+    "status": "Статус",
+    "select": "Выберите серию...",
+    "emailPlaceholder": "example@gmail.com"
   }
 }

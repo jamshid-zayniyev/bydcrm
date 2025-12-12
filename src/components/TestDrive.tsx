@@ -133,7 +133,7 @@ const TestDrive = () => {
         defaultValue="p"
       >
         <TabsList
-          className="grid w-full"
+          className="grid w-full mb-3"
           style={{ gridTemplateColumns: "repeat(3, minmax(0, 1fr))" }}
         >
           <TabsTrigger value="p">Jarayonda</TabsTrigger>
@@ -572,7 +572,7 @@ const TestDrive = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    customer
+                    {t("test-drive.customer")}
                   </label>
                   <select
                     {...register("customer")}
@@ -589,7 +589,7 @@ const TestDrive = () => {
                     }}
                   >
                     <option value="" disabled selected hidden>
-                      Seriyani tanlang...
+                      {t("test-drive.select")}
                     </option>
                     {carustomersList.map((customer) => (
                       <option key={customer.id} value={customer.id}>
@@ -652,12 +652,12 @@ const TestDrive = () => {
                 )}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    email
+                    {t("test-drive.email")}
                   </label>
                   <input
                     type="email"
                     {...register("email")}
-                    placeholder="example@gmail.com"
+                    placeholder={t("test-drive.emailPlaceholder")}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
                     style={{ height: "39px" }}
                   />
@@ -668,7 +668,7 @@ const TestDrive = () => {
 
                 <div>
                   <label className="block text-sm text-gray-700 mb-2">
-                    Employees
+                    {t("test-drive.empolees")}
                   </label>
                   <select
                     {...register("employee")}
@@ -685,7 +685,7 @@ const TestDrive = () => {
 
                 <div>
                   <label className="block text-sm text-gray-700 mb-2">
-                    status
+                    {t("test-drive.status")}
                   </label>
                   <select
                     {...register("status")}

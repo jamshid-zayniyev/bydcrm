@@ -294,7 +294,8 @@ export function Customers() {
                 </div>
               </div>
             ))}
-            {/* {pgnCount && pgnCount > 10 ? ( */}
+          </div>
+          {pgnCount && pgnCount > 10 ? (
             <PaginationDemo
               pgnCount={pgnCount}
               fetchUsers={fetchUsers}
@@ -305,10 +306,9 @@ export function Customers() {
               filterService=""
               filterDate=""
             />
-            {/* ) : (
+          ) : (
             ""
-          )} */}
-          </div>
+          )}
         </>
       ) : (
         <div className="flex justify-center">
