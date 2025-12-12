@@ -118,20 +118,53 @@ export function KPI() {
   const [selectedEmployee, setSelectedEmployee] = useState<string | null>(null);
   const { t } = useTranslation();
 
-  const { kpiMonthly, kpiRevenue } = useKPI();
+  const {
+    kpiMonthly,
+    kpiRevenue,
+    bestStaff,
+    salesPerformance,
+    kpiTestDriveMonthly,
+    kpiMostSoldCar,
+    kpiSales,
+    kpiStaffReports,
+  } = useKPI();
   const { bestSeller } = usePieChart();
 
   // Mock data for salespeople
   const salesTeam: SalesmanKPI[] = [
     {
+      // employee_id
       id: "1",
+
+      // full_name
       name: "Алексей Иванов",
+
+      // role
       role: "Менеджер по продажам",
+
+      // avatar
       avatar: "👨‍💼",
+
+      // no
       score: 94,
+
       kpis: {
-        carsSold: { current: 12, target: 10, trend: "up", change: 20 },
-        revenue: { current: 420, target: 350, trend: "up", change: 20 },
+        carsSold: {
+          // total_sales
+          current: 12,
+          // sales_target
+          target: 10,
+          trend: "up",
+          change: 20,
+        },
+        revenue: {
+          // total_revenue
+          current: 420,
+          // revenue_target
+          target: 350,
+          trend: "up",
+          change: 20,
+        },
         conversionRate: { current: 28, target: 25, trend: "up", change: 12 },
         testDrives: { current: 35, target: 30, trend: "up", change: 16.7 },
         customerSatisfaction: {
@@ -295,7 +328,7 @@ export function KPI() {
           return true;
         });
 
-  // Team performance data
+  // // Team performance data
   const teamPerformanceData = [
     { month: "Янв", продажи: 27, выручка: 945, цель: 1050 },
     { month: "Фев", продажи: 31, выручка: 1085, цель: 1050 },
@@ -315,10 +348,12 @@ export function KPI() {
 
   // Individual KPI comparison
   const kpiComparison = [
-    { name: "Алексей И.", продажи: 12, выручка: 420, рейтинг: 4.8 },
-    { name: "Мария П.", продажи: 11, выручка: 385, рейтинг: 4.9 },
-    { name: "Дмитрий С.", продажи: 9, выручка: 315, рейтинг: 4.6 },
+    { name: "Алексей И.", продажи: 12, рейтинг: 4.8 },
+    { name: "Мария П.", продажи: 11, рейтинг: 4.9 },
+    { name: "Дмитрий С.", продажи: 9, рейтинг: 4.6 },
   ];
+
+  console.log(bestStaff);
 
   const getScoreBadgeColor = (score: number) => {
     if (score >= 90) return "bg-green-100 text-green-800 border-green-200";
@@ -605,9 +640,9 @@ export function KPI() {
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
-                  <ComposedChart data={teamPerformanceData}>
+                  <ComposedChart data={salesPerformance}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="month" />
+                    <XAxis dataKey="month_label" />
                     <YAxis
                       yAxisId="left"
                       label={{
@@ -629,14 +664,14 @@ export function KPI() {
                     <Legend />
                     <Bar
                       yAxisId="left"
-                      dataKey="продажи"
+                      dataKey="sales"
                       fill="#E60012"
                       name="Продажи авто"
                     />
                     <Line
                       yAxisId="right"
                       type="monotone"
-                      dataKey="выручка"
+                      dataKey="revenue"
                       stroke="#10b981"
                       strokeWidth={3}
                       name="Выручка"
@@ -644,7 +679,7 @@ export function KPI() {
                     <Line
                       yAxisId="right"
                       type="monotone"
-                      dataKey="цель"
+                      dataKey="target"
                       stroke="#cbd5e1"
                       strokeWidth={2}
                       strokeDasharray="5 5"
@@ -661,14 +696,18 @@ export function KPI() {
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={kpiComparison} layout="vertical">
+                  <BarChart data={bestStaff} layout="vertical">
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis type="number" />
-                    <YAxis type="category" dataKey="name" width={100} />
+                    <YAxis type="category" dataKey="full_name" width={100} />
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey="продажи" fill="#E60012" name="Продажи" />
-                    <Bar dataKey="рейтинг" fill="#fbbf24" name="Рейтинг" />
+                    <Bar dataKey="sales_count" fill="#E60012" name="Продажи" />
+                    <Bar
+                      dataKey="average_rating"
+                      fill="#fbbf24"
+                      name="Рейтинг"
+                    />
                   </BarChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -682,7 +721,9 @@ export function KPI() {
                 <CardTitle className="text-base">Средний чек</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl mb-2">35 млн ₸</p>
+                <p className="text-2xl mb-2">
+                  {formatPrice(kpiMostSoldCar?.price)}
+                </p>
                 {/* <Progress value={116.7} className="h-2 mb-2" />
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">Цель: 30 млн</span>
@@ -696,7 +737,9 @@ export function KPI() {
                 <CardTitle className="text-base">Тест-драйвы</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl mb-2">120 шт</p>
+                <p className="text-2xl mb-2">
+                  {kpiTestDriveMonthly?.test_drive_count} шт
+                </p>
                 {/* <Progress value={100} className="h-2 mb-2" />
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">Цель: 120 шт</span>
@@ -710,7 +753,9 @@ export function KPI() {
                 <CardTitle className="text-base">Допродажи</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl mb-2">20 шт</p>
+                <p className="text-2xl mb-2">
+                  {kpiSales?.purchased_customers} шт
+                </p>
                 {/* <Progress value={90.9} className="h-2 mb-2" />
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">Цель: 22 шт</span>

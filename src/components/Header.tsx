@@ -35,7 +35,14 @@ export function Header({ onMenuClick }: HeaderProps) {
   };
 
   const getRoleName = (role: string) => {
-    return role === "s" ? "Super Admin" : "Employee";
+    // return role === "sa" ? "Super Admin" : "Employee";
+    return role === "sa"
+      ? "Super Admin"
+      : role === "s"
+      ? "Seller"
+      : role === "m"
+      ? "Manager"
+      : "Call-Center";
   };
 
   // Click outside to close dropdowns

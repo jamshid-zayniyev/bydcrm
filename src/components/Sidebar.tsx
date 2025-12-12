@@ -31,77 +31,77 @@ export function Sidebar({ userRole, isMobile = false, onClose }: SidebarProps) {
       path: "/dashboard",
       label: t("nav.dashboard"),
       icon: LayoutDashboard,
-      roles: ["s", "e"],
+      roles: ["sa", "s", "m", "cc"],
     },
     {
       id: "customers",
       path: "/customers",
       label: t("nav.customers"),
       icon: Users,
-      roles: ["s", "e"],
+      roles: ["sa", "m", "cc"],
     },
     {
       id: "cars",
       path: "/cars",
       label: t("nav.warehouse"),
       icon: Car,
-      roles: ["s", "e"],
+      roles: ["sa", "m", "cc"],
     },
     {
       id: "calls",
       path: "/calls",
       label: t("nav.calls"),
       icon: Phone,
-      roles: ["s", "e"],
+      roles: ["sa", "m", "cc"],
     },
     {
       id: "sales",
       path: "/sales",
       label: t("nav.sales"),
       icon: TrendingUp,
-      roles: ["s", "e"],
+      roles: ["sa", "m"],
     },
     {
       id: "service",
       path: "/service",
       label: t("nav.service"),
       icon: Wrench,
-      roles: ["s", "e"],
+      roles: ["sa", "m", "cc"],
     },
     {
       id: "test-drive",
       path: "/test-drive",
       label: t("nav.testDrive"),
       icon: Gauge,
-      roles: ["s", "e"],
+      roles: ["sa", "m", "cc"],
     },
     {
       id: "kpi",
       path: "/kpi",
       label: t("nav.kpi"),
       icon: Target,
-      roles: ["s"],
+      roles: ["sa"],
     },
     {
       id: "ai",
       path: "/ai",
       label: t("nav.ai"),
       icon: Brain,
-      roles: ["s"],
+      roles: ["sa"],
     },
     {
       id: "qr",
       path: "/qr",
       label: t("nav.qr"),
       icon: QrCode,
-      roles: ["s", "e"],
+      roles: ["sa", "m"],
     },
     {
       id: "reviews",
       path: "/reviews",
       label: t("nav.reviews"),
       icon: Star,
-      roles: ["s", "e"],
+      roles: ["sa", "m"],
     },
   ];
 
@@ -111,7 +111,13 @@ export function Sidebar({ userRole, isMobile = false, onClose }: SidebarProps) {
   );
 
   const getRoleName = (role: string) => {
-    return role === "s" ? "Super Admin" : "Employee";
+    return role === "sa"
+      ? "Super Admin"
+      : role === "s"
+      ? "Seller"
+      : role === "m"
+      ? "Manager"
+      : "Call-Center";
   };
 
   const handleLinkClick = () => {

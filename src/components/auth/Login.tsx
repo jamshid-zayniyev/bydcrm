@@ -146,7 +146,13 @@ export function Login() {
                   <strong>Super Admin:</strong> admin / 123
                 </p>
                 <p>
-                  <strong>Reception:</strong> employee1 / user1234
+                  <strong>Saller:</strong> employee1 / user1234
+                </p>
+                <p>
+                  <strong>Manager:</strong> manager / user1234
+                </p>
+                <p>
+                  <strong>Call-Center:</strong> call1 / user1234
                 </p>
               </div>
             </div>
