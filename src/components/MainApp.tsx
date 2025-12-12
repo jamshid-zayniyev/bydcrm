@@ -13,6 +13,7 @@ import { QRScanner } from "./QRScanner";
 import { Reviews } from "./Reviews";
 import { useAuthContext } from "../contexts/AuthContext";
 import Cars from "./Cars";
+import TestDrive from "./TestDrive";
 
 export function MainApp() {
   const { user } = useAuthContext();
@@ -59,6 +60,7 @@ export function MainApp() {
             <Route path="/calls" element={<CallCenter />} />
             <Route path="/sales" element={<Sales />} />
             <Route path="/service" element={<Service />} />
+            <Route path="/test-drive" element={<TestDrive />} />
             <Route path="/kpi" element={<KPI />} />
             <Route path="/ai" element={<AIRecommendations />} />
             <Route path="/qr" element={<QRScanner />} />

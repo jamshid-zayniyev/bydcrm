@@ -9,7 +9,8 @@ import {
   QrCode,
   Star,
   X,
-  Car, // Yangi icon qo'shildi
+  Car,
+  Gauge, // Yangi icon qo'shildi
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
@@ -65,6 +66,13 @@ export function Sidebar({ userRole, isMobile = false, onClose }: SidebarProps) {
       path: "/service",
       label: t("nav.service"),
       icon: Wrench,
+      roles: ["s", "e"],
+    },
+    {
+      id: "test-drive",
+      path: "/test-drive",
+      label: t("nav.testDrive"),
+      icon: Gauge,
       roles: ["s", "e"],
     },
     {

@@ -8,12 +8,12 @@ export interface CarsColor {
 
 export const createCarSchema = (t: any) =>
   z.object({
-    model: z.string().min(1, "Model nomi majburiy"),
-    base_price: z.number().positive("Boshlang'ich narx musbat bo'lishi kerak"),
-    total_available: z.number().positive("Sonni bo'lishi shart"),
-    description_uz: z.string().min(1, "description_uz nomi majburiy"),
-    description_ru: z.string().min(1, "description_ru nomi majburiy"),
-    brand_color: z.string().min(1, "Rangni tanlash majburiy"),
+    model: z.string().min(1, t("cars.modelError")),
+    base_price: z.number().positive(t("cars.priceError")),
+    total_available: z.number().positive(t("cars.totalAvailableError")),
+    description_uz: z.string().min(1, t("cars.descriptionUzError")),
+    description_ru: z.string().min(1, t("cars.descriptionRuError")),
+    brand_color: z.string().min(1, t("cars.brandColorError")),
     image: z
       .any()
       .refine((file) => {
@@ -22,7 +22,7 @@ export const createCarSchema = (t: any) =>
         return (
           file instanceof File || typeof file === "string" || file === undefined
         );
-      }, "Rasm yuklash majburiy")
+      }, t("cars.imageUploadError"))
       .optional(),
   });
 

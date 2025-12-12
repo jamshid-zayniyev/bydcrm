@@ -22,6 +22,9 @@
   "title": "Удаление",
   "message": "Вы уверены, что хотите удалить эти данные?",
 
+  "formLaoding": "Загрузка...",
+  "formSave": "Сохранить",
+
   "pcs": "шт",
   "actions": {
     "cansel": "Отмена",
@@ -50,7 +53,8 @@
     "qr": "QR Регистрация",
     "reviews": "Отзывы",
     "cars": "Автомобили",
-    "warehouse": "Склад"
+    "warehouse": "Склад",
+    "testDrive": "Тест драйв"
   },
   "dashboard": {
     "controlPanel": "BYD Карши - Панель управления",
@@ -111,7 +115,7 @@
     "addClientObj": {
       "addNewClient": "Добавить нового клиента",
       "oneClient": "Редактирование клиента",
-      "statusFilter": "Barcha holatlar",
+      "statusFilter": "Все случаи",
 
       "clientName": "Имя клиента",
       "enterName": "Введите имя",
@@ -187,10 +191,14 @@
     "completed_trade": "Завершенных продаж",
     "average_check": "Средний чек",
 
-    "COMPLETED": "Завершена",
-    "PENDING": "В обработке",
-    "REVISED": "Исправлено",
-    "CANCELLED": "Отменена"
+    "COMPLETED": "Контракт завершён",
+    "PENDING": "В процессе",
+    "REVISED": "Переработано",
+    "CANCELLED": "Отменено",
+
+    "customer": "Клиент",
+    "car": "Машина",
+    "soldBy": "Продавец"
   },
   "service": {
     "serviceMaintenance": "Сервисное обслуживание",
@@ -389,6 +397,30 @@
     }
   },
   "cars": {
-    "carsObj": "Добавить новый автомобиль"
+    "carsObj": "Добавить новый автомобиль",
+    "add": "Добавить",
+    "edit": "Редактировать",
+    "model": "Модель",
+    "modelName": "Название модели",
+    "modelError": "Название модели должно быть написано обязательно!",
+    "price": "Цена",
+    "pricePlaceholder": "Введите цену",
+    "priceError": "Введите начальную цену!",
+    "totalAvailable": "Общее количество",
+    "totalAvailablePlaceholder": "Количество",
+    "totalAvailableError": "Введите количество!",
+    "brandColor": "Цвет бренда",
+    "colorSelect": "Выберите цвет...",
+    "brandColorError": "Выбор цвета обязателен!",
+    "descriptionUz": "Описание UZ",
+    "descriptionUzError": "Заполнение описания UZ обязательно!",
+    "descriptionRu": "Описание RU",
+    "descriptionRuError": "Заполнение описания RU обязательно!",
+    "imageUpload": "Загрузка изображения",
+    "imageReplacement": "Замена изображения",
+    "imageUploadError": "Загрузка изображения обязательна!"
+  },
+  "test-drive": {
+    "filter": "Поиск по имени, фамилии, телефону и email..."
   }
 }

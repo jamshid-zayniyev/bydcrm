@@ -58,6 +58,7 @@ import {
 import { useTranslation } from "react-i18next";
 import useKPI from "@/hooks/useKPI";
 import { formatPrice } from "@/hooks/mlnNumber";
+import { usePieChart } from "@/hooks/usePieChart";
 
 interface SalesmanKPI {
   id: string;
@@ -118,6 +119,7 @@ export function KPI() {
   const { t } = useTranslation();
 
   const { kpiMonthly, kpiRevenue } = useKPI();
+  const { bestSeller } = usePieChart();
 
   // Mock data for salespeople
   const salesTeam: SalesmanKPI[] = [
@@ -504,9 +506,9 @@ export function KPI() {
               {t("kpi.target")}: 12%
             </p>
           </CardContent>
-        </Card>
+        </Card> */}
 
-        <Card className="border-l-4 border-l-yellow-500">
+        {/* <Card className="border-l-4 border-l-yellow-500">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-2">
               <div>
@@ -549,6 +551,53 @@ export function KPI() {
 
         {/* Overview Tab */}
         <TabsContent value="overview" className="space-y-4">
+          <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl border border-gray-200 shadow-sm">
+            <h3 className="text-gray-900 mb-3 sm:mb-4 text-base sm:text-lg">
+              {t("dashboard.best.title")}
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {bestSeller.map((employee, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                        index === 0
+                          ? "bg-[#E60012] text-white"
+                          : index === 1
+                          ? "bg-gray-800 text-white"
+                          : index === 2
+                          ? "bg-gray-600 text-white"
+                          : "bg-gray-200 text-gray-700"
+                      }`}
+                    >
+                      {index + 1}
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-900">
+                        {employee?.full_name}
+                      </p>
+                      {/* <p className="text-xs text-gray-500">{employee.department}</p> */}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-gray-900">
+                      {employee.total_sales} {t("dashboard.best.sales")}
+                    </p>
+                    {/* <div className="flex items-center gap-1 mt-1">
+                  <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
+                  <span className="text-xs text-gray-600">
+                    {employee.customerSatisfaction?.toFixed(1)}
+                  </span>
+                </div> */}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <Card>
               <CardHeader>

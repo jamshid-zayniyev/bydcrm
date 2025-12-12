@@ -23,6 +23,9 @@
   "title": "O'chirish",
   "message": "Ushbu ma'lumotni o'chirishni xohlaysizmi?",
 
+  "formLaoding": "Yuklanmoqda...",
+  "formSave": "Saqlash",
+
   "pcs": "dona",
   "actions": {
     "cansel": "Bekor qilish",
@@ -50,7 +53,8 @@
     "qr": "QR Ro‘yxatdan o‘tish",
     "reviews": "Sharhlar",
     "cars": "Avtomobillar",
-    "warehouse":"Ombor"
+    "warehouse": "Ombor",
+    "testDrive": "Test drive"
   },
   "dashboard": {
     "controlPanel": "BYD Qarshi - Boshqaruv paneli",
@@ -188,10 +192,14 @@
     "completed_trade": "Yakunlangan savdolar",
     "average_check": "O‘rtacha chek",
 
-    "COMPLETED": "Tugadi",
+    "COMPLETED": "Shartnoma yakunlangan",
     "PENDING": "Jarayonda",
-    "REVISED": "Tuzatildi",
-    "CANCELLED": "Bekor qilindi"
+    "REVISED": "Qayta ishlangan",
+    "CANCELLED": "Bekor qilindi",
+
+    "customer": "Mijoz",
+    "car": "Avtomobil",
+    "soldBy": "Sotuvchi"
   },
   "service": {
     "serviceMaintenance": "Xizmat ko'rsatish",
@@ -390,6 +398,31 @@
     }
   },
   "cars": {
-    "carsObj": "Yangi aftomobil qo'shish"
+    "carsObj": "Yangi aftomobil qo'shish",
+    "add": "Qo'shish",
+    "edit": "Tahrirlash",
+
+    "model": "Model",
+    "modelName": "Model nomi",
+    "modelError": "Model nomi yozish kerak!",
+    "price": "Narx",
+    "pricePlaceholder": "Narxni kiriting",
+    "priceError": "Boshlang'ich narxni kiriting",
+    "totalAvailable": "Umumiy soni",
+    "totalAvailablePlaceholder": "Soni",
+    "totalAvailableError": "Sonini kiriting!",
+    "brandColor": "Brend Rangi",
+    "colorSelect": "Rang tanlang...",
+    "brandColorError": "Rangni tanlash majburiy!",
+    "descriptionUz": "Izoh UZ",
+    "descriptionUzError": "Izoh UZ yozish majburiy!",
+    "descriptionRu": "Izoh RU",
+    "descriptionRuError": "Izoh RU yozish majburiy!",
+    "imageUpload": "Rasm yuklash",
+    "imageReplacement": "Rasmni almashtirish",
+    "imageUploadError": "Rasm yuklash majburiy!"
+  },
+  "test-drive": {
+    "filter": "Ism familya, telefon va email bo‘yicha qidirish..."
   }
 }

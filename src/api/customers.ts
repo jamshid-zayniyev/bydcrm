@@ -18,7 +18,7 @@ export interface Customers {
 
 export interface CarsModels {
   id: number;
-  name: string;
+  model: string;
 }
 
 export interface ApiResponse<T> {
@@ -39,7 +39,9 @@ export const getCustomers = async (
   status: number | string
 ): Promise<ApiResponse<Customers>> => {
   const response = await api.get(
-    `/users/customers/?page=${active}&search=${search}&status=${status==="all"?"":status}`
+    `/users/customers/?page=${active}&search=${search}&status=${
+      status === "all" ? "" : status
+    }`
   );
   return response.data;
 };

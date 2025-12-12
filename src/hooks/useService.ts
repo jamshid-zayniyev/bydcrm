@@ -22,7 +22,7 @@ export const useService = () => {
   } = useForm<ServiceFormData>({
     resolver: zodResolver(serviceSchema),
     defaultValues: {
-      customer_name: "",
+      // customer_name: "",
       // vehicle: 0,
       // service_type: "",
       date: new Date().toISOString().split("T")[0],
@@ -122,7 +122,7 @@ export const useService = () => {
     setSelected(null);
     setShowAddModal(false);
     reset({
-      customer_name: "",
+      // customer_name: "",
       date: new Date().toISOString().split("T")[0],
     });
   };
@@ -178,7 +178,7 @@ export const useService = () => {
 
       reset({
         customer_id: `${data.customer_id}`,
-        customer_name: data.customer_name,
+        // customer_name: data.customer_name,
         date: data.date,
         rate: `${data.rate}`,
         service_type: `${data.service_type}`,

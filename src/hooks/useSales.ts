@@ -7,6 +7,11 @@ import {
   SalesBanner,
   SalesStatistics,
 } from "../api/sales";
+import { useTranslation } from "react-i18next";
+import { createSaleContractSchema, SaleContractSchema } from "@/types/sales";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { api } from "@/api/axios";
 
 export const useSales = () => {
   const [loading, setLoading] = useState(true);
@@ -18,6 +23,48 @@ export const useSales = () => {
     average_check: "",
   });
   const [salesBanner, setSalesBanner] = useState<SalesBanner[]>([]);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [selected, setSelected] = useState<number | null>(null);
+  const [isDeleteModal, setDeleteModal] = useState(false);
+
+  const { t } = useTranslation();
+  const saleContractSchema = createSaleContractSchema(t);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    watch,
+    reset,
+    control,
+  } = useForm<SaleContractSchema>({
+    resolver: zodResolver(saleContractSchema),
+    defaultValues: {},
+  });
+
+  const onSubmit = async (data: SaleContractSchema) => {
+    try {
+      console.log(data);
+      let newData = {
+        ...data,
+        customer_id: Number(data?.customer_id),
+        car: Number(data?.car),
+        price: Number(data?.price),
+        sold_by: Number(data?.sold_by),
+      };
+
+      if (selected === null) {
+        await api.post("/sales/sales-contract/create/", newData);
+      } else {
+        await api.put(`/sales/sales-contract/${selected}/`, newData);
+      }
+
+      closeModal();
+      fetchSales();
+    } catch (err) {
+      window.alert(err);
+    }
+  };
 
   const fetchSales = async () => {
     try {
@@ -47,6 +94,18 @@ export const useSales = () => {
     }
   };
 
+  const closeModal = () => {
+    setSelected(null);
+    setShowAddModal(false);
+    reset({
+      // customer_id: `${data.customer_id}`,
+      // car: `${data.car}`,
+      price: "",
+      // sold_by: `${data.sold_by}`,
+      // status: "",
+    });
+  };
+
   const fetchSalesBanner = async () => {
     try {
       setLoading(true);
@@ -71,6 +130,35 @@ export const useSales = () => {
     fetchSales();
   };
 
+  const editBtn = async (id: number) => {
+    setSelected(id);
+    let { data } = await api.get(`/sales/sales-contract/${id}/`);
+    console.log(data);
+
+    reset({
+      customer_id: `${data.customer_id}`,
+      car: `${data.car}`,
+      price: `${data.price}`,
+      sold_by: `${data.sold_by}`,
+      status: data.status,
+    });
+
+    setShowAddModal(true);
+  };
+
+  const openDeleteModal = () => {
+    setDeleteModal(true);
+  };
+  const closeDeleteModal = () => {
+    setDeleteModal(false);
+  };
+
+  const deleteBtn = async (id: number) => {
+    await api.delete(`/sales/sales-contract/${id}/`);
+    closeDeleteModal();
+    fetchSales();
+  };
+
   return {
     sales,
     salesStatistics,
@@ -78,5 +166,26 @@ export const useSales = () => {
     loading,
     error,
     refetch,
+
+    // form
+    register,
+    errors,
+    handleSubmit,
+    onSubmit,
+
+    // modal
+    setShowAddModal,
+    showAddModal,
+    closeModal,
+
+    // edit and delete
+    editBtn,
+    openDeleteModal,
+    closeDeleteModal,
+    isDeleteModal,
+    deleteBtn,
+
+    // selected
+    selected,
   };
 };

@@ -18,6 +18,11 @@ import { useCustomers } from "../hooks/useCustomers";
 import DeleteModal from "./ui/delete-modal";
 import { useState } from "react";
 import { PaginationDemo } from "./ui/paginationApi";
+import {
+  getStatusLabels,
+  statusColors,
+  statusIcons,
+} from "@/hooks/useColorLabelsIcons";
 
 export function Service() {
   const { t } = useTranslation();
@@ -53,23 +58,24 @@ export function Service() {
     reports,
   } = useService();
   const { carsModels, customers } = useCustomers();
-  const statusColors: Record<string, string> = {
-    s: "bg-blue-100 text-blue-700 border-blue-200",
-    i: "bg-yellow-100 text-yellow-700 border-yellow-200",
-    c: "bg-green-100 text-green-700 border-green-200",
-  };
+  // const statusColors: Record<string, string> = {
+  //   s: "bg-blue-100 text-blue-700 border-blue-200",
+  //   i: "bg-yellow-100 text-yellow-700 border-yellow-200",
+  //   c: "bg-green-100 text-green-700 border-green-200",
+  // };
 
-  const statusLabels: Record<string, string> = {
-    s: t("service.SCHEDULED"),
-    i: t("service.IN_PROGRESS"),
-    c: t("service.completed"),
-  };
+  // const statusLabels: Record<string, string> = {
+  //   s: t("service.SCHEDULED"),
+  //   i: t("service.IN_PROGRESS"),
+  //   c: t("service.completed"),
+  // };
 
-  const statusIcons: Record<string, any> = {
-    s: Calendar,
-    i: Clock,
-    c: CheckCircle,
-  };
+  // const statusIcons: Record<string, any> = {
+  //   s: Calendar,
+  //   i: Clock,
+  //   c: CheckCircle,
+  // };
+  const statusLabels: Record<string, string> = getStatusLabels(t);
 
   return (
     <div className="space-y-6">
@@ -363,7 +369,7 @@ export function Service() {
 
             <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
+                {/* <div>
                   <label className="block text-sm text-gray-700 mb-2">
                     {t("service.customerName")}
                   </label>
@@ -381,7 +387,7 @@ export function Service() {
                       {errors.customer_name.message}
                     </p>
                   )}
-                </div>
+                </div> */}
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -410,7 +416,7 @@ export function Service() {
                     {carsModels.length ? (
                       carsModels.map((el) => (
                         <option key={el?.id} value={el?.id}>
-                          {el?.name}
+                          {el?.model}
                         </option>
                       ))
                     ) : (

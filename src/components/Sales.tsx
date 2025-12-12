@@ -1,12 +1,49 @@
-import { TrendingUp, DollarSign, Calendar, User } from "lucide-react";
+import { TrendingUp, DollarSign, Calendar, User, Plus, X } from "lucide-react";
 import { sales, customers } from "../data/mockData";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useTranslation } from "react-i18next";
 import { useSales } from "../hooks/useSales";
+import { useState } from "react";
+import { useCustomers } from "@/hooks/useCustomers";
+import { useService } from "@/hooks/useService";
+import EditDelete from "./ui/edit-delete";
+import DeleteModal from "./ui/delete-modal";
 
 export function Sales() {
+  const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
   const { t } = useTranslation();
-  const { salesBanner, sales, salesStatistics, loading, error } = useSales();
+  const {
+    salesBanner,
+    sales,
+    salesStatistics,
+    loading,
+    error,
+
+    // form
+    register,
+    errors,
+    handleSubmit,
+    onSubmit,
+
+    // modal
+    setShowAddModal,
+    showAddModal,
+    closeModal,
+
+    // edit and delete
+    editBtn,
+    openDeleteModal,
+    closeDeleteModal,
+    isDeleteModal,
+    deleteBtn,
+
+    // selected
+    selected,
+  } = useSales();
+
+  const { carsModels, customers } = useCustomers();
+  const { employees } = useService();
+
   const formatAmount = (amount: number) => {
     return new Intl.NumberFormat("ru-RU", {
       style: "currency",
@@ -20,7 +57,7 @@ export function Sales() {
     cp: "bg-green-100 text-green-700 border-green-200",
     p: "bg-yellow-100 text-yellow-700 border-yellow-200",
     r: "bg-blue-100 text-blue-700 border-blue-200",
-    cancelled: "bg-red-100 text-red-700 border-red-200",
+    cc: "bg-red-100 text-red-700 border-red-200",
   };
 
   // const statusLabels: Record<string, string> = {
@@ -62,6 +99,7 @@ export function Sales() {
   // ];
 
   // BYD Vehicles loading state
+
   if (loading) {
     return (
       <div className="space-y-4 sm:space-y-6">
@@ -145,8 +183,15 @@ export function Sales() {
 
       {/* Sales List */}
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
-        <div className="p-5 border-b border-gray-200">
+        <div className="flex items-center justify-between p-5 border-b border-gray-200">
           <h3 className="text-gray-900">{t("sales.latestTransactions")}</h3>
+          <div
+            className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-[#E60012] to-[#b00010] text-white rounded-lg text-xs sm:text-sm shadow-sm"
+            onClick={() => setShowAddModal(true)}
+          >
+            <Plus className="w-4 h-4" />
+            {/* <span className="text-sm">{t("cars.carsObj")}</span> */}
+          </div>
         </div>
         <div className="divide-y divide-gray-200">
           {sales.map((sale) => (
@@ -154,7 +199,7 @@ export function Sales() {
               key={sale.id}
               className="p-5 hover:bg-gray-50 transition-colors"
             >
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+              <div className="flex flex-col sm:flex-row lg:items-center justify-between gap-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
                     <div className="w-10 h-10 bg-red-50 border-2 border-[#E60012] rounded-full flex items-center justify-center">
@@ -188,19 +233,27 @@ export function Sales() {
                   </div>
                 </div>
 
-                <span
-                  className={`px-3 py-1 rounded-lg text-sm border ${
-                    statusColors[sale.status]
-                  }`}
-                >
-                  {sale.status == "cp"
-                    ? `${t("sales.COMPLETED")}`
-                    : sale.status == "p"
-                    ? `${t("sales.PENDING")}`
-                    : sale.status == "r"
-                    ? `${t("sales.REVISED")}`
-                    : `${t("sales.CANCELLED")}`}
-                </span>
+                <div className="flex flex-col items-center gap-2">
+                  <span
+                    className={`px-3 py-1 rounded-lg text-sm border ${
+                      statusColors[sale.status]
+                    }`}
+                  >
+                    {sale.status == "cp"
+                      ? `${t("sales.COMPLETED")}`
+                      : sale.status == "p"
+                      ? `${t("sales.PENDING")}`
+                      : sale.status == "r"
+                      ? `${t("sales.REVISED")}`
+                      : `${t("sales.CANCELLED")}`}
+                  </span>
+                  <EditDelete
+                    id={sale.id}
+                    editBtn={editBtn}
+                    setSelectedItemId={setSelectedItemId}
+                    openDeleteModal={openDeleteModal}
+                  />
+                </div>
               </div>
             </div>
           ))}
@@ -226,6 +279,145 @@ export function Sales() {
           </div>
         </div>
       </div>
+      {showAddModal && (
+        <div className="fixed inset-0 flex items-center justify-center p-4 z-50 bg-black/50 backdrop-blur">
+          <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-200 flex items-center justify-between">
+              <h2 className="text-gray-900">
+                {selected === null ? t("cars.add") : t("cars.edit")}
+              </h2>
+              <button
+                onClick={closeModal}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+            <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {t("sales.customer")}
+                  </label>
+                  <select
+                    {...register("customer_id")}
+                    className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent border-red-500`}
+                  >
+                    {customers.map((customer) => (
+                      <option key={customer.id} value={customer.id}>
+                        {customer.full_name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    {t("sales.car")}
+                  </label>
+                  <select
+                    {...register("car")}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
+                  >
+                    {carsModels.length ? (
+                      carsModels.map((el) => (
+                        <option key={el?.id} value={el?.id}>
+                          {el?.model}
+                        </option>
+                      ))
+                    ) : (
+                      <option value="" disabled>
+                        {t("noInformation")}
+                      </option>
+                    )}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    {t("cars.price")}
+                  </label>
+                  <input
+                    {...register("price")}
+                    placeholder={t("cars.pricePlaceholder")}
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                      errors.price
+                        ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
+                        : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
+                    }`}
+                    type="number"
+                  />
+                  {errors.price && (
+                    <p className="text-[#E60012]">{errors.price.message}</p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    {t("sales.soldBy")}
+                  </label>
+                  <select
+                    {...register("sold_by")}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
+                  >
+                    {employees.length ? (
+                      employees.map((el) => (
+                        <option key={el?.id} value={el?.id}>
+                          {el?.full_name}
+                        </option>
+                      ))
+                    ) : (
+                      <option value="" disabled>
+                        {t("noInformation")}
+                      </option>
+                    )}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    {t("service.status")}
+                  </label>
+                  <select
+                    {...register("status")}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
+                  >
+                    <option value={"cp"}>{t("sales.COMPLETED")}</option>
+                    <option value={"p"}>{t("sales.PENDING")}</option>
+                    <option value={"r"}>{t("sales.REVISED")}</option>
+                    <option value={"cc"}>{t("sales.CANCELLED")}</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="submit"
+                  className="flex-1 px-4 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors"
+                >
+                  {loading
+                    ? `...${t("customers.addClientObj.addClient")}`
+                    : `${t("customers.addClientObj.addClient")}`}
+                </button>
+                <button
+                  disabled={loading}
+                  onClick={closeModal}
+                  className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                >
+                  {t("customers.addClientObj.cancel")}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      <DeleteModal
+        closeDeleteModal={closeDeleteModal}
+        isOpen={isDeleteModal}
+        selectedItemId={selectedItemId}
+        deleteBtn={deleteBtn}
+      />
     </div>
   );
 }

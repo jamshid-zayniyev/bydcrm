@@ -41,7 +41,7 @@ export interface Service {
 
 export const serviceSchema = z.object({
   customer_id: z.string().optional(),
-  customer_name: z.string().min(1, "Mijoz nomi kiritilishi shart"),
+  // customer_name: z.string().min(1, "Mijoz nomi kiritilishi shart"),
   date: z.string().min(1, "Sana tanlanishi shart"),
   rate: z.string().optional(),
   service_type: z.string().optional(),

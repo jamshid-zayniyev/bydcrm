@@ -294,8 +294,7 @@ export function Customers() {
                 </div>
               </div>
             ))}
-          </div>
-          {pgnCount && pgnCount > 10 ? (
+            {/* {pgnCount && pgnCount > 10 ? ( */}
             <PaginationDemo
               pgnCount={pgnCount}
               fetchUsers={fetchUsers}
@@ -306,9 +305,10 @@ export function Customers() {
               filterService=""
               filterDate=""
             />
-          ) : (
+            {/* ) : (
             ""
-          )}
+          )} */}
+          </div>
         </>
       ) : (
         <div className="flex justify-center">
@@ -414,7 +414,7 @@ export function Customers() {
                     {carsModels.length ? (
                       carsModels.map((el) => (
                         <option key={el?.id} value={el?.id}>
-                          {el?.name}
+                          {el?.model}
                         </option>
                       ))
                     ) : (

@@ -725,7 +725,7 @@ const Cars = () => {
           <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-gray-200 flex items-center justify-between">
               <h2 className="text-gray-900">
-                {selected === null ? "Add" : "tahrirlash"}
+                {selected === null ? t("cars.add") : t("cars.edit")}
               </h2>
               <button
                 onClick={closeModal}
@@ -739,11 +739,11 @@ const Cars = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm text-gray-700 mb-2">
-                    Model
+                    {t("cars.model")}
                   </label>
                   <input
                     {...register("model")}
-                    placeholder={t("customers.addClientObj.enterName")}
+                    placeholder={t("cars.modelName")}
                     className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
                       errors.model
                         ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
@@ -756,11 +756,11 @@ const Cars = () => {
                 </div>
                 <div>
                   <label className="block text-sm text-gray-700 mb-2">
-                    Asosiy narx
+                    {t("cars.price")}
                   </label>
                   <input
                     {...register("base_price", { valueAsNumber: true })}
-                    placeholder="base_price"
+                    placeholder={t("cars.pricePlaceholder")}
                     className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
                       errors.base_price
                         ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
@@ -776,11 +776,11 @@ const Cars = () => {
                 </div>
                 <div>
                   <label className="block text-sm text-gray-700 mb-2">
-                    Jami mavjud
+                    {t("cars.totalAvailable")}
                   </label>
                   <input
                     {...register("total_available", { valueAsNumber: true })}
-                    placeholder="total_available"
+                    placeholder={t("cars.total_availablePlaceholder")}
                     className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
                       errors.base_price
                         ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
@@ -797,7 +797,7 @@ const Cars = () => {
 
                 <div>
                   <label className="block text-sm text-gray-700 mb-2">
-                    Brend Rangi
+                    {t("cars.brandColor")}
                   </label>
 
                   <Controller
@@ -809,7 +809,7 @@ const Cars = () => {
                           colors={colors}
                           value={field.value ? field.value.toString() : ""}
                           onChange={field.onChange}
-                          placeholder="Rang tanlang..."
+                          placeholder={t("cars.colorSelect")}
                           errorsColor={!!errors.brand_color}
                         />
                         {errors.brand_color && (
@@ -824,11 +824,10 @@ const Cars = () => {
 
                 <div>
                   <label className="block text-sm text-gray-700 mb-2">
-                    description_uz
+                    {t("cars.descriptionUz")}
                   </label>
                   <textarea
                     {...register("description_uz")}
-                    placeholder="total_available"
                     className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2
                       ${
                         errors.model
@@ -845,11 +844,10 @@ const Cars = () => {
                 </div>
                 <div>
                   <label className="block text-sm text-gray-700 mb-2">
-                    description_ru
+                    {t("cars.descriptionRu")}
                   </label>
                   <textarea
                     {...register("description_ru")}
-                    placeholder="total_available"
                     className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2
                       ${
                         errors.model
@@ -867,7 +865,7 @@ const Cars = () => {
                 {/* Image Upload */}
                 <div className="md:col-span-2">
                   <label className="block text-sm text-gray-700 mb-2">
-                    Rasm yuklash {selected === null ? "*" : ""}
+                    {t("cars.imageUpload")} {selected === null ? "*" : ""}
                   </label>
 
                   {previewImage && (
@@ -923,8 +921,8 @@ const Cars = () => {
                           </svg>
                           <span className="text-sm text-gray-600">
                             {previewImage
-                              ? "Rasmni almashtirish"
-                              : "Rasm yuklash"}
+                              ? t("cars.imageReplacement")
+                              : t("cars.imageUpload")}
                           </span>
                           <span className="text-xs text-gray-500">
                             PNG, JPG, JPEG (max 10MB)
@@ -956,7 +954,7 @@ const Cars = () => {
                   className="flex-1 px-4 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors"
                   disabled={uploadLoading}
                 >
-                  {uploadLoading ? "Yuklanmoqda..." : "Saqlash"}
+                  {uploadLoading ? t("formLaoding") : t("formSave")}
                 </button>
                 <button
                   type="button"
