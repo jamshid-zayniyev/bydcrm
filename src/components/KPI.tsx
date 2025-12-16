@@ -2,25 +2,13 @@ import { useState } from "react";
 import {
   TrendingUp,
   TrendingDown,
-  Target,
-  Users,
-  Award,
-  Calendar,
   DollarSign,
   Car,
-  Phone,
   ThumbsUp,
-  ShoppingCart,
-  Zap,
   Download,
   Plus,
   Eye,
-  Filter,
-  X,
   Star,
-  Trophy,
-  Clock,
-  Activity,
   PhoneCall,
   Wrench,
   DollarSignIcon,
@@ -52,11 +40,6 @@ import {
   Area,
   AreaChart,
   ComposedChart,
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  Radar,
 } from "recharts";
 import { useTranslation } from "react-i18next";
 import useKPI from "@/hooks/useKPI";
@@ -65,7 +48,6 @@ import { usePieChart } from "@/hooks/usePieChart";
 import formatCurrency from "@/hooks/formatCurrents";
 import { NoUser } from "@/assets";
 import { formatPriceNoT } from "@/hooks/mlnNumberNoT";
-import { useAuthContext } from "@/contexts/AuthContext";
 
 interface SalesmanKPI {
   id: string;
@@ -330,44 +312,6 @@ export function KPI() {
     },
   ];
 
-  const filteredEmployees =
-    selectedRole === "all"
-      ? salesTeam
-      : salesTeam.filter((emp) => {
-          if (selectedRole === "sales")
-            return emp.role === "Менеджер по продажам";
-          if (selectedRole === "callcenter") return emp.role === "Колл-центр";
-          if (selectedRole === "service")
-            return emp.role === "Сервисный менеджер";
-          if (selectedRole === "marketing") return emp.role === "Маркетинг";
-          return true;
-        });
-
-  // // Team performance data
-  const teamPerformanceData = [
-    { month: "Янв", продажи: 27, выручка: 945, цель: 1050 },
-    { month: "Фев", продажи: 31, выручка: 1085, цель: 1050 },
-    { month: "Мар", продажи: 31, выручка: 1085, цель: 1050 },
-    { month: "Апр", продажи: 28, выручка: 980, цель: 1050 },
-    { month: "Май", продажи: 32, выручка: 1120, цель: 1050 },
-  ];
-
-  // Sales funnel data
-  const salesFunnelData = [
-    { stage: "Лиды", count: 280, conversion: 100 },
-    { stage: "Квалиф.", count: 196, conversion: 70 },
-    { stage: "Тест-драйв", count: 120, conversion: 43 },
-    { stage: "Предложение", count: 80, conversion: 29 },
-    { stage: "Продажа", count: 32, conversion: 11 },
-  ];
-
-  // Individual KPI comparison
-  const kpiComparison = [
-    { name: "Алексей И.", продажи: 12, рейтинг: 4.8 },
-    { name: "Мария П.", продажи: 11, рейтинг: 4.9 },
-    { name: "Дмитрий С.", продажи: 9, рейтинг: 4.6 },
-  ];
-
   const getScoreBadgeColor = (score: number) => {
     if (score >= 90) return "bg-green-100 text-green-800 border-green-200";
     if (score >= 80) return "bg-blue-100 text-blue-800 border-blue-200";
@@ -380,63 +324,6 @@ export function KPI() {
     (emp) => emp.id === selectedEmployee
   );
 
-  // Detailed daily performance data for selected employee
-  const dailyPerformance = [
-    { day: "Пн", звонки: 8, встречи: 3, продажи: 2 },
-    { day: "Вт", звонки: 12, встречи: 4, продажи: 3 },
-    { day: "Ср", звонки: 10, встречи: 5, продажи: 2 },
-    { day: "Чт", звонки: 15, встречи: 6, продажи: 4 },
-    { day: "Пт", звонки: 14, встречи: 5, продажи: 3 },
-    { day: "Сб", звонки: 9, встречи: 4, продажи: 2 },
-    { day: "Вс", звонки: 6, встречи: 2, продажи: 1 },
-  ];
-
-  // Weekly comparison data
-  const weeklyComparison = [
-    { неделя: "Нед 1", план: 10, факт: 8 },
-    { неделя: "Нед 2", план: 10, факт: 11 },
-    { неделя: "Нед 3", план: 10, факт: 9 },
-    { неделя: "Нед 4", план: 10, факт: 12 },
-  ];
-
-  // Skills radar data
-  const skillsData = [
-    { skill: "Продажи", value: 92 },
-    { skill: "Переговоры", value: 88 },
-    { skill: "Знание продукта", value: 95 },
-    { skill: "Работа с возражениями", value: 85 },
-    { skill: "Клиентский сервис", value: 90 },
-    { skill: "Допродажи", value: 87 },
-  ];
-
-  // Achievements
-  const achievements = [
-    {
-      title: "Продавец месяца",
-      date: "Май 2024",
-      icon: Trophy,
-      color: "text-yellow-600",
-    },
-    {
-      title: "План перевыполнен на 20%",
-      date: "Апрель 2024",
-      icon: Target,
-      color: "text-green-600",
-    },
-    {
-      title: "Лучший рейтинг клиентов",
-      date: "Март 2024",
-      icon: Star,
-      color: "text-blue-600",
-    },
-    {
-      title: "50+ успешных продаж",
-      date: "Февраль 2024",
-      icon: Award,
-      color: "text-purple-600",
-    },
-  ];
-
   const salesRoles = [
     { value: "all", label: t("kpi.roles.all") },
     { value: "sales", label: t("kpi.roles.sales") },
@@ -444,8 +331,6 @@ export function KPI() {
     { value: "service", label: t("kpi.roles.service") },
     { value: "marketing", label: t("kpi.roles.marketing") },
   ];
-
-  console.log(staffReports2Data);
 
   return (
     <div className="space-y-6">
@@ -519,7 +404,6 @@ export function KPI() {
               <span className="text-green-600">
                 {kpiRevenue?.percent_change}%
               </span>
-              {/* <span className="text-muted-foreground">млн ₸</span> */}
             </div>
             <Progress
               value={kpiRevenue?.achievement_percent}
@@ -530,54 +414,6 @@ export function KPI() {
             </p>
           </CardContent>
         </Card>
-
-        {/* <Card className="border-l-4 border-l-blue-500">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between mb-2">
-              <div>
-                <p className="text-sm text-muted-foreground mb-1">Конверсия</p>
-                <p className="text-3xl">11.4%</p>
-              </div>
-              <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
-                <Target className="h-6 w-6 text-blue-600" />
-              </div>
-            </div>
-            <div className="flex items-center gap-1 mt-2 text-sm">
-              <TrendingUp className="h-4 w-4 text-green-600" />
-              <span className="text-green-600">+0.7%</span>
-              <span className="text-muted-foreground">лид → продажа</span>
-            </div>
-            <Progress value={95} className="mt-3 h-2" />
-            <p className="text-xs text-muted-foreground mt-1">
-              {t("kpi.target")}: 12%
-            </p>
-          </CardContent>
-        </Card> */}
-
-        {/* <Card className="border-l-4 border-l-yellow-500">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between mb-2">
-              <div>
-                <p className="text-sm text-muted-foreground mb-1">
-                  Рейтинг команды
-                </p>
-                <p className="text-3xl">4.7</p>
-              </div>
-              <div className="h-12 w-12 rounded-full bg-yellow-100 flex items-center justify-center">
-                <ThumbsUp className="h-6 w-6 text-yellow-600" />
-              </div>
-            </div>
-            <div className="flex items-center gap-1 mt-2 text-sm">
-              <TrendingUp className="h-4 w-4 text-green-600" />
-              <span className="text-green-600">+0.2</span>
-              <span className="text-muted-foreground">из 5.0</span>
-            </div>
-            <Progress value={94} className="mt-3 h-2" />
-            <p className="text-xs text-muted-foreground mt-1">
-              {t("kpi.target")}: 4.5
-            </p>
-          </CardContent>
-        </Card> */}
       </div>
 
       {/* Main Tabs */}
@@ -589,10 +425,6 @@ export function KPI() {
           <TabsTrigger value="employees">
             {t("kpi.employees.employeesName")}
           </TabsTrigger>
-          {/* <TabsTrigger value="funnel">{t("kpi.funnel.funnelName")}</TabsTrigger> */}
-          {/* <TabsTrigger value="analytics">
-            {t("kpi.analytics.analyticsName")}
-          </TabsTrigger> */}
         </TabsList>
 
         {/* Overview Tab */}
@@ -625,19 +457,12 @@ export function KPI() {
                       <p className="text-sm text-gray-900">
                         {employee?.full_name}
                       </p>
-                      {/* <p className="text-xs text-gray-500">{employee.department}</p> */}
                     </div>
                   </div>
                   <div className="text-right">
                     <p className="text-sm text-gray-900">
                       {employee.total_sales} {t("dashboard.best.sales")}
                     </p>
-                    {/* <div className="flex items-center gap-1 mt-1">
-                  <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
-                  <span className="text-xs text-gray-600">
-                    {employee.customerSatisfaction?.toFixed(1)}
-                  </span>
-                </div> */}
                   </div>
                 </div>
               ))}
@@ -651,72 +476,9 @@ export function KPI() {
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
-                  {/* <ComposedChart data={salesPerformance}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="month_label" />
-                    <YAxis
-                      yAxisId="left"
-                      label={{
-                        value: "Продажи",
-                        angle: -90,
-                        position: "insideLeft",
-                      }}
-                    />
-                    <YAxis
-                      yAxisId="right"
-                      orientation="right"
-                      label={{
-                        value: "Выручка (млн)",
-                        angle: 90,
-                        position: "insideRight",
-                      }}
-                    />
-                    <Tooltip />
-                    <Legend />
-                    <Bar
-                      yAxisId="left"
-                      dataKey="sales"
-                      fill="#E60012"
-                      name="Продажи авто"
-                    />
-                    <Line
-                      yAxisId="right"
-                      type="monotone"
-                      dataKey="revenue"
-                      stroke="#10b981"
-                      strokeWidth={3}
-                      name="Выручка"
-                    />
-                    <Line
-                      yAxisId="right"
-                      type="monotone"
-                      dataKey="target"
-                      stroke="#cbd5e1"
-                      strokeWidth={2}
-                      strokeDasharray="5 5"
-                      name="Цель"
-                    />
-                  </ComposedChart> */}
                   <ComposedChart data={salesPerformance}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="month_label" />
-                    {/* <YAxis
-                      yAxisId="left"
-                      label={{
-                        value: "Продажи",
-                        angle: -90,
-                        position: "insideLeft",
-                      }}
-                    />
-                    <YAxis
-                      yAxisId="right"
-                      orientation="right"
-                      label={{
-                        value: "Выручка (млн)",
-                        angle: 90,
-                        position: "insideRight",
-                      }}
-                    /> */}
 
                     {/* Tooltip formatter bilan */}
                     <Tooltip
@@ -792,11 +554,6 @@ export function KPI() {
                 <p className="text-2xl mb-2">
                   {formatPrice(kpiMostSoldCar?.price)}
                 </p>
-                {/* <Progress value={116.7} className="h-2 mb-2" />
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Цель: 30 млн</span>
-                  <span className="text-green-600">+16.7%</span>
-                </div> */}
               </CardContent>
             </Card>
 
@@ -810,11 +567,6 @@ export function KPI() {
                 <p className="text-2xl mb-2">
                   {kpiTestDriveMonthly?.test_drive_count} {t("kpi.pcs")}
                 </p>
-                {/* <Progress value={100} className="h-2 mb-2" />
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Цель: 120 шт</span>
-                  <span className="text-green-600">100%</span>
-                </div> */}
               </CardContent>
             </Card>
 
@@ -828,11 +580,6 @@ export function KPI() {
                 <p className="text-2xl mb-2">
                   {kpiSales?.purchased_customers} {t("kpi.pcs")}
                 </p>
-                {/* <Progress value={90.9} className="h-2 mb-2" />
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Цель: 22 шт</span>
-                  <span className="text-yellow-600">90.9%</span>
-                </div> */}
               </CardContent>
             </Card>
           </div>
@@ -1728,93 +1475,6 @@ export function KPI() {
                   </Card>
                 </TabsContent>
 
-                {/* Skills Tab */}
-                {/* <TabsContent value="skills" className="space-y-4">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                    <Card>
-                      <CardHeader>
-                        <CardTitle className="text-base">
-                          Профиль навыков
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <ResponsiveContainer width="100%" height={300}>
-                          <RadarChart data={skillsData}>
-                            <PolarGrid />
-                            <PolarAngleAxis dataKey="skill" />
-                            <PolarRadiusAxis angle={90} domain={[0, 100]} />
-                            <Radar
-                              name="Навыки"
-                              dataKey="value"
-                              stroke="#E60012"
-                              fill="#E60012"
-                              fillOpacity={0.6}
-                            />
-                            <Tooltip />
-                          </RadarChart>
-                        </ResponsiveContainer>
-                      </CardContent>
-                    </Card>
-
-                    <Card>
-                      <CardHeader>
-                        <CardTitle className="text-base">
-                          Детализация навыков
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-4">
-                          {skillsData.map((skill, idx) => (
-                            <div key={idx}>
-                              <div className="flex items-center justify-between mb-1">
-                                <span className="text-sm font-medium">
-                                  {skill.skill}
-                                </span>
-                                <span className="text-sm font-medium">
-                                  {skill.value}%
-                                </span>
-                              </div>
-                              <Progress value={skill.value} className="h-2" />
-                            </div>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-base">
-                        Рекомендации по развитию
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="p-4 rounded-lg bg-green-50 border border-green-200">
-                          <h4 className="font-medium text-green-900 mb-2">
-                            Сильные стороны
-                          </h4>
-                          <ul className="text-sm text-green-800 space-y-1">
-                            <li>• Отличное знание продукта (95%)</li>
-                            <li>• Высокий уровень продаж (92%)</li>
-                            <li>• Превосходный клиентский сервис (90%)</li>
-                          </ul>
-                        </div>
-                        <div className="p-4 rounded-lg bg-yellow-50 border border-yellow-200">
-                          <h4 className="font-medium text-yellow-900 mb-2">
-                            Зоны роста
-                          </h4>
-                          <ul className="text-sm text-yellow-800 space-y-1">
-                            <li>• Работа с возражениями - пройти тренинг</li>
-                            <li>• Допродажи - изучить техники upsell</li>
-                            <li>• Переговоры - развивать навыки</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </TabsContent> */}
-
                 {/* History Tab */}
                 <TabsContent value="history" className="space-y-4">
                   {customersId?.role === "s" ? (
@@ -1954,41 +1614,6 @@ export function KPI() {
 
                 {/* Achievements Tab */}
                 <TabsContent value="achievements" className="space-y-4">
-                  {/* <Card>
-                    <CardHeader>
-                      <CardTitle className="text-base">
-                        Награды и достижения
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {achievements.map((achievement, idx) => {
-                          const Icon = achievement.icon;
-                          return (
-                            <div
-                              key={idx}
-                              className="flex items-center gap-4 p-4 border rounded-lg hover:shadow-md transition-shadow"
-                            >
-                              <div
-                                className={`w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center ${achievement.color}`}
-                              >
-                                <Icon className="h-6 w-6" />
-                              </div>
-                              <div>
-                                <p className="font-medium">
-                                  {achievement.title}
-                                </p>
-                                <p className="text-sm text-muted-foreground">
-                                  {achievement.date}
-                                </p>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </CardContent>
-                  </Card> */}
-
                   <div className="grid grid-cols-1 gap-4">
                     <Card>
                       <CardHeader>
