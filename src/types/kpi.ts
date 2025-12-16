@@ -66,34 +66,112 @@ export interface TestDriveSales {
 }
 
 export interface StaffReports {
-  employee_id: number;
   full_name: string;
-  role: string;
-  avatar: number;
-  total_sales: number;
-  total_revenue: number;
-  sales_target: number;
-  revenue_target: number;
+  avatar: string | null;
+  calls: {
+    value: number;
+    target: number;
+    percent: number;
+    remaining: number;
+  };
+  revenue: {
+    value: number;
+    target: number;
+    percent: number;
+    average_check: number;
+  };
+  sales: {
+    value: number;
+    target: number;
+    percent: number;
+    remaining: number;
+  };
+  rating: {
+    value: number;
+    target: number;
+    percent: number;
+  };
   last_5_months: [
     {
       month: string;
-      sales: number;
+      calls: number;
     }
-    // {
-    //   month: "September";
-    //   sales: 0;
-    // },
-    // {
-    //   month: "October";
-    //   sales: 0;
-    // },
-    // {
-    //   month: "November";
-    //   sales: 0;
-    // },
-    // {
-    //   month: "December";
-    //   sales: 1;
-    // }
   ];
+  id: number;
+  role: string;
+}
+
+export interface monthlyId {
+  avatar: string | null;
+  full_name: string;
+  role: string;
+  sales_count: number;
+  total_revenue: number;
+  average_rating: number;
+  rating_target: number;
+  rating_percent: number;
+  calls_count: number;
+}
+
+export interface yearly {
+  average_sales: number;
+  month: string;
+  quarterly_growth: number;
+  record_sales: number;
+  revenue: number;
+}
+
+export interface Weekly {
+  role: string;
+  week: string;
+  data: {
+    day: string;
+    sales: number;
+  }[];
+}
+
+export interface WeeklyIndicators {
+  week: string;
+  plan: number;
+  fact: number;
+}
+
+export interface last5Months {
+  month: string;
+  sales_count: number;
+  revenue: number;
+}
+
+export interface staffReports2 {
+  full_name: string;
+  calls: { value: number; target: number; percent: number; remaining: number };
+  sales: {
+    value: number;
+    target: number;
+    percent: number;
+    remaining: number;
+  };
+  revenue: {
+    value: number;
+    target: number;
+    percent: number;
+    average_check: number;
+  };
+  rating: {
+    value: number;
+    target: number;
+    percent: number;
+  };
+}
+
+export interface generalStatistics {
+  total_calls: number;
+  positive_calls: number;
+  average_score: number;
+  average_rate: number;
+  completed_services: number;
+  average_rating: number;
+  satisfied_clients: number;
+  total_revenue: number;
+  total_sold: number;
 }

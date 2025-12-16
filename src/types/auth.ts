@@ -1,6 +1,6 @@
 export interface User {
   id: number;
-  role: 's' | 'e';
+  role: "sa" | "s" | "m" | "cc" | "t";
   full_name: string;
   username: string;
 }
@@ -14,6 +14,6 @@ export interface AuthResponse {
   access: string;
   refresh: string;
   id: number;
-  role: 's' | 'e';
+  role: "s" | "e";
   full_name: string;
 }

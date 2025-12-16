@@ -286,7 +286,12 @@
     "analytics": {
       "analyticsName": "Tahlil",
       "salesAnalysis": "Sotuvlarni taqqosiy tahlil qilish"
-    }
+    },
+    "chek": "O‘rtacha chek",
+    "testDrive": "Test-drive",
+    "upselling": "Qo‘shimcha sotuvlar",
+    "pcs": "dona",
+    "score": "Umumiy ball:"
   },
   "ai": {
     "title": "AI Tavsiyalari",

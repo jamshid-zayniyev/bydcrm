@@ -21,6 +21,9 @@ import {
   Trophy,
   Clock,
   Activity,
+  PhoneCall,
+  Wrench,
+  DollarSignIcon,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
@@ -59,6 +62,10 @@ import { useTranslation } from "react-i18next";
 import useKPI from "@/hooks/useKPI";
 import { formatPrice } from "@/hooks/mlnNumber";
 import { usePieChart } from "@/hooks/usePieChart";
+import formatCurrency from "@/hooks/formatCurrents";
+import { NoUser } from "@/assets";
+import { formatPriceNoT } from "@/hooks/mlnNumberNoT";
+import { useAuthContext } from "@/contexts/AuthContext";
 
 interface SalesmanKPI {
   id: string;
@@ -127,6 +134,14 @@ export function KPI() {
     kpiMostSoldCar,
     kpiSales,
     kpiStaffReports,
+    btnEmployeeId,
+    customersId,
+    yearly,
+    weeklyData,
+    weeklyIndicatorsData,
+    last5MonthsData,
+    staffReports2Data,
+    generalStatisticsData,
   } = useKPI();
   const { bestSeller } = usePieChart();
 
@@ -353,17 +368,11 @@ export function KPI() {
     { name: "Дмитрий С.", продажи: 9, рейтинг: 4.6 },
   ];
 
-  console.log(bestStaff);
-
   const getScoreBadgeColor = (score: number) => {
     if (score >= 90) return "bg-green-100 text-green-800 border-green-200";
     if (score >= 80) return "bg-blue-100 text-blue-800 border-blue-200";
     if (score >= 70) return "bg-yellow-100 text-yellow-800 border-yellow-200";
     return "bg-red-100 text-red-800 border-red-200";
-  };
-
-  const formatCurrency = (value: number) => {
-    return `${value} млн ₸`;
   };
 
   // Get selected employee for detailed report
@@ -435,6 +444,8 @@ export function KPI() {
     { value: "service", label: t("kpi.roles.service") },
     { value: "marketing", label: t("kpi.roles.marketing") },
   ];
+
+  console.log(staffReports2Data);
 
   return (
     <div className="space-y-6">
@@ -640,7 +651,7 @@ export function KPI() {
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
-                  <ComposedChart data={salesPerformance}>
+                  {/* <ComposedChart data={salesPerformance}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="month_label" />
                     <YAxis
@@ -661,6 +672,63 @@ export function KPI() {
                       }}
                     />
                     <Tooltip />
+                    <Legend />
+                    <Bar
+                      yAxisId="left"
+                      dataKey="sales"
+                      fill="#E60012"
+                      name="Продажи авто"
+                    />
+                    <Line
+                      yAxisId="right"
+                      type="monotone"
+                      dataKey="revenue"
+                      stroke="#10b981"
+                      strokeWidth={3}
+                      name="Выручка"
+                    />
+                    <Line
+                      yAxisId="right"
+                      type="monotone"
+                      dataKey="target"
+                      stroke="#cbd5e1"
+                      strokeWidth={2}
+                      strokeDasharray="5 5"
+                      name="Цель"
+                    />
+                  </ComposedChart> */}
+                  <ComposedChart data={salesPerformance}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month_label" />
+                    {/* <YAxis
+                      yAxisId="left"
+                      label={{
+                        value: "Продажи",
+                        angle: -90,
+                        position: "insideLeft",
+                      }}
+                    />
+                    <YAxis
+                      yAxisId="right"
+                      orientation="right"
+                      label={{
+                        value: "Выручка (млн)",
+                        angle: 90,
+                        position: "insideRight",
+                      }}
+                    /> */}
+
+                    {/* Tooltip formatter bilan */}
+                    <Tooltip
+                      formatter={(value: number, name: string) => {
+                        // formatPrice funksiyasini chaqirish
+                        if (name === "Выручка" || name === "Цель") {
+                          return [formatCurrency(value), name];
+                        }
+                        return [value, name];
+                      }}
+                    />
+
                     <Legend />
                     <Bar
                       yAxisId="left"
@@ -718,7 +786,7 @@ export function KPI() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Средний чек</CardTitle>
+                <CardTitle className="text-base">{t("kpi.chek")}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-2xl mb-2">
@@ -734,11 +802,13 @@ export function KPI() {
 
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Тест-драйвы</CardTitle>
+                <CardTitle className="text-base">
+                  {t("kpi.testDrive")}
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-2xl mb-2">
-                  {kpiTestDriveMonthly?.test_drive_count} шт
+                  {kpiTestDriveMonthly?.test_drive_count} {t("kpi.pcs")}
                 </p>
                 {/* <Progress value={100} className="h-2 mb-2" />
                 <div className="flex items-center justify-between text-sm">
@@ -750,11 +820,13 @@ export function KPI() {
 
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Допродажи</CardTitle>
+                <CardTitle className="text-base">
+                  {t("kpi.upselling")}
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-2xl mb-2">
-                  {kpiSales?.purchased_customers} шт
+                  {kpiSales?.purchased_customers} {t("kpi.pcs")}
                 </p>
                 {/* <Progress value={90.9} className="h-2 mb-2" />
                 <div className="flex items-center justify-between text-sm">
@@ -815,7 +887,7 @@ export function KPI() {
           </Card>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {filteredEmployees.map((employee) => (
+            {kpiStaffReports.map((employee) => (
               <Card
                 key={employee.id}
                 className="hover:shadow-lg transition-shadow"
@@ -823,28 +895,45 @@ export function KPI() {
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="text-4xl">{employee.avatar}</div>
+                      <div className="text-4xl">
+                        <img
+                          src={`${employee.avatar}`}
+                          alt={`${employee.full_name}`}
+                          style={{
+                            width: "36px",
+                            height: "36px",
+                            borderRadius: "50%",
+                          }}
+                        />
+                      </div>
                       <div>
                         <CardTitle className="text-lg">
-                          {employee.name}
+                          {employee.full_name}
                         </CardTitle>
                         <p className="text-sm text-muted-foreground">
-                          {employee.role}
+                          {employee.role === "sa"
+                            ? "Super Admin"
+                            : employee.role === "s"
+                            ? "Seller"
+                            : employee.role === "t"
+                            ? "Technikal"
+                            : "Call-Center"}
                         </p>
                       </div>
                     </div>
-                    <Badge
+                    {/* <Badge
                       className={getScoreBadgeColor(employee.score)}
                       variant="outline"
                     >
                       {employee.score}%
-                    </Badge>
+                    </Badge> */}
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  {/* KPI Grid */}
                   <div className="grid grid-cols-2 gap-3">
-                    {employee.role === "Менеджер по продажам" && (
+                    {employee.role === "sa" ? (
+                      "Super Admin"
+                    ) : employee.role === "s" ? (
                       <>
                         <div className="space-y-1">
                           <div className="flex items-center justify-between text-sm">
@@ -854,12 +943,15 @@ export function KPI() {
                             </span>
                             <div className="flex items-center gap-1">
                               <span className="font-medium">
-                                {employee.kpis.carsSold.current}
+                                {employee.sales.value}
                               </span>
                               <span className="text-xs text-muted-foreground">
-                                /{employee.kpis.carsSold.target}
+                                /{" "}
+                                {employee.sales.target
+                                  ? employee.sales.target
+                                  : 0}
                               </span>
-                              {employee.kpis.carsSold.trend === "up" ? (
+                              {employee.sales.target < employee.sales.value ? (
                                 <TrendingUp className="h-3 w-3 text-green-600" />
                               ) : (
                                 <TrendingDown className="h-3 w-3 text-red-600" />
@@ -867,11 +959,7 @@ export function KPI() {
                             </div>
                           </div>
                           <Progress
-                            value={
-                              (employee.kpis.carsSold.current /
-                                employee.kpis.carsSold.target) *
-                              100
-                            }
+                            value={employee.sales.percent}
                             className="h-1.5"
                           />
                         </div>
@@ -884,12 +972,19 @@ export function KPI() {
                             </span>
                             <div className="flex items-center gap-1">
                               <span className="font-medium">
-                                {employee.kpis.revenue.current}м
+                                {(employee.revenue.value / 1000000).toFixed(0)}{" "}
+                                {t("dashboard.cars.mln")}
                               </span>
                               <span className="text-xs text-muted-foreground">
-                                /{employee.kpis.revenue.target}м
+                                /
+                                {employee.revenue.target
+                                  ? `${(
+                                      employee.revenue.target / 1000000
+                                    ).toFixed(0)} ${t("dashboard.cars.mln")}`
+                                  : `0 ${t("dashboard.cars.mln")}`}
                               </span>
-                              {employee.kpis.revenue.trend === "up" ? (
+                              {employee.revenue.target <
+                              employee.revenue.value ? (
                                 <TrendingUp className="h-3 w-3 text-green-600" />
                               ) : (
                                 <TrendingDown className="h-3 w-3 text-red-600" />
@@ -897,131 +992,175 @@ export function KPI() {
                             </div>
                           </div>
                           <Progress
-                            value={
-                              (employee.kpis.revenue.current /
-                                employee.kpis.revenue.target) *
-                              100
-                            }
+                            value={employee.revenue.percent}
+                            className="h-1.5"
+                          />
+                        </div>
+
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-muted-foreground flex items-center gap-1">
+                              <ThumbsUp className="h-3 w-3" />
+                              {t("kpi.employees.rating")}
+                            </span>
+                            <div className="flex items-center gap-1">
+                              <span className="font-medium">
+                                {employee.rating.value}
+                              </span>
+                              <span className="text-xs text-muted-foreground">
+                                /
+                                {employee.rating.target
+                                  ? employee.rating.target
+                                  : 0}
+                              </span>
+                              {employee.rating.target <
+                              employee.rating.value ? (
+                                <TrendingUp className="h-3 w-3 text-green-600" />
+                              ) : (
+                                <TrendingDown className="h-3 w-3 text-red-600" />
+                              )}
+                            </div>
+                          </div>
+                          <Progress
+                            value={employee.rating.percent}
+                            className="h-1.5"
+                          />
+                        </div>
+                      </>
+                    ) : employee.role === "t" ? (
+                      <div className="space-y-1">
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-muted-foreground flex items-center gap-1">
+                            <ThumbsUp className="h-3 w-3" />
+                            {t("kpi.employees.rating")}
+                          </span>
+                          <div className="flex items-center gap-1">
+                            <span className="font-medium">
+                              {employee.rating.value}
+                            </span>
+                            <span className="text-xs text-muted-foreground">
+                              /
+                              {employee.rating.target
+                                ? employee.rating.target
+                                : 0}
+                            </span>
+                            {employee.rating.target < employee.rating.value ? (
+                              <TrendingUp className="h-3 w-3 text-green-600" />
+                            ) : (
+                              <TrendingDown className="h-3 w-3 text-red-600" />
+                            )}
+                          </div>
+                        </div>
+                        <Progress
+                          value={employee.rating.percent}
+                          className="h-1.5"
+                        />
+                      </div>
+                    ) : (
+                      <>
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-muted-foreground flex items-center gap-1">
+                              <DollarSign className="h-3 w-3" />
+                              Calls
+                            </span>
+                            <div className="flex items-center gap-1">
+                              <span className="font-medium">
+                                {(employee.calls.value / 1000000).toFixed(0)}{" "}
+                                {t("dashboard.cars.mln")}
+                              </span>
+                              <span className="text-xs text-muted-foreground">
+                                /
+                                {employee.calls.target
+                                  ? `${(
+                                      employee.calls.target / 1000000
+                                    ).toFixed(0)} ${t("dashboard.cars.mln")}`
+                                  : `0 ${t("dashboard.cars.mln")}`}
+                              </span>
+                              {employee.calls.target < employee.calls.value ? (
+                                <TrendingUp className="h-3 w-3 text-green-600" />
+                              ) : (
+                                <TrendingDown className="h-3 w-3 text-red-600" />
+                              )}
+                            </div>
+                          </div>
+                          <Progress
+                            value={employee.calls.percent}
+                            className="h-1.5"
+                          />
+                        </div>
+
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-muted-foreground flex items-center gap-1">
+                              <ThumbsUp className="h-3 w-3" />
+                              {t("kpi.employees.rating")}
+                            </span>
+                            <div className="flex items-center gap-1">
+                              <span className="font-medium">
+                                {employee.rating.value}
+                              </span>
+                              <span className="text-xs text-muted-foreground">
+                                /
+                                {employee.rating.target
+                                  ? employee.rating.target
+                                  : 0}
+                              </span>
+                              {employee.rating.target <
+                              employee.rating.value ? (
+                                <TrendingUp className="h-3 w-3 text-green-600" />
+                              ) : (
+                                <TrendingDown className="h-3 w-3 text-red-600" />
+                              )}
+                            </div>
+                          </div>
+                          <Progress
+                            value={employee.rating.percent}
                             className="h-1.5"
                           />
                         </div>
                       </>
                     )}
-
-                    {/* <div className="space-y-1">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground flex items-center gap-1">
-                          <Target className="h-3 w-3" />
-                          {employee.role === "Менеджер по продажам"
-                            ? t("kpi.employees.conversion")
-                            : t("kpi.employees.efficiency")}
-                        </span>
-                        <div className="flex items-center gap-1">
-                          <span className="font-medium">
-                            {employee.kpis.conversionRate.current}%
-                          </span>
-                          {employee.kpis.conversionRate.target > 0 && (
-                            <>
-                              <span className="text-xs text-muted-foreground">
-                                /{employee.kpis.conversionRate.target}%
-                              </span>
-                              {employee.kpis.conversionRate.trend === "up" ? (
-                                <TrendingUp className="h-3 w-3 text-green-600" />
-                              ) : (
-                                <TrendingDown className="h-3 w-3 text-red-600" />
-                              )}
-                            </>
-                          )}
-                        </div>
-                      </div>
-                      <Progress
-                        value={
-                          employee.kpis.conversionRate.target > 0
-                            ? (employee.kpis.conversionRate.current /
-                                employee.kpis.conversionRate.target) *
-                              100
-                            : 100
-                        }
-                        className="h-1.5"
-                      />
-                    </div> */}
-
-                    <div className="space-y-1">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground flex items-center gap-1">
-                          <ThumbsUp className="h-3 w-3" />
-                          {t("kpi.employees.rating")}
-                        </span>
-                        <div className="flex items-center gap-1">
-                          <span className="font-medium">
-                            {employee.kpis.customerSatisfaction.current}
-                          </span>
-                          {employee.kpis.customerSatisfaction.target > 0 && (
-                            <>
-                              <span className="text-xs text-muted-foreground">
-                                /{employee.kpis.customerSatisfaction.target}
-                              </span>
-                              {employee.kpis.customerSatisfaction.trend ===
-                              "up" ? (
-                                <TrendingUp className="h-3 w-3 text-green-600" />
-                              ) : (
-                                <TrendingDown className="h-3 w-3 text-red-600" />
-                              )}
-                            </>
-                          )}
-                        </div>
-                      </div>
-                      <Progress
-                        value={
-                          employee.kpis.customerSatisfaction.target > 0
-                            ? (employee.kpis.customerSatisfaction.current /
-                                employee.kpis.customerSatisfaction.target) *
-                              100
-                            : 100
-                        }
-                        className="h-1.5"
-                      />
-                    </div>
                   </div>
 
-                  {/* Monthly Trend Chart */}
-                  {employee.role === "Менеджер по продажам" && (
-                    <div className="pt-4 border-t">
-                      <p className="text-sm mb-3 font-medium">
-                        Динамика продаж (5 месяцев)
-                      </p>
-                      <ResponsiveContainer width="100%" height={120}>
-                        <AreaChart data={employee.monthlyData}>
-                          <CartesianGrid strokeDasharray="3 3" />
-                          <XAxis dataKey="month" tick={{ fontSize: 10 }} />
-                          <YAxis tick={{ fontSize: 10 }} />
-                          <Tooltip />
-                          <Area
-                            type="monotone"
-                            dataKey="carsSold"
-                            stroke="#E60012"
-                            fill="#E60012"
-                            fillOpacity={0.3}
-                            name="Продажи"
-                          />
-                          <Line
+                  <div className="pt-4 border-t">
+                    <p className="text-sm mb-3 font-medium">
+                      Динамика продаж (5 месяцев)
+                    </p>
+                    <ResponsiveContainer width="100%" height={120}>
+                      <AreaChart data={employee.last_5_months}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="month" tick={{ fontSize: 10 }} />
+                        <YAxis tick={{ fontSize: 10 }} />
+                        <Tooltip />
+                        <Area
+                          type="monotone"
+                          dataKey="sales"
+                          stroke="#E60012"
+                          fill="#E60012"
+                          fillOpacity={0.3}
+                          name="Продажи"
+                        />
+                        {/* <Line
                             type="monotone"
                             dataKey="target"
                             stroke="#cbd5e1"
                             strokeWidth={2}
                             strokeDasharray="5 5"
                             name="Цель"
-                          />
-                        </AreaChart>
-                      </ResponsiveContainer>
-                    </div>
-                  )}
+                          /> */}
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </div>
 
                   <Button
                     variant="outline"
                     size="sm"
                     className="w-full"
-                    onClick={() => setSelectedEmployee(employee.id)}
+                    onClick={() => {
+                      btnEmployeeId(employee.id, employee.role);
+                      setSelectedEmployee(employee.id.toString());
+                    }}
                   >
                     <Eye className="h-4 w-4 mr-2" />
                     {t("kpi.employees.detailedReport")}
@@ -1031,199 +1170,6 @@ export function KPI() {
             ))}
           </div>
         </TabsContent>
-
-        {/* Funnel Tab */}
-        {/* <TabsContent value="funnel" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Воронка продаж (текущий месяц)</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {salesFunnelData.map((stage, idx) => (
-                  <div key={idx} className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="font-medium">{stage.stage}</span>
-                      <div className="flex items-center gap-4">
-                        <span className="text-2xl">{stage.count}</span>
-                        <Badge variant="secondary">{stage.conversion}%</Badge>
-                      </div>
-                    </div>
-                    <div className="relative">
-                      <Progress value={stage.conversion} className="h-8" />
-                      <div className="absolute inset-0 flex items-center justify-center text-sm font-medium">
-                        {idx < salesFunnelData.length - 1 && (
-                          <span className="text-muted">
-                            Конверсия в след. этап:{" "}
-                            {Math.round(
-                              (salesFunnelData[idx + 1].count / stage.count) *
-                                100
-                            )}
-                            %
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">
-                  Ключевые метрики воронки
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">
-                    Общая конверсия
-                  </span>
-                  <span className="font-medium">11.4%</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">
-                    Среднее время в воронке
-                  </span>
-                  <span className="font-medium">21 день</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">
-                    Потери на этапе квалификации
-                  </span>
-                  <span className="font-medium text-red-600">30%</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">
-                    Конверсия тест-драйв → продажа
-                  </span>
-                  <span className="font-medium text-green-600">26.7%</span>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Рекомендации</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex gap-2">
-                    <div className="h-2 w-2 rounded-full bg-red-500 mt-1.5 flex-shrink-0"></div>
-                    <p className="text-sm">
-                      Высокие потери на квалификации - усилить скрипты
-                    </p>
-                  </div>
-                  <div className="flex gap-2">
-                    <div className="h-2 w-2 rounded-full bg-yellow-500 mt-1.5 flex-shrink-0"></div>
-                    <p className="text-sm">
-                      Увеличить количество тест-драйвов на 20%
-                    </p>
-                  </div>
-                  <div className="flex gap-2">
-                    <div className="h-2 w-2 rounded-full bg-green-500 mt-1.5 flex-shrink-0"></div>
-                    <p className="text-sm">
-                      Отличная конверсия после тест-драйва
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent> */}
-
-        {/* Analytics Tab */}
-        {/* <TabsContent value="analytics" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>{t("kpi.analytics.salesAnalysis")}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={350}>
-                <BarChart data={teamPerformanceData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="продажи" fill="#E60012" name="Продажи факт" />
-                  <Bar dataKey="цель" fill="#cbd5e1" name="Цель" />
-                </BarChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card className="border-l-4 border-l-green-500">
-              <CardHeader>
-                <CardTitle className="text-base">Сильные стороны</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex gap-2">
-                    <span className="text-green-600">✓</span>
-                    <span>Превышение плана продаж на 6.7%</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-green-600">✓</span>
-                    <span>Высокая удовлетворенность клиентов</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-green-600">✓</span>
-                    <span>Рост среднего чека на 16.7%</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card className="border-l-4 border-l-yellow-500">
-              <CardHeader>
-                <CardTitle className="text-base">Зоны внимания</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex gap-2">
-                    <span className="text-yellow-600">!</span>
-                    <span>Конверсия ниже целевой на 5%</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-yellow-600">!</span>
-                    <span>Неравномерная нагрузка в команде</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-yellow-600">!</span>
-                    <span>Допродажи недостигают цели</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card className="border-l-4 border-l-blue-500">
-              <CardHeader>
-                <CardTitle className="text-base">Действия</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex gap-2">
-                    <span className="text-blue-600">→</span>
-                    <span>Тренинг по допродажам</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-blue-600">→</span>
-                    <span>Оптимизация распределения лидов</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-blue-600">→</span>
-                    <span>Улучшение квалификации звонков</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent> */}
       </Tabs>
 
       {/* Detailed Report Dialog */}
@@ -1234,20 +1180,33 @@ export function KPI() {
         <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-3">
-              <span className="text-4xl">{selectedEmployeeData?.avatar}</span>
+              <span className="text-4xl">
+                <img
+                  src={`${customersId?.avatar ? customersId?.avatar : NoUser}`}
+                  alt={`${customersId?.full_name}`}
+                  className="rounded-full"
+                  style={{ width: "36px", height: "36px" }}
+                />
+              </span>
               <div>
-                <h2 className="text-2xl">{selectedEmployeeData?.name}</h2>
+                <h2 className="text-2xl">{customersId?.full_name}</h2>
                 <p className="text-muted-foreground text-base font-normal">
-                  {selectedEmployeeData?.role}
+                  {customersId?.role === "sa"
+                    ? "Super Admin"
+                    : customersId?.role === "s"
+                    ? "Seller"
+                    : customersId?.role === "t"
+                    ? "Technikal"
+                    : "Call-Center"}
                 </p>
               </div>
               <Badge
                 className={`ml-auto ${getScoreBadgeColor(
-                  selectedEmployeeData?.score || 0
+                  customersId?.rating_percent || 0
                 )}`}
                 variant="outline"
               >
-                Общий балл: {selectedEmployeeData?.score}%
+                {t("kpi.score")} {customersId?.rating_percent}%
               </Badge>
             </DialogTitle>
           </DialogHeader>
@@ -1256,7 +1215,9 @@ export function KPI() {
             <div className="space-y-6 mt-4">
               {/* Quick Stats */}
               <div className="grid grid-cols-2 gap-4">
-                {selectedEmployeeData.role === "Менеджер по продажам" && (
+                {customersId?.role === "sa" ? (
+                  "Super Admin"
+                ) : customersId?.role === "s" ? (
                   <>
                     <Card>
                       <CardContent className="pt-4">
@@ -1264,7 +1225,7 @@ export function KPI() {
                           <Car className="h-8 w-8 text-[#E60012]" />
                           <div className="text-right">
                             <p className="text-2xl">
-                              {selectedEmployeeData.kpis.carsSold.current}
+                              {customersId?.sales_count}
                             </p>
                             <p className="text-xs text-muted-foreground">
                               Продано авто
@@ -1280,7 +1241,10 @@ export function KPI() {
                           <DollarSign className="h-8 w-8 text-green-600" />
                           <div className="text-right">
                             <p className="text-2xl">
-                              {selectedEmployeeData.kpis.revenue.current}м
+                              {(customersId?.total_revenue / 1000000).toFixed(
+                                0
+                              )}{" "}
+                              {t("dashboard.cars.mln")}
                             </p>
                             <p className="text-xs text-muted-foreground">
                               Выручка
@@ -1289,41 +1253,78 @@ export function KPI() {
                         </div>
                       </CardContent>
                     </Card>
+
+                    <Card>
+                      <CardContent className="pt-4">
+                        <div className="flex items-center justify-between">
+                          <Star className="h-8 w-8 text-yellow-600" />
+                          <div className="text-right">
+                            <p className="text-2xl">
+                              {customersId?.average_rating}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              Рейтинг
+                            </p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </>
+                ) : customersId?.role === "t" ? (
+                  <>
+                    <Card>
+                      <CardContent className="pt-4">
+                        <div className="flex items-center justify-between">
+                          <Wrench className="h-8 w-8 text-[#E60012]" />
+
+                          <div className="text-right">
+                            <p className="text-2xl">
+                              {customersId?.average_rating}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              Рейтинг
+                            </p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </>
+                ) : (
+                  <>
+                    <Card>
+                      <CardContent className="pt-4">
+                        <div className="flex items-center justify-between">
+                          <PhoneCall className="h-8 w-8 text-[#E60012]" />
+
+                          <div className="text-right">
+                            <p className="text-2xl">
+                              {customersId?.calls_count}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              Продано авто
+                            </p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card>
+                      <CardContent className="pt-4">
+                        <div className="flex items-center justify-between">
+                          <Star className="h-8 w-8 text-yellow-600" />
+                          <div className="text-right">
+                            <p className="text-2xl">
+                              {customersId?.average_rating}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              Рейтинг
+                            </p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
                   </>
                 )}
-
-                {/* <Card>
-                  <CardContent className="pt-4">
-                    <div className="flex items-center justify-between">
-                      <Target className="h-8 w-8 text-blue-600" />
-                      <div className="text-right">
-                        <p className="text-2xl">
-                          {selectedEmployeeData.kpis.conversionRate.current}%
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          Конверсия
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card> */}
-
-                <Card>
-                  <CardContent className="pt-4">
-                    <div className="flex items-center justify-between">
-                      <Star className="h-8 w-8 text-yellow-600" />
-                      <div className="text-right">
-                        <p className="text-2xl">
-                          {
-                            selectedEmployeeData.kpis.customerSatisfaction
-                              .current
-                          }
-                        </p>
-                        <p className="text-xs text-muted-foreground">Рейтинг</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
               </div>
 
               {/* Detailed Tabs */}
@@ -1335,7 +1336,6 @@ export function KPI() {
                   <TabsTrigger value="performance">
                     Производительность
                   </TabsTrigger>
-                  {/* <TabsTrigger value="skills">Навыки</TabsTrigger> */}
                   <TabsTrigger value="history">История</TabsTrigger>
                   <TabsTrigger value="achievements">Достижения</TabsTrigger>
                 </TabsList>
@@ -1343,62 +1343,65 @@ export function KPI() {
                 {/* Performance Tab */}
                 <TabsContent value="performance" className="space-y-4">
                   <div className="grid grid-cols-1 gap-4">
-                    <Card>
-                      <CardHeader>
-                        <CardTitle className="text-base">
-                          Ежедневная активность (текущая неделя)
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <ResponsiveContainer width="100%" height={250}>
-                          <ComposedChart data={dailyPerformance}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="day" />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend />
-                            <Bar
-                              dataKey="звонки"
-                              fill="#3b82f6"
-                              name="Звонки"
-                            />
-                            {/* <Bar
-                              dataKey="встречи"
-                              fill="#10b981"
-                              name="Встречи"
-                            /> */}
-                            <Line
-                              type="monotone"
-                              dataKey="продажи"
-                              stroke="#E60012"
-                              strokeWidth={3}
-                              name="Продажи"
-                            />
-                          </ComposedChart>
-                        </ResponsiveContainer>
-                      </CardContent>
-                    </Card>
+                    {customersId?.role === "t" ? (
+                      <></>
+                    ) : (
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="text-base">
+                            Ежедневная активность (текущая неделя)
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <ResponsiveContainer width="100%" height={250}>
+                            <ComposedChart data={weeklyData?.data}>
+                              <CartesianGrid strokeDasharray="3 3" />
+                              <XAxis dataKey="day" />
+                              <YAxis />
+                              <Tooltip />
+                              <Legend />
+                              <Bar
+                                dataKey="calls"
+                                fill="#3b82f6"
+                                name="Звонки"
+                              />
+                              {/* <Line
+                                type="monotone"
+                                dataKey="продажи"
+                                stroke="#E60012"
+                                strokeWidth={3}
+                                name="Продажи"
+                              /> */}
+                            </ComposedChart>
+                          </ResponsiveContainer>
+                        </CardContent>
+                      </Card>
+                    )}
 
-                    <Card>
-                      <CardHeader>
-                        <CardTitle className="text-base">
-                          Недельные показатели
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <ResponsiveContainer width="100%" height={250}>
-                          <BarChart data={weeklyComparison}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="неделя" />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend />
-                            <Bar dataKey="план" fill="#cbd5e1" name="План" />
-                            <Bar dataKey="факт" fill="#E60012" name="Факт" />
-                          </BarChart>
-                        </ResponsiveContainer>
-                      </CardContent>
-                    </Card>
+                    {customersId?.role === "s" ? (
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="text-base">
+                            Недельные показатели
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <ResponsiveContainer width="100%" height={250}>
+                            <BarChart data={weeklyIndicatorsData}>
+                              <CartesianGrid strokeDasharray="3 3" />
+                              <XAxis dataKey="week" />
+                              <YAxis />
+                              <Tooltip />
+                              <Legend />
+                              <Bar dataKey="plan" fill="#cbd5e1" name="План" />
+                              <Bar dataKey="fact" fill="#E60012" name="Факт" />
+                            </BarChart>
+                          </ResponsiveContainer>
+                        </CardContent>
+                      </Card>
+                    ) : (
+                      <></>
+                    )}
                   </div>
 
                   {/* Detailed KPI Progress */}
@@ -1410,173 +1413,240 @@ export function KPI() {
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-6">
-                        {selectedEmployeeData.role ===
-                          "Менеджер по продажам" && (
+                        {customersId?.role === "sa" ? (
+                          "Super Admin"
+                        ) : customersId?.role === "s" ? (
                           <>
                             <div>
                               <div className="flex items-center justify-between mb-2">
                                 <div className="flex items-center gap-2">
                                   <Car className="h-5 w-5 text-[#E60012]" />
-                                  <span className="font-medium">
-                                    Продажи автомобилей
-                                  </span>
+                                  <span className="font-medium">Car</span>
                                 </div>
                                 <div className="flex items-center gap-3">
                                   <span className="text-2xl">
-                                    {selectedEmployeeData.kpis.carsSold.current}
+                                    {staffReports2Data?.sales?.value}
                                   </span>
                                   <span className="text-muted-foreground">
-                                    /{" "}
-                                    {selectedEmployeeData.kpis.carsSold.target}
+                                    / {staffReports2Data?.sales?.target}
                                   </span>
                                   <Badge
-                                    variant={
-                                      selectedEmployeeData.kpis.carsSold
-                                        .trend === "up"
-                                        ? "default"
-                                        : "destructive"
-                                    }
+                                  // variant={
+                                  //   selectedEmployeeData.kpis.carsSold
+                                  //     .trend === "up"
+                                  //     ? "default"
+                                  //     : "destructive"
+                                  // }
                                   >
-                                    {selectedEmployeeData.kpis.carsSold.change >
-                                    0
-                                      ? "+"
-                                      : ""}
-                                    {selectedEmployeeData.kpis.carsSold.change}%
+                                    {staffReports2Data?.sales?.percent}%
                                   </Badge>
                                 </div>
                               </div>
                               <Progress
-                                value={
-                                  (selectedEmployeeData.kpis.carsSold.current /
-                                    selectedEmployeeData.kpis.carsSold.target) *
-                                  100
-                                }
+                                value={staffReports2Data?.sales?.percent}
                                 className="h-3"
                               />
                               <p className="text-xs text-muted-foreground mt-1">
                                 Осталось до цели:{" "}
-                                {selectedEmployeeData.kpis.carsSold.target -
-                                  selectedEmployeeData.kpis.carsSold
-                                    .current}{" "}
-                                авто
+                                {staffReports2Data?.sales?.remaining} авто
                               </p>
                             </div>
 
                             <div>
                               <div className="flex items-center justify-between mb-2">
                                 <div className="flex items-center gap-2">
-                                  <DollarSign className="h-5 w-5 text-green-600" />
+                                  <DollarSignIcon className="h-5 w-5 text-yellow-600" />
                                   <span className="font-medium">Выручка</span>
                                 </div>
                                 <div className="flex items-center gap-3">
                                   <span className="text-2xl">
-                                    {selectedEmployeeData.kpis.revenue.current}м
+                                    {formatPriceNoT(
+                                      staffReports2Data?.revenue?.value
+                                        ? staffReports2Data?.revenue?.value
+                                        : 0
+                                    )}{" "}
+                                    {t("dashboard.cars.mln")}
+                                  </span>
+                                  /
+                                  {formatPriceNoT(
+                                    staffReports2Data?.revenue?.target
+                                      ? staffReports2Data?.revenue?.target
+                                      : 0
+                                  )}{" "}
+                                  {t("dashboard.cars.mln")}
+                                  <Badge
+                                  // variant={
+                                  //   selectedEmployeeData.kpis.carsSold
+                                  //     .trend === "up"
+                                  //     ? "default"
+                                  //     : "destructive"
+                                  // }
+                                  >
+                                    {staffReports2Data?.revenue?.percent}%
+                                  </Badge>
+                                </div>
+                              </div>
+
+                              <Progress
+                                value={staffReports2Data?.revenue?.percent}
+                                className="h-3"
+                              />
+                              <p className="text-xs text-muted-foreground mt-1">
+                                Средний чек::{" "}
+                                {formatPriceNoT(
+                                  staffReports2Data?.revenue?.average_check
+                                    ? staffReports2Data?.revenue?.average_check
+                                    : 0
+                                )}{" "}
+                                {t("dashboard.cars.mln")}
+                              </p>
+                            </div>
+
+                            <div>
+                              <div className="flex items-center justify-between mb-2">
+                                <div className="flex items-center gap-2">
+                                  <Star className="h-5 w-5 text-yellow-600" />
+                                  <span className="font-medium">
+                                    Удовлетворенность клиентов
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                  <span className="text-2xl">
+                                    {staffReports2Data?.rating?.value}
+                                  </span>
+                                  /{staffReports2Data?.rating?.target}
+                                  <Badge
+                                  // variant={
+                                  //   selectedEmployeeData.kpis.carsSold
+                                  //     .trend === "up"
+                                  //     ? "default"
+                                  //     : "destructive"
+                                  // }
+                                  >
+                                    {staffReports2Data?.rating?.percent}%
+                                  </Badge>
+                                </div>
+                              </div>
+
+                              <Progress
+                                value={staffReports2Data?.rating?.percent}
+                                className="h-3"
+                              />
+                            </div>
+                          </>
+                        ) : customersId?.role === "t" ? (
+                          <>
+                            <div>
+                              <div className="flex items-center justify-between mb-2">
+                                <div className="flex items-center gap-2">
+                                  <Wrench className="h-5 w-5 text-yellow-600" />
+                                  <span className="font-medium">
+                                    Удовлетворенность клиентов
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                  <span className="text-2xl">
+                                    {staffReports2Data?.rating?.value}
+                                  </span>
+                                  /{staffReports2Data?.rating?.target}
+                                  <Badge
+                                  // variant={
+                                  //   selectedEmployeeData.kpis.carsSold
+                                  //     .trend === "up"
+                                  //     ? "default"
+                                  //     : "destructive"
+                                  // }
+                                  >
+                                    {staffReports2Data?.rating?.percent}%
+                                  </Badge>
+                                </div>
+                              </div>
+
+                              <Progress
+                                value={staffReports2Data?.rating?.percent}
+                                className="h-3"
+                              />
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div>
+                              <div className="flex items-center justify-between mb-2">
+                                <div className="flex items-center gap-2">
+                                  <PhoneCall className="h-5 w-5 text-[#E60012]" />
+                                  <span className="font-medium">Call</span>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                  <span className="text-2xl">
+                                    {staffReports2Data?.calls?.value}
                                   </span>
                                   <span className="text-muted-foreground">
-                                    / {selectedEmployeeData.kpis.revenue.target}
-                                    м
+                                    / {staffReports2Data?.calls?.target}
                                   </span>
                                   <Badge
-                                    variant={
-                                      selectedEmployeeData.kpis.revenue
-                                        .trend === "up"
-                                        ? "default"
-                                        : "destructive"
-                                    }
+                                  // variant={
+                                  //   selectedEmployeeData.kpis.carsSold
+                                  //     .trend === "up"
+                                  //     ? "default"
+                                  //     : "destructive"
+                                  // }
                                   >
-                                    {selectedEmployeeData.kpis.revenue.change >
-                                    0
-                                      ? "+"
-                                      : ""}
-                                    {selectedEmployeeData.kpis.revenue.change}%
+                                    {staffReports2Data?.calls?.percent}%
                                   </Badge>
                                 </div>
                               </div>
                               <Progress
-                                value={
-                                  (selectedEmployeeData.kpis.revenue.current /
-                                    selectedEmployeeData.kpis.revenue.target) *
-                                  100
-                                }
+                                value={staffReports2Data?.calls?.percent}
                                 className="h-3"
                               />
                               <p className="text-xs text-muted-foreground mt-1">
-                                Средний чек:{" "}
-                                {(
-                                  selectedEmployeeData.kpis.revenue.current /
-                                  selectedEmployeeData.kpis.carsSold.current
-                                ).toFixed(1)}{" "}
-                                млн ₸
+                                Осталось до цели:{" "}
+                                {staffReports2Data?.calls?.remaining} авто
                               </p>
+                            </div>
+
+                            <div>
+                              <div className="flex items-center justify-between mb-2">
+                                <div className="flex items-center gap-2">
+                                  <Star className="h-5 w-5 text-yellow-600" />
+                                  <span className="font-medium">
+                                    Удовлетворенность клиентов
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                  <span className="text-2xl">
+                                    {staffReports2Data?.rating?.value}
+                                  </span>
+                                  /{staffReports2Data?.rating?.target}
+                                </div>
+                              </div>
+
+                              <Progress
+                                value={staffReports2Data?.rating?.percent}
+                                className="h-3"
+                              />
+
+                              {/* <div className="flex gap-1 mt-2">
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                  <Star
+                                    key={star}
+                                    className={`h-5 w-5 ${
+                                      star <=
+                                      Math.round(
+                                        selectedEmployeeData.kpis
+                                          .customerSatisfaction.current
+                                      )
+                                        ? "text-yellow-600 fill-yellow-600"
+                                        : "text-gray-300"
+                                    }`}
+                                  />
+                                ))}
+                              </div> */}
                             </div>
                           </>
                         )}
 
                         {/* <div>
-                          <div className="flex items-center justify-between mb-2">
-                            <div className="flex items-center gap-2">
-                              <Target className="h-5 w-5 text-blue-600" />
-                              <span className="font-medium">
-                                Конверсия лид → продажа
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-3">
-                              <span className="text-2xl">
-                                {
-                                  selectedEmployeeData.kpis.conversionRate
-                                    .current
-                                }
-                                %
-                              </span>
-                              {selectedEmployeeData.kpis.conversionRate.target >
-                                0 && (
-                                <>
-                                  <span className="text-muted-foreground">
-                                    /{" "}
-                                    {
-                                      selectedEmployeeData.kpis.conversionRate
-                                        .target
-                                    }
-                                    %
-                                  </span>
-                                  <Badge
-                                    variant={
-                                      selectedEmployeeData.kpis.conversionRate
-                                        .trend === "up"
-                                        ? "default"
-                                        : "destructive"
-                                    }
-                                  >
-                                    {selectedEmployeeData.kpis.conversionRate
-                                      .change > 0
-                                      ? "+"
-                                      : ""}
-                                    {
-                                      selectedEmployeeData.kpis.conversionRate
-                                        .change
-                                    }
-                                    %
-                                  </Badge>
-                                </>
-                              )}
-                            </div>
-                          </div>
-                          {selectedEmployeeData.kpis.conversionRate.target >
-                            0 && (
-                            <Progress
-                              value={
-                                (selectedEmployeeData.kpis.conversionRate
-                                  .current /
-                                  selectedEmployeeData.kpis.conversionRate
-                                    .target) *
-                                100
-                              }
-                              className="h-3"
-                            />
-                          )}
-                        </div> */}
-
-                        <div>
                           <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-2">
                               <Star className="h-5 w-5 text-yellow-600" />
@@ -1652,7 +1722,7 @@ export function KPI() {
                               />
                             ))}
                           </div>
-                        </div>
+                        </div> */}
                       </div>
                     </CardContent>
                   </Card>
@@ -1747,101 +1817,139 @@ export function KPI() {
 
                 {/* History Tab */}
                 <TabsContent value="history" className="space-y-4">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-base">
-                        История продаж (5 месяцев)
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <ResponsiveContainer width="100%" height={300}>
-                        <AreaChart data={selectedEmployeeData.monthlyData}>
-                          <CartesianGrid strokeDasharray="3 3" />
-                          <XAxis dataKey="month" />
-                          <YAxis yAxisId="left" />
-                          <YAxis yAxisId="right" orientation="right" />
-                          <Tooltip />
-                          <Legend />
-                          <Area
-                            yAxisId="left"
-                            type="monotone"
-                            dataKey="carsSold"
-                            stroke="#E60012"
-                            fill="#E60012"
-                            fillOpacity={0.3}
-                            name="Продажи"
-                          />
-                          <Area
-                            yAxisId="right"
-                            type="monotone"
-                            dataKey="revenue"
-                            stroke="#10b981"
-                            fill="#10b981"
-                            fillOpacity={0.3}
-                            name="Выручка (млн)"
-                          />
-                          <Line
-                            yAxisId="right"
-                            type="monotone"
-                            dataKey="target"
-                            stroke="#cbd5e1"
-                            strokeWidth={2}
-                            strokeDasharray="5 5"
-                            name="Цель"
-                          />
-                        </AreaChart>
-                      </ResponsiveContainer>
-                    </CardContent>
-                  </Card>
-
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {customersId?.role === "s" ? (
                     <Card>
                       <CardHeader>
                         <CardTitle className="text-base">
-                          Лучший месяц
+                          История продаж (5 месяцев)
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <div className="text-center">
-                          <p className="text-3xl text-[#E60012] mb-1">Май</p>
-                          <p className="text-muted-foreground text-sm">
-                            12 продаж / 420 млн ₸
-                          </p>
-                        </div>
+                        <ResponsiveContainer width="100%" height={300}>
+                          <AreaChart data={last5MonthsData}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="month" />
+                            <YAxis yAxisId="left" />
+                            <YAxis yAxisId="right" orientation="right" />
+                            <Tooltip
+                              formatter={(value: any, name: string) => {
+                                // revenue va target uchun formatPriceNoT funksiyasini ishlatish
+                                if (
+                                  name === "Выручка (млн)" ||
+                                  name === "Цель"
+                                ) {
+                                  return [formatPriceNoT(value), name];
+                                }
+                                return [value, name];
+                              }}
+                            />
+                            <Legend />
+                            <Area
+                              yAxisId="left"
+                              type="monotone"
+                              dataKey="sales_count"
+                              stroke="#E60012"
+                              fill="#E60012"
+                              fillOpacity={0.3}
+                              name="Продажи"
+                            />
+                            <Area
+                              yAxisId="right"
+                              type="monotone"
+                              dataKey="revenue"
+                              stroke="#10b981"
+                              fill="#10b981"
+                              fillOpacity={0.3}
+                              name="Выручка (млн)"
+                            />
+                            <Line
+                              yAxisId="right"
+                              type="monotone"
+                              dataKey="target"
+                              stroke="#cbd5e1"
+                              strokeWidth={2}
+                              strokeDasharray="5 5"
+                              name="Цель"
+                            />
+                          </AreaChart>
+                        </ResponsiveContainer>
                       </CardContent>
                     </Card>
+                  ) : (
+                    <></>
+                  )}
 
-                    <Card>
-                      <CardHeader>
-                        <CardTitle className="text-base">
-                          Средний результат
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="text-center">
-                          <p className="text-3xl text-blue-600 mb-1">10.2</p>
-                          <p className="text-muted-foreground text-sm">
-                            продаж в месяц
-                          </p>
-                        </div>
-                      </CardContent>
-                    </Card>
+                  {customersId?.role === "t" ? (
+                    ""
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="text-base">
+                            Лучший месяц
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-center">
+                            <p className="text-3xl text-[#E60012] mb-1">
+                              {yearly?.month?.slice(0, 3)}
+                            </p>
+                            <p className="text-muted-foreground text-sm">
+                              {yearly?.record_sales} продаж /
+                              {yearly?.revenue
+                                ? formatPriceNoT(yearly?.revenue)
+                                : ""}{" "}
+                              {t("dashboard.cars.mln")}
+                            </p>
+                          </div>
+                        </CardContent>
+                      </Card>
 
-                    <Card>
-                      <CardHeader>
-                        <CardTitle className="text-base">Тренд</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="text-center flex items-center justify-center gap-2">
-                          <TrendingUp className="h-8 w-8 text-green-600" />
-                          <p className="text-3xl text-green-600">+15%</p>
-                        </div>
-                        <p className="text-muted-foreground text-sm text-center mt-1">
-                          рост за квартал
-                        </p>
-                      </CardContent>
-                    </Card>
-                  </div>
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="text-base">
+                            Средний результат
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-center">
+                            <p className="text-3xl text-blue-600 mb-1">
+                              {yearly?.average_sales}
+                            </p>
+                            <p className="text-muted-foreground text-sm">
+                              продаж в месяц
+                            </p>
+                          </div>
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="text-base">Тренд</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-center flex items-center justify-center gap-2">
+                            {yearly?.quarterly_growth ? (
+                              <TrendingUp className="h-8 w-8 text-green-600" />
+                            ) : (
+                              <TrendingDown className="h-8 w-8 text-red-600" />
+                            )}
+
+                            {yearly?.quarterly_growth ? (
+                              <p className="text-3xl text-green-600">
+                                `${+yearly?.quarterly_growth}%`{" "}
+                              </p>
+                            ) : (
+                              <p className="text-3xl text-red-600">0</p>
+                            )}
+                          </div>
+                          <p className="text-muted-foreground text-sm text-center mt-1">
+                            рост за квартал
+                          </p>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  )}
                 </TabsContent>
 
                 {/* Achievements Tab */}
@@ -1889,77 +1997,93 @@ export function KPI() {
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <div className="space-y-3">
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm text-muted-foreground">
-                              Всего продано авто
-                            </span>
-                            <span className="font-medium text-lg">127</span>
+                        {customersId?.role === "sa" ? (
+                          "Super Admin"
+                        ) : customersId?.role === "s" ? (
+                          <div className="space-y-3">
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm text-muted-foreground">
+                                Всего продано
+                              </span>
+                              <span className="font-medium text-lg">
+                                {generalStatisticsData?.total_sold}
+                              </span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm text-muted-foreground">
+                                Общий доход
+                              </span>
+                              <span className="font-medium text-lg">
+                                {generalStatisticsData?.total_revenue}
+                              </span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm text-muted-foreground">
+                                Довольных клиентов
+                              </span>
+                              <span className="font-medium text-lg">
+                                {generalStatisticsData?.satisfied_clients}
+                              </span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm text-muted-foreground">
+                                Средний рейтинг
+                              </span>
+                              <span className="font-medium text-lg">
+                                {generalStatisticsData?.average_rating} ⭐
+                              </span>
+                            </div>
                           </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm text-muted-foreground">
-                              Общая выручка
-                            </span>
-                            <span className="font-medium text-lg">
-                              4,445 млн ₸
-                            </span>
+                        ) : customersId?.role === "t" ? (
+                          <div className="space-y-3">
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm text-muted-foreground">
+                                Завершенные услуги
+                              </span>
+                              <span className="font-medium text-lg">
+                                {generalStatisticsData?.completed_services}
+                              </span>
+                            </div>
+
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm text-muted-foreground">
+                                Средний рейтинг
+                              </span>
+                              <span className="font-medium text-lg">
+                                {generalStatisticsData?.average_rate} ⭐
+                              </span>
+                            </div>
                           </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm text-muted-foreground">
-                              Довольных клиентов
-                            </span>
-                            <span className="font-medium text-lg">119</span>
+                        ) : (
+                          <div className="space-y-3">
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm text-muted-foreground">
+                                Общее количество звонков
+                              </span>
+                              <span className="font-medium text-lg">
+                                {generalStatisticsData?.total_calls}
+                              </span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm text-muted-foreground">
+                                Довольных клиентов
+                              </span>
+                              <span className="font-medium text-lg">
+                                {generalStatisticsData?.positive_calls}
+                              </span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm text-muted-foreground">
+                                Средний рейтинг
+                              </span>
+                              <span className="font-medium text-lg">
+                                {generalStatisticsData?.average_score} ⭐
+                              </span>
+                            </div>
                           </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm text-muted-foreground">
-                              Средний рейтинг
-                            </span>
-                            <span className="font-medium text-lg">4.7 ⭐</span>
-                          </div>
-                        </div>
+                        )}
                       </CardContent>
                     </Card>
-
-                    {/* <Card>
-                      <CardHeader>
-                        <CardTitle className="text-base">Рекорды</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-3">
-                          <div className="flex items-center gap-2">
-                            <Trophy className="h-5 w-5 text-yellow-600" />
-                            <div>
-                              <p className="font-medium">
-                                Самый большой контракт
-                              </p>
-                              <p className="text-sm text-muted-foreground">
-                                52 млн ₸ - BYD Tang Premium
-                              </p>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Clock className="h-5 w-5 text-blue-600" />
-                            <div>
-                              <p className="font-medium">
-                                Самая быстрая сделка
-                              </p>
-                              <p className="text-sm text-muted-foreground">
-                                2 дня от лида до продажи
-                              </p>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Activity className="h-5 w-5 text-green-600" />
-                            <div>
-                              <p className="font-medium">Лучшая серия</p>
-                              <p className="text-sm text-muted-foreground">
-                                5 продаж подряд за неделю
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card> */}
                   </div>
                 </TabsContent>
               </Tabs>
