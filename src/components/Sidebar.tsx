@@ -38,14 +38,14 @@ export function Sidebar({ userRole, isMobile = false, onClose }: SidebarProps) {
       path: "/customers",
       label: t("nav.customers"),
       icon: Users,
-      roles: ["sa", "m", "cc"],
+      roles: ["sa", "s", "m", "cc"],
     },
     {
       id: "cars",
       path: "/cars",
       label: t("nav.warehouse"),
       icon: Car,
-      roles: ["sa", "m", "cc"],
+      roles: ["sa", "s", "m", "cc"],
     },
     {
       id: "calls",
@@ -59,7 +59,7 @@ export function Sidebar({ userRole, isMobile = false, onClose }: SidebarProps) {
       path: "/sales",
       label: t("nav.sales"),
       icon: TrendingUp,
-      roles: ["sa", "m"],
+      roles: ["sa", "s", "m"],
     },
     {
       id: "service",
@@ -73,7 +73,7 @@ export function Sidebar({ userRole, isMobile = false, onClose }: SidebarProps) {
       path: "/test-drive",
       label: t("nav.testDrive"),
       icon: Gauge,
-      roles: ["sa", "m", "cc"],
+      roles: ["sa", "s", "m", "cc"],
     },
     {
       id: "kpi",
