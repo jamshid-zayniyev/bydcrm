@@ -291,7 +291,11 @@
     "testDrive": "Test-drive",
     "upselling": "Qo‘shimcha sotuvlar",
     "pcs": "dona",
-    "score": "Umumiy ball:"
+    "score": "Umumiy ball:",
+    "5Month": "Savdo dinamikasi (5 oy)",
+    "salesCount": "Sotilgan avtomobillar soni",
+    "totalRevenue": "Tushum",
+    "averageRating": "Reyting"
   },
   "ai": {
     "title": "AI Tavsiyalari",

@@ -248,7 +248,16 @@ export function Customers() {
                         />
                       </div>
                     </div>
-                    {customer.status ? (
+
+                    <span
+                      className={`inline-block px-3 py-1 rounded-lg text-xs border ${
+                        statusColors[customer.status]
+                      }`}
+                    >
+                      {customer.status}
+                    </span>
+
+                    {/* {customer.status ? (
                       <span
                         className={`inline-block px-3 py-1 rounded-lg text-xs border ${
                           statusColors[customer.status]
@@ -268,7 +277,7 @@ export function Customers() {
                       <span className="inline-block px-3 py-1 rounded-lg text-xs border bg-primary text-primary-foreground">
                         {t("noInformation")}
                       </span>
-                    )}
+                    )} */}
                   </div>
                 </div>
 

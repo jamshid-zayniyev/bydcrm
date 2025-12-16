@@ -872,7 +872,7 @@ export function KPI() {
 
                   <div className="pt-4 border-t">
                     <p className="text-sm mb-3 font-medium">
-                      Динамика продаж (5 месяцев)
+                      {t("kpi.5Month")}
                     </p>
                     <ResponsiveContainer width="100%" height={120}>
                       <AreaChart data={employee.last_5_months}>
@@ -975,7 +975,7 @@ export function KPI() {
                               {customersId?.sales_count}
                             </p>
                             <p className="text-xs text-muted-foreground">
-                              Продано авто
+                              {t("kpi.salesCount")}
                             </p>
                           </div>
                         </div>
@@ -994,7 +994,7 @@ export function KPI() {
                               {t("dashboard.cars.mln")}
                             </p>
                             <p className="text-xs text-muted-foreground">
-                              Выручка
+                              {t("kpi.totalRevenue")}
                             </p>
                           </div>
                         </div>
@@ -1029,7 +1029,7 @@ export function KPI() {
                               {customersId?.average_rating}
                             </p>
                             <p className="text-xs text-muted-foreground">
-                              Рейтинг
+                              {t("kpi.avergeRating")}
                             </p>
                           </div>
                         </div>
@@ -1048,7 +1048,7 @@ export function KPI() {
                               {customersId?.calls_count}
                             </p>
                             <p className="text-xs text-muted-foreground">
-                              Продано авто
+                              {t("kpi?.salesCount")}
                             </p>
                           </div>
                         </div>
@@ -1064,7 +1064,7 @@ export function KPI() {
                               {customersId?.average_rating}
                             </p>
                             <p className="text-xs text-muted-foreground">
-                              Рейтинг
+                              {t("kpi.avergeRating")}
                             </p>
                           </div>
                         </div>
