@@ -7,7 +7,7 @@ import {
 } from "../utils/token";
 import i18n from "../i18n/i18n";
 
-const API_BASE_URL = "https://bydats.pythonanywhere.com";
+export const API_BASE_URL = "https://api.byd-karshi.uz";
 
 export const api = axios.create({
   baseURL: `${API_BASE_URL}/api/v1`,
@@ -23,10 +23,10 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    
+
     // Accept-language header qo'shamiz
     const currentLanguage = i18n.language;
-    config.headers['Accept-language'] = currentLanguage;
+    config.headers["Accept-language"] = currentLanguage;
 
     return config;
   },
@@ -47,9 +47,12 @@ api.interceptors.response.use(
       try {
         const refreshToken = getRefreshToken();
         if (refreshToken) {
-          const response = await axios.post(`${API_BASE_URL}/api/v1/users/token/refresh/`, {
-            refresh: refreshToken,
-          });
+          const response = await axios.post(
+            `${API_BASE_URL}/api/v1/users/token/refresh/`,
+            {
+              refresh: refreshToken,
+            }
+          );
 
           const { access } = response.data;
           setTokens(access, refreshToken);

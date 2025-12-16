@@ -230,7 +230,15 @@ const Cars = () => {
                     <div className="flex items-start justify-between mb-2">
                       <div>
                         <h4 className="text-gray-900 mb-1">{vehicle.model}</h4>
-                        <p className="text-xs text-gray-500">
+                        <p
+                          className="text-xs text-gray-500"
+                          style={{
+                            display: "-webkit-box",
+                            WebkitBoxOrient: "vertical",
+                            WebkitLineClamp: 3,
+                            overflow: "hidden",
+                          }}
+                        >
                           {vehicle.description}
                         </p>
                       </div>

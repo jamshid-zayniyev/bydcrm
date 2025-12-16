@@ -88,8 +88,9 @@ export const useCustomers = () => {
       }
       closeModal();
       fetchUsers();
-    } catch (err) {
-      window.alert(err);
+    } catch (err: any) {
+      window.alert(err?.response?.data?.phone_number[0]);
+      // window.alert(err.phone_number);
     } finally {
       setLoading(false);
     }

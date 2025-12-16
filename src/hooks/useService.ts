@@ -102,7 +102,7 @@ export const useService = () => {
 
   const getEmployees = async () => {
     try {
-      const { data } = await api.get("/users/employees/");
+      const { data } = await api.get("/users/technicians/");
       setEmployees(data);
     } catch (error) {
       console.error("Error fetching cars:", error);

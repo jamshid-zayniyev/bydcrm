@@ -206,7 +206,17 @@ export function Sales() {
                       <TrendingUp className="w-5 h-5 text-[#E60012]" />
                     </div>
                     <div>
-                      <h4 className="text-gray-900">{sale.customer_name}</h4>
+                      <h4
+                        className="text-gray-900"
+                        style={{
+                          width: "200px",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                      >
+                        {sale.customer_name}
+                      </h4>
                       <p className="text-sm text-gray-500">{sale.car}</p>
                     </div>
                   </div>

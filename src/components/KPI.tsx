@@ -644,7 +644,7 @@ export function KPI() {
                     <div className="flex items-center gap-3">
                       <div className="text-4xl">
                         <img
-                          src={`${employee.avatar}`}
+                          src={`${employee.avatar ? employee.avatar : NoUser}`}
                           alt={`${employee.full_name}`}
                           style={{
                             width: "36px",

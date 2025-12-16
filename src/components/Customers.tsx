@@ -211,7 +211,17 @@ export function Customers() {
                   <div className="flex-1">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-gray-900">{customer.full_name}</h3>
+                        <h3
+                          className="text-gray-900"
+                          style={{
+                            width: "200px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {customer.full_name}
+                        </h3>
                         {/* {customer.sentiment && (
                           <span className="text-lg">
                             {sentimentIcons[customer.sentiment]}
@@ -529,12 +539,20 @@ export function Customers() {
 
       {/* Customer Detail Modal */}
       {selectedCustomer && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 bg-black/50 backdrop-blur">
           <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-gray-200">
               <div className="flex items-start justify-between">
                 <div>
-                  <h2 className="text-gray-900 mb-2">
+                  <h2
+                    className="text-gray-900 mb-2"
+                    style={{
+                      width: "200px",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
                     {selectedCustomer.full_name}
                   </h2>
                 </div>
@@ -619,7 +637,15 @@ export function Customers() {
                   <h3 className="text-gray-900 mb-2">
                     {t("customers.person.notes")}
                   </h3>
-                  <p className="text-sm text-gray-600">
+                  <p
+                    className="text-sm text-gray-600"
+                    style={{
+                      display: "-webkit-box",
+                      WebkitBoxOrient: "vertical",
+                      WebkitLineClamp: 3,
+                      overflow: "hidden",
+                    }}
+                  >
                     {selectedCustomer.notes}
                   </p>
                 </div>

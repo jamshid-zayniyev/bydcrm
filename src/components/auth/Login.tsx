@@ -139,24 +139,6 @@ export function Login() {
               </div>
             </div>
 
-            <div className="mt-4 bg-blue-50 border border-blue-100 rounded-lg p-3 text-xs">
-              <h4 className="font-medium text-blue-800 mb-1">Demo Loginlar:</h4>
-              <div className="text-blue-700 space-y-1">
-                <p>
-                  <strong>Super Admin:</strong> admin / 123
-                </p>
-                <p>
-                  <strong>Saller:</strong> employee1 / user1234
-                </p>
-                <p>
-                  <strong>Manager:</strong> manager / user1234
-                </p>
-                <p>
-                  <strong>Call-Center:</strong> call1 / user1234
-                </p>
-              </div>
-            </div>
-
             <button
               type="submit"
               disabled={isLoading}

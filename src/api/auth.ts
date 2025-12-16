@@ -1,10 +1,9 @@
 import { LoginCredentials, AuthResponse, User } from "../types/auth";
-
-const API_BASE_URL = "https://bydats.pythonanywhere.com/api/v1";
+import { API_BASE_URL } from "./axios";
 
 export const authApi = {
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
-    const response = await fetch(`${API_BASE_URL}/users/login/`, {
+    const response = await fetch(`${API_BASE_URL}/api/v1/users/login/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

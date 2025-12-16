@@ -251,7 +251,7 @@ export function Service() {
                           </div>
                           <div>
                             <h4 className="text-gray-900">
-                              {request.customer_name}
+                              {request.customer_id}
                             </h4>
                             <p className="text-sm text-gray-500">
                               {request.vehicle}
