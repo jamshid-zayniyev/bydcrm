@@ -38,7 +38,7 @@ export function Sidebar({ userRole, isMobile = false, onClose }: SidebarProps) {
       path: "/customers",
       label: t("nav.customers"),
       icon: Users,
-      roles: ["sa", "s", "m", "cc"],
+      roles: ["sa", "s", "m", "cc", "t"],
     },
     {
       id: "cars",
@@ -66,7 +66,7 @@ export function Sidebar({ userRole, isMobile = false, onClose }: SidebarProps) {
       path: "/service",
       label: t("nav.service"),
       icon: Wrench,
-      roles: ["sa", "m", "cc"],
+      roles: ["sa", "m", "cc", "t"],
     },
     {
       id: "test-drive",
@@ -117,6 +117,8 @@ export function Sidebar({ userRole, isMobile = false, onClose }: SidebarProps) {
       ? "Seller"
       : role === "m"
       ? "Manager"
+      : role === "t"
+      ? "Technician"
       : "Call-Center";
   };
 

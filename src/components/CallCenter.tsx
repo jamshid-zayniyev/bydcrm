@@ -78,10 +78,14 @@ export function CallCenter() {
     );
   }
 
-  console.log(callStatistics);
-
   return (
     <div className="space-y-6">
+      {/* <div className="fixed inset-0 flex items-center justify-center p-4 z-50 bg-black/50 backdrop-blur">
+        <div className="text-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto text-center">
+          <b>Dashturlash jarayonida</b>
+        </div>
+      </div> */}
+
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-gray-900 mb-1">{t("callCenter.call")}</h2>

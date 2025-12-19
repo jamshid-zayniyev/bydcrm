@@ -50,9 +50,7 @@ const Variants = ({
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>
-            {selected === null
-              ? "Yangi xususiyat qo‘shish"
-              : "Xususiyatni tahrirlash"}
+            {selected === null ? t("cars.newAdd") : t("cars.carEdit")}
           </DialogTitle>
         </DialogHeader>
 
@@ -62,10 +60,12 @@ const Variants = ({
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm text-gray-700 mb-2">series</label>
+              <label className="block text-sm text-gray-700 mb-2">
+                {t("cars.series")}
+              </label>
               <select
                 {...register("series", {
-                  required: "Seriyani tanlash majburiy", // Zod yoki RHF validation
+                  required: t("cars.seriesSelectZod"), // Zod yoki RHF validation
                 })}
                 className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012] ${
                   errors.series
@@ -76,7 +76,7 @@ const Variants = ({
               >
                 {/* Placeholder – tanlanmagan holatda ko‘rinadi */}
                 <option value="" disabled selected hidden>
-                  Seriyani tanlang...
+                  {t("cars.serieSelect")}
                 </option>
 
                 {/* Ma'lumotlar yuklanmagan yoki bo'sh bo'lsa */}
@@ -87,20 +87,22 @@ const Variants = ({
                     </option>
                   ))
                 ) : (
-                  <option disabled>Yuklanmoqda yoki ma'lumot yo‘q</option>
+                  <option disabled>{t("cars.addSave")}</option>
                 )}
               </select>
 
               {/* XATO XABARI – SIZ SO‘RAGAN QISM */}
               {errors.series && (
                 <p className="text-[#E60012] text-sm mt-1">
-                  {errors.series.message || "Seriyani tanlash majburiy"}
+                  {errors.series.message || t("cars.seriesSelectZod")}
                 </p>
               )}
             </div>
 
             <div>
-              <label className="block text-sm text-gray-700 mb-2">Color</label>
+              <label className="block text-sm text-gray-700 mb-2">
+                {t("cars.color")}
+              </label>
               <Controller
                 name="color"
                 control={control}
@@ -110,7 +112,7 @@ const Variants = ({
                       colors={colors}
                       value={field.value ? field.value.toString() : ""}
                       onChange={field.onChange}
-                      placeholder="Rang tanlang..."
+                      placeholder={t("cars.colorSelect1")}
                       errorsColor={!!errors.color}
                     />
                     {errors.color && (
@@ -125,85 +127,29 @@ const Variants = ({
 
             <div>
               <label className="block text-sm text-gray-700 mb-2">
-                battery_uz
+                {t("cars.power")}
               </label>
               <input
-                {...register("battery_uz")}
-                placeholder="total_available"
+                {...register("battery")}
                 className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
-                  errors.battery_uz
+                  errors.battery
                     ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
                     : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
                 }`}
                 type="text"
               />
-              {errors.battery_uz && (
-                <p className="text-[#E60012]">{errors.battery_uz.message}</p>
+              {errors.battery && (
+                <p className="text-[#E60012]">{errors.battery.message}</p>
               )}
             </div>
 
             <div>
               <label className="block text-sm text-gray-700 mb-2">
-                battery_ru
+                {t("cars.priceMoney")}
               </label>
-              <input
-                {...register("battery_ru")}
-                placeholder="total_available"
-                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
-                  errors.battery_ru
-                    ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
-                    : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
-                }`}
-                type="text"
-              />
-              {errors.battery_ru && (
-                <p className="text-[#E60012]">{errors.battery_ru.message}</p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm text-gray-700 mb-2">
-                range_uz
-              </label>
-              <input
-                {...register("range_uz")}
-                placeholder="total_available"
-                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
-                  errors.range_uz
-                    ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
-                    : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
-                }`}
-                type="text"
-              />
-              {errors.range_uz && (
-                <p className="text-[#E60012]">{errors.range_uz.message}</p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm text-gray-700 mb-2">
-                range_ru
-              </label>
-              <input
-                {...register("range_ru")}
-                placeholder="total_available"
-                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
-                  errors.range_ru
-                    ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
-                    : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
-                }`}
-                type="text"
-              />
-              {errors.range_ru && (
-                <p className="text-[#E60012]">{errors.range_ru.message}</p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm text-gray-700 mb-2">price</label>
               <input
                 {...register("price")}
-                placeholder="total_available"
+                placeholder="200,000,000"
                 className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
                   errors.price
                     ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
@@ -238,10 +184,12 @@ const Variants = ({
             </div>
 
             <div>
-              <label className="block text-sm text-gray-700 mb-2">stock</label>
+              <label className="block text-sm text-gray-700 mb-2">
+                {t("cars.count")}
+              </label>
               <input
                 {...register("stock")}
-                placeholder="total_available"
+                placeholder="7"
                 className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
                   errors.stock
                     ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
@@ -284,7 +232,7 @@ const Variants = ({
               className="flex-1 px-4 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors"
               // disabled={uploadLoading}
             >
-              Saqlash
+              {t("formSave")}
               {/* {uploadLoading ? "Yuklanmoqda..." : "Saqlash"} */}
             </button>
             <button
@@ -293,8 +241,7 @@ const Variants = ({
               onClick={() => onOpenChange(false)}
               className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
             >
-              Bekor qilish
-              {/* {t("customers.addClientObj.cancel")} */}
+              {t("customers.addClientObj.cancel")}
             </button>
           </div>
         </form>

@@ -7,7 +7,8 @@ import {
 } from "../utils/token";
 import i18n from "../i18n/i18n";
 
-export const API_BASE_URL = "https://api.byd-karshi.uz";
+// export const API_BASE_URL = "https://api.byd-karshi.uz";
+export const API_BASE_URL = "https://bydats.pythonanywhere.com";
 
 export const api = axios.create({
   baseURL: `${API_BASE_URL}/api/v1`,

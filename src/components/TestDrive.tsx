@@ -136,9 +136,9 @@ const TestDrive = () => {
           className="grid w-full mb-3"
           style={{ gridTemplateColumns: "repeat(3, minmax(0, 1fr))" }}
         >
-          <TabsTrigger value="p">Jarayonda</TabsTrigger>
-          <TabsTrigger value="pl">Rejalashtirilgan</TabsTrigger>
-          <TabsTrigger value="c">Tugallangan</TabsTrigger>
+          <TabsTrigger value="p">{t("test-drive.PENDING")}</TabsTrigger>
+          <TabsTrigger value="pl">{t("test-drive.PLANNED")}</TabsTrigger>
+          <TabsTrigger value="c">{t("test-drive.COMPLETED")}</TabsTrigger>
         </TabsList>
         <TabsContent value="p" className="space-y-4">
           {loading ? (
@@ -163,7 +163,15 @@ const TestDrive = () => {
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2 mb-1">
-                            <h3 className="text-gray-900">
+                            <h3
+                              className="text-gray-900"
+                              style={{
+                                width: "200px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                              }}
+                            >
                               {customer.full_name}
                             </h3>
                           </div>
@@ -300,7 +308,15 @@ const TestDrive = () => {
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2 mb-1">
-                            <h3 className="text-gray-900">
+                            <h3
+                              className="text-gray-900"
+                              style={{
+                                width: "200px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                              }}
+                            >
                               {customer.full_name}
                             </h3>
                           </div>
@@ -436,7 +452,15 @@ const TestDrive = () => {
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2 mb-1">
-                            <h3 className="text-gray-900">
+                            <h3
+                              className="text-gray-900"
+                              style={{
+                                width: "200px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                              }}
+                            >
                               {customer.full_name}
                             </h3>
                           </div>
@@ -692,9 +716,9 @@ const TestDrive = () => {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
                     style={{ height: "39px" }}
                   >
-                    <option value={"p"}>PENDING</option>
-                    <option value={"pl"}>PLANNED</option>
-                    <option value={"c"}>COMPLETED</option>
+                    <option value={"p"}>{t("test-drive.PENDING")}</option>
+                    <option value={"pl"}> {t("test-drive.PLANNED")}</option>
+                    <option value={"c"}>{t("test-drive.COMPLETED")}</option>
                   </select>
                 </div>
               </div>

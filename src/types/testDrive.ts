@@ -2,7 +2,7 @@ import z from "zod";
 
 export const createTestDriveSchema = (t: any) =>
   z.object({
-    customer: z.string().min(1, "Mijozni tanlash majburiy"),
+    customer: z.string().min(1, t("test-drive.customerError")),
     email: z
       .string()
       .optional()

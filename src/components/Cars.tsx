@@ -623,9 +623,9 @@ const Cars = () => {
                             <th className="text-left py-3 px-4 text-xs text-gray-600">
                               {t("dashboard.cars.availableForm.battery")}
                             </th>
-                            <th className="text-left py-3 px-4 text-xs text-gray-600">
-                              {t("dashboard.cars.availableForm.stock")}
-                            </th>
+                            {/* <th className="text-left py-3 px-4 text-xs text-gray-600">
+                              {t("dashboard.cars.availableForm.stock")}...
+                            </th> */}
                             <th className="text-right py-3 px-4 text-xs text-gray-600">
                               {t("dashboard.cars.availableForm.price")}
                             </th>
@@ -671,9 +671,9 @@ const Cars = () => {
                                     <td className="py-3 px-4 text-gray-700 text-xs">
                                       {variant.battery}
                                     </td>
-                                    <td className="py-3 px-4 text-gray-700 text-xs">
+                                    {/* <td className="py-3 px-4 text-gray-700 text-xs">
                                       {variant.range}
-                                    </td>
+                                    </td> */}
                                     <td className="py-3 px-4 text-right text-[#E60012]">
                                       {formatPrice(variant.price)}
                                     </td>
@@ -767,14 +767,35 @@ const Cars = () => {
                     {t("cars.price")}
                   </label>
                   <input
-                    {...register("base_price", { valueAsNumber: true })}
+                    {...register("base_price")}
                     placeholder={t("cars.pricePlaceholder")}
                     className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
                       errors.base_price
                         ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
                         : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
                     }`}
-                    type="number"
+                    type="text"
+                    onChange={(e) => {
+                      // Faqat raqamlarni qoldirish
+                      let value = e.target.value.replace(/,/g, "");
+
+                      // Agar son bo'lsa, formatlash
+                      if (value && !isNaN(Number(value))) {
+                        // Vergul bilan formatlash
+                        const formatted = Number(value).toLocaleString("en-US");
+                        e.target.value = formatted;
+
+                        // React Hook Form uchun asl qiymatni saqlash
+                        e.target.setAttribute("data-value", value);
+                      }
+                    }}
+                    onBlur={(e) => {
+                      // Blur paytida asl qiymatni register ga yuborish
+                      const rawValue = e.target.value.replace(/,/g, "");
+                      register("base_price").onChange({
+                        target: { value: rawValue, name: "base_price" },
+                      });
+                    }}
                   />
                   {errors.base_price && (
                     <p className="text-[#E60012]">

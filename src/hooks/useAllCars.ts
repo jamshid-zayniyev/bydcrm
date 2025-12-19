@@ -31,7 +31,7 @@ export const useAllCars = () => {
     resolver: zodResolver(carSchema),
     defaultValues: {
       model: "",
-      base_price: 0,
+      base_price: "",
       total_available: 0,
       description_uz: "",
       description_ru: "",
@@ -122,7 +122,7 @@ export const useAllCars = () => {
 
     reset({
       model: "",
-      base_price: 0,
+      base_price: "",
       total_available: 0,
       description_uz: "",
       description_ru: "",

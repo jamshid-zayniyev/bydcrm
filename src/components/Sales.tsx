@@ -164,7 +164,7 @@ export function Sales() {
             </p>
           </div>
           <p className="text-gray-900">
-            {formatAmount(+salesStatistics?.completed_trade)}
+            {salesStatistics?.completed_trade} {t("pcs")}
           </p>
         </div>
 

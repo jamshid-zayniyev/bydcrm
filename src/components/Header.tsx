@@ -42,6 +42,8 @@ export function Header({ onMenuClick }: HeaderProps) {
       ? "Seller"
       : role === "m"
       ? "Manager"
+      : role === "t"
+      ? "Technician"
       : "Call-Center";
   };
 

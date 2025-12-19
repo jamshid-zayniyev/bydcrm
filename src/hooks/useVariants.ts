@@ -40,10 +40,7 @@ export const useVariants = (carId?: number) => {
     defaultValues: {
       series: "",
       // color: "",
-      battery_uz: "",
-      battery_ru: "",
-      range_uz: "",
-      range_ru: "",
+      battery: "",
       price: "",
       stock: "",
     },
@@ -102,10 +99,7 @@ export const useVariants = (carId?: number) => {
     reset({
       series: "",
       color: "",
-      battery_uz: "",
-      battery_ru: "",
-      range_uz: "",
-      range_ru: "",
+      battery: "",
       price: "",
       stock: "",
     });

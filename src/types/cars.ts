@@ -9,7 +9,8 @@ export interface CarsColor {
 export const createCarSchema = (t: any) =>
   z.object({
     model: z.string().min(1, t("cars.modelError")),
-    base_price: z.number().positive(t("cars.priceError")),
+    base_price: z.string().min(1, t("cars.priceError")),
+
     total_available: z.number().positive(t("cars.totalAvailableError")),
     description_uz: z.string().min(1, t("cars.descriptionUzError")),
     description_ru: z.string().min(1, t("cars.descriptionRuError")),
@@ -30,8 +31,8 @@ export type CarSchema = z.infer<ReturnType<typeof createCarSchema>>;
 
 export const createFeaturesSchema = (t: any) =>
   z.object({
-    description_uz: z.string().min(1, "description_uz nomi majburiy"),
-    description_ru: z.string().min(1, "description_ru nomi majburiy"),
+    description_uz: z.string().min(1, t("cars.descriptionUzError")),
+    description_ru: z.string().min(1, t("cars.descriptionRuError")),
   });
 export type FeaturesSchema = z.infer<ReturnType<typeof createFeaturesSchema>>;
 
@@ -42,14 +43,11 @@ export interface GetFeatures {
 
 export const createVariantsSchema = (t: any) =>
   z.object({
-    series: z.string().min(1, "Series tanlash majburiy"),
-    color: z.string().min(1, "Rangni tanlash majburiy"),
-    battery_uz: z.string().min(1, "battery_uz nomi majburiy"),
-    battery_ru: z.string().min(1, "battery_ru nomi majburiy"),
-    range_uz: z.string().min(1, "range_uz nomi majburiy"),
-    range_ru: z.string().min(1, "range_ru nomi majburiy"),
-    price: z.string().min(1, "price nomi majburiy"),
-    stock: z.string().min(1, "Summa kiritishlikki shart!"),
+    series: z.string().min(1, t("cars.seriesError")),
+    color: z.string().min(1, t("cars.colorError")),
+    battery: z.string().min(1, t("cars.batteryError")),
+    price: z.string().min(1, t("cars.priceError")),
+    stock: z.string().min(1, t("cars.stockError")),
   });
 export type VariantsSchema = z.infer<ReturnType<typeof createVariantsSchema>>;
 

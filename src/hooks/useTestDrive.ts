@@ -87,7 +87,9 @@ export const useTestDrive = (tabsValue?: string) => {
     try {
       const { data } = await api.get("/users/employees/");
       setEmployees(data);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const getCustomersList = async () => {
