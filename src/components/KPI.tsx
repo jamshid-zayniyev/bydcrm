@@ -48,6 +48,7 @@ import { usePieChart } from "@/hooks/usePieChart";
 import formatCurrency from "@/hooks/formatCurrents";
 import { NoUser } from "@/assets";
 import { formatPriceNoT } from "@/hooks/mlnNumberNoT";
+import Loading from "./ui/loading";
 
 interface SalesmanKPI {
   id: string;
@@ -124,6 +125,7 @@ export function KPI() {
     last5MonthsData,
     staffReports2Data,
     generalStatisticsData,
+    loading,
   } = useKPI();
   const { bestSeller } = usePieChart();
 
@@ -925,455 +927,487 @@ export function KPI() {
         onOpenChange={() => setSelectedEmployee(null)}
       >
         <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-3">
-              <span className="text-4xl">
-                <img
-                  src={`${customersId?.avatar ? customersId?.avatar : NoUser}`}
-                  alt={`${customersId?.full_name}`}
-                  className="rounded-full"
-                  style={{ width: "36px", height: "36px" }}
-                />
-              </span>
-              <div>
-                <h2 className="text-2xl">{customersId?.full_name}</h2>
-                <p className="text-muted-foreground text-base font-normal">
-                  {customersId?.role === "sa"
-                    ? "Super Admin"
-                    : customersId?.role === "s"
-                    ? "Seller"
-                    : customersId?.role === "t"
-                    ? "Technikal"
-                    : "Call-Center"}
-                </p>
-              </div>
-              <Badge
-                className={`ml-auto ${getScoreBadgeColor(
-                  customersId?.rating_percent || 0
-                )}`}
-                variant="outline"
-              >
-                {t("kpi.score")} {customersId?.rating_percent}%
-              </Badge>
-            </DialogTitle>
-          </DialogHeader>
+          {loading ? (
+            <Loading />
+          ) : (
+            <>
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-3">
+                  <span className="text-4xl">
+                    <img
+                      src={`${
+                        customersId?.avatar ? customersId?.avatar : NoUser
+                      }`}
+                      alt={`${customersId?.full_name}`}
+                      className="rounded-full"
+                      style={{ width: "36px", height: "36px" }}
+                    />
+                  </span>
+                  <div>
+                    <h2 className="text-2xl">{customersId?.full_name}</h2>
+                    <p className="text-muted-foreground text-base font-normal">
+                      {customersId?.role === "sa"
+                        ? "Super Admin"
+                        : customersId?.role === "s"
+                        ? "Seller"
+                        : customersId?.role === "t"
+                        ? "Technikal"
+                        : "Call-Center"}
+                    </p>
+                  </div>
+                  <Badge
+                    className={`ml-auto ${getScoreBadgeColor(
+                      customersId?.rating_percent || 0
+                    )}`}
+                    variant="outline"
+                  >
+                    {t("kpi.score")} {customersId?.rating_percent}%
+                  </Badge>
+                </DialogTitle>
+              </DialogHeader>
 
-          {selectedEmployeeData && (
-            <div className="space-y-6 mt-4">
-              {/* Quick Stats */}
-              <div className="grid grid-cols-2 gap-4">
-                {customersId?.role === "sa" ? (
-                  "Super Admin"
-                ) : customersId?.role === "s" ? (
-                  <>
-                    <Card>
-                      <CardContent className="pt-4">
-                        <div className="flex items-center justify-between">
-                          <Car className="h-8 w-8 text-[#E60012]" />
-                          <div className="text-right">
-                            <p className="text-2xl">
-                              {customersId?.sales_count}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              {t("kpi.salesCount")}
-                            </p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
+              {selectedEmployeeData && (
+                <div className="space-y-6 mt-4">
+                  {/* Quick Stats */}
+                  <div className="grid grid-cols-2 gap-4">
+                    {customersId?.role === "sa" ? (
+                      "Super Admin"
+                    ) : customersId?.role === "s" ? (
+                      <>
+                        <Card>
+                          <CardContent className="pt-4">
+                            <div className="flex items-center justify-between">
+                              <Car className="h-8 w-8 text-[#E60012]" />
+                              <div className="text-right">
+                                <p className="text-2xl">
+                                  {customersId?.sales_count}
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                  {t("kpi.salesCount")}
+                                </p>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
 
-                    <Card>
-                      <CardContent className="pt-4">
-                        <div className="flex items-center justify-between">
-                          <DollarSign className="h-8 w-8 text-green-600" />
-                          <div className="text-right">
-                            <p className="text-2xl">
-                              {(customersId?.total_revenue / 1000000).toFixed(
-                                0
-                              )}{" "}
-                              {t("dashboard.cars.mln")}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              {t("kpi.totalRevenue")}
-                            </p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
+                        <Card>
+                          <CardContent className="pt-4">
+                            <div className="flex items-center justify-between">
+                              <DollarSign className="h-8 w-8 text-green-600" />
+                              <div className="text-right">
+                                <p className="text-2xl">
+                                  {(
+                                    customersId?.total_revenue / 1000000
+                                  ).toFixed(0)}{" "}
+                                  {t("dashboard.cars.mln")}
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                  {t("kpi.totalRevenue")}
+                                </p>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
 
-                    <Card>
-                      <CardContent className="pt-4">
-                        <div className="flex items-center justify-between">
-                          <Star className="h-8 w-8 text-yellow-600" />
-                          <div className="text-right">
-                            <p className="text-2xl">
-                              {customersId?.average_rating}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              Рейтинг
-                            </p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </>
-                ) : customersId?.role === "t" ? (
-                  <>
-                    <Card>
-                      <CardContent className="pt-4">
-                        <div className="flex items-center justify-between">
-                          <Wrench className="h-8 w-8 text-[#E60012]" />
+                        <Card>
+                          <CardContent className="pt-4">
+                            <div className="flex items-center justify-between">
+                              <Star className="h-8 w-8 text-yellow-600" />
+                              <div className="text-right">
+                                <p className="text-2xl">
+                                  {customersId?.average_rating}
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                  Рейтинг
+                                </p>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </>
+                    ) : customersId?.role === "t" ? (
+                      <>
+                        <Card>
+                          <CardContent className="pt-4">
+                            <div className="flex items-center justify-between">
+                              <Wrench className="h-8 w-8 text-[#E60012]" />
 
-                          <div className="text-right">
-                            <p className="text-2xl">
-                              {customersId?.average_rating}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              {t("kpi.avergeRating")}
-                            </p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </>
-                ) : (
-                  <>
-                    <Card>
-                      <CardContent className="pt-4">
-                        <div className="flex items-center justify-between">
-                          <PhoneCall className="h-8 w-8 text-[#E60012]" />
-
-                          <div className="text-right">
-                            <p className="text-2xl">
-                              {customersId?.calls_count}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              {t("kpi?.salesCount")}
-                            </p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-
-                    <Card>
-                      <CardContent className="pt-4">
-                        <div className="flex items-center justify-between">
-                          <Star className="h-8 w-8 text-yellow-600" />
-                          <div className="text-right">
-                            <p className="text-2xl">
-                              {customersId?.average_rating}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              {t("kpi.avergeRating")}
-                            </p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </>
-                )}
-              </div>
-
-              {/* Detailed Tabs */}
-              <Tabs defaultValue="performance" className="space-y-4">
-                <TabsList
-                  className="grid w-full"
-                  style={{ gridTemplateColumns: "repeat(3, minmax(0, 1fr))" }}
-                >
-                  <TabsTrigger value="performance">
-                    Производительность
-                  </TabsTrigger>
-                  <TabsTrigger value="history">История</TabsTrigger>
-                  <TabsTrigger value="achievements">Достижения</TabsTrigger>
-                </TabsList>
-
-                {/* Performance Tab */}
-                <TabsContent value="performance" className="space-y-4">
-                  <div className="grid grid-cols-1 gap-4">
-                    {customersId?.role === "t" ? (
-                      <></>
+                              <div className="text-right">
+                                <p className="text-2xl">
+                                  {customersId?.average_rating}
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                  {t("kpi.technikal")}
+                                </p>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </>
                     ) : (
-                      <Card>
-                        <CardHeader>
-                          <CardTitle className="text-base">
-                            Ежедневная активность (текущая неделя)
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <ResponsiveContainer width="100%" height={250}>
-                            <ComposedChart data={weeklyData?.data}>
-                              <CartesianGrid strokeDasharray="3 3" />
-                              <XAxis dataKey="day" />
-                              <YAxis />
-                              <Tooltip />
-                              <Legend />
-                              <Bar
-                                dataKey="calls"
-                                fill="#3b82f6"
-                                name="Звонки"
-                              />
-                              {/* <Line
+                      <>
+                        <Card>
+                          <CardContent className="pt-4">
+                            <div className="flex items-center justify-between">
+                              <PhoneCall className="h-8 w-8 text-[#E60012]" />
+
+                              <div className="text-right">
+                                <p className="text-2xl">
+                                  {customersId?.calls_count}
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                  {t("kpi.salesCount")}
+                                </p>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        <Card>
+                          <CardContent className="pt-4">
+                            <div className="flex items-center justify-between">
+                              <Star className="h-8 w-8 text-yellow-600" />
+                              <div className="text-right">
+                                <p className="text-2xl">
+                                  {customersId?.average_rating}
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                  {t("kpi.averageRating")}
+                                </p>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Detailed Tabs */}
+                  <Tabs defaultValue="performance" className="space-y-4">
+                    <TabsList
+                      className="grid w-full"
+                      style={{
+                        gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+                      }}
+                    >
+                      <TabsTrigger value="performance">
+                        {t("kpi.performance")}
+                      </TabsTrigger>
+                      {customersId?.role === "t" ? (
+                        <></>
+                      ) : (
+                        <TabsTrigger value="history">
+                          {t("kpi.history")}
+                        </TabsTrigger>
+                      )}
+
+                      <TabsTrigger value="achievements">
+                        {t("kpi.achievements")}
+                      </TabsTrigger>
+                    </TabsList>
+
+                    {/* Performance Tab */}
+                    <TabsContent value="performance" className="space-y-4">
+                      <div className="grid grid-cols-1 gap-4">
+                        {customersId?.role === "t" ? (
+                          <></>
+                        ) : (
+                          <Card>
+                            <CardHeader>
+                              <CardTitle className="text-base">
+                                {t("kpi.currentWeek")}
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <ResponsiveContainer width="100%" height={250}>
+                                <ComposedChart data={weeklyData?.data}>
+                                  <CartesianGrid strokeDasharray="3 3" />
+                                  <XAxis dataKey="day" />
+                                  <YAxis />
+                                  <Tooltip />
+                                  <Legend />
+                                  <Bar
+                                    dataKey="calls"
+                                    fill="#3b82f6"
+                                    name={t("kpi.calls")}
+                                  />
+                                  {/* <Line
                                 type="monotone"
                                 dataKey="продажи"
                                 stroke="#E60012"
                                 strokeWidth={3}
                                 name="Продажи"
                               /> */}
-                            </ComposedChart>
-                          </ResponsiveContainer>
-                        </CardContent>
-                      </Card>
-                    )}
+                                </ComposedChart>
+                              </ResponsiveContainer>
+                            </CardContent>
+                          </Card>
+                        )}
 
-                    {customersId?.role === "s" ? (
+                        {customersId?.role === "s" ? (
+                          <Card>
+                            <CardHeader>
+                              <CardTitle className="text-base">
+                                {t("kpi.weeklyIndicators")}
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <ResponsiveContainer width="100%" height={250}>
+                                <BarChart data={weeklyIndicatorsData}>
+                                  <CartesianGrid strokeDasharray="3 3" />
+                                  <XAxis dataKey="week" />
+                                  <YAxis />
+                                  <Tooltip />
+                                  <Legend />
+                                  <Bar
+                                    dataKey="plan"
+                                    fill="#cbd5e1"
+                                    name={t("kpi.planed")}
+                                  />
+                                  <Bar
+                                    dataKey="fact"
+                                    fill="#E60012"
+                                    name={t("kpi.fact")}
+                                  />
+                                </BarChart>
+                              </ResponsiveContainer>
+                            </CardContent>
+                          </Card>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+
+                      {/* Detailed KPI Progress */}
                       <Card>
                         <CardHeader>
                           <CardTitle className="text-base">
-                            Недельные показатели
+                            {t("kpi.detailsKpi")}
                           </CardTitle>
                         </CardHeader>
                         <CardContent>
-                          <ResponsiveContainer width="100%" height={250}>
-                            <BarChart data={weeklyIndicatorsData}>
-                              <CartesianGrid strokeDasharray="3 3" />
-                              <XAxis dataKey="week" />
-                              <YAxis />
-                              <Tooltip />
-                              <Legend />
-                              <Bar dataKey="plan" fill="#cbd5e1" name="План" />
-                              <Bar dataKey="fact" fill="#E60012" name="Факт" />
-                            </BarChart>
-                          </ResponsiveContainer>
-                        </CardContent>
-                      </Card>
-                    ) : (
-                      <></>
-                    )}
-                  </div>
+                          <div className="space-y-6">
+                            {customersId?.role === "sa" ? (
+                              "Super Admin"
+                            ) : customersId?.role === "s" ? (
+                              <>
+                                <div>
+                                  <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center gap-2">
+                                      <Car className="h-5 w-5 text-[#E60012]" />
+                                      <span className="font-medium">Car</span>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                      <span className="text-2xl">
+                                        {staffReports2Data?.sales?.value}
+                                      </span>
+                                      <span className="text-muted-foreground">
+                                        / {staffReports2Data?.sales?.target}
+                                      </span>
+                                      <Badge
+                                      // variant={
+                                      //   selectedEmployeeData.kpis.carsSold
+                                      //     .trend === "up"
+                                      //     ? "default"
+                                      //     : "destructive"
+                                      // }
+                                      >
+                                        {staffReports2Data?.sales?.percent}%
+                                      </Badge>
+                                    </div>
+                                  </div>
+                                  <Progress
+                                    value={staffReports2Data?.sales?.percent}
+                                    className="h-3"
+                                  />
+                                  <p className="text-xs text-muted-foreground mt-1">
+                                    {t("kpi.theGoal")}{" "}
+                                    {staffReports2Data?.sales?.remaining}{" "}
+                                    {t("kpi.avto")}
+                                  </p>
+                                </div>
 
-                  {/* Detailed KPI Progress */}
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-base">
-                        Детализация KPI
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-6">
-                        {customersId?.role === "sa" ? (
-                          "Super Admin"
-                        ) : customersId?.role === "s" ? (
-                          <>
-                            <div>
-                              <div className="flex items-center justify-between mb-2">
-                                <div className="flex items-center gap-2">
-                                  <Car className="h-5 w-5 text-[#E60012]" />
-                                  <span className="font-medium">Car</span>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                  <span className="text-2xl">
-                                    {staffReports2Data?.sales?.value}
-                                  </span>
-                                  <span className="text-muted-foreground">
-                                    / {staffReports2Data?.sales?.target}
-                                  </span>
-                                  <Badge
-                                  // variant={
-                                  //   selectedEmployeeData.kpis.carsSold
-                                  //     .trend === "up"
-                                  //     ? "default"
-                                  //     : "destructive"
-                                  // }
-                                  >
-                                    {staffReports2Data?.sales?.percent}%
-                                  </Badge>
-                                </div>
-                              </div>
-                              <Progress
-                                value={staffReports2Data?.sales?.percent}
-                                className="h-3"
-                              />
-                              <p className="text-xs text-muted-foreground mt-1">
-                                Осталось до цели:{" "}
-                                {staffReports2Data?.sales?.remaining} авто
-                              </p>
-                            </div>
+                                <div>
+                                  <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center gap-2">
+                                      <DollarSignIcon className="h-5 w-5 text-yellow-600" />
+                                      <span className="font-medium">
+                                        {t("kpi.revenueStatistices")}
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                      <span className="text-2xl">
+                                        {formatPriceNoT(
+                                          staffReports2Data?.revenue?.value
+                                            ? staffReports2Data?.revenue?.value
+                                            : 0
+                                        )}{" "}
+                                        {t("dashboard.cars.mln")}
+                                      </span>
+                                      /
+                                      {formatPriceNoT(
+                                        staffReports2Data?.revenue?.target
+                                          ? staffReports2Data?.revenue?.target
+                                          : 0
+                                      )}{" "}
+                                      {t("dashboard.cars.mln")}
+                                      <Badge
+                                      // variant={
+                                      //   selectedEmployeeData.kpis.carsSold
+                                      //     .trend === "up"
+                                      //     ? "default"
+                                      //     : "destructive"
+                                      // }
+                                      >
+                                        {staffReports2Data?.revenue?.percent}%
+                                      </Badge>
+                                    </div>
+                                  </div>
 
-                            <div>
-                              <div className="flex items-center justify-between mb-2">
-                                <div className="flex items-center gap-2">
-                                  <DollarSignIcon className="h-5 w-5 text-yellow-600" />
-                                  <span className="font-medium">Выручка</span>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                  <span className="text-2xl">
+                                  <Progress
+                                    value={staffReports2Data?.revenue?.percent}
+                                    className="h-3"
+                                  />
+                                  <p className="text-xs text-muted-foreground mt-1">
+                                    {t("kpi.check")}{" "}
                                     {formatPriceNoT(
-                                      staffReports2Data?.revenue?.value
-                                        ? staffReports2Data?.revenue?.value
+                                      staffReports2Data?.revenue?.average_check
+                                        ? staffReports2Data?.revenue
+                                            ?.average_check
                                         : 0
                                     )}{" "}
                                     {t("dashboard.cars.mln")}
-                                  </span>
-                                  /
-                                  {formatPriceNoT(
-                                    staffReports2Data?.revenue?.target
-                                      ? staffReports2Data?.revenue?.target
-                                      : 0
-                                  )}{" "}
-                                  {t("dashboard.cars.mln")}
-                                  <Badge
-                                  // variant={
-                                  //   selectedEmployeeData.kpis.carsSold
-                                  //     .trend === "up"
-                                  //     ? "default"
-                                  //     : "destructive"
-                                  // }
-                                  >
-                                    {staffReports2Data?.revenue?.percent}%
-                                  </Badge>
+                                  </p>
                                 </div>
-                              </div>
 
-                              <Progress
-                                value={staffReports2Data?.revenue?.percent}
-                                className="h-3"
-                              />
-                              <p className="text-xs text-muted-foreground mt-1">
-                                Средний чек::{" "}
-                                {formatPriceNoT(
-                                  staffReports2Data?.revenue?.average_check
-                                    ? staffReports2Data?.revenue?.average_check
-                                    : 0
-                                )}{" "}
-                                {t("dashboard.cars.mln")}
-                              </p>
-                            </div>
+                                <div>
+                                  <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center gap-2">
+                                      <Star className="h-5 w-5 text-yellow-600" />
+                                      <span className="font-medium">
+                                        {t("kpi.customer")}
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                      <span className="text-2xl">
+                                        {staffReports2Data?.rating?.value}
+                                      </span>
+                                      /{staffReports2Data?.rating?.target}
+                                      <Badge
+                                      // variant={
+                                      //   selectedEmployeeData.kpis.carsSold
+                                      //     .trend === "up"
+                                      //     ? "default"
+                                      //     : "destructive"
+                                      // }
+                                      >
+                                        {staffReports2Data?.rating?.percent}%
+                                      </Badge>
+                                    </div>
+                                  </div>
 
-                            <div>
-                              <div className="flex items-center justify-between mb-2">
-                                <div className="flex items-center gap-2">
-                                  <Star className="h-5 w-5 text-yellow-600" />
-                                  <span className="font-medium">
-                                    Удовлетворенность клиентов
-                                  </span>
+                                  <Progress
+                                    value={staffReports2Data?.rating?.percent}
+                                    className="h-3"
+                                  />
                                 </div>
-                                <div className="flex items-center gap-3">
-                                  <span className="text-2xl">
-                                    {staffReports2Data?.rating?.value}
-                                  </span>
-                                  /{staffReports2Data?.rating?.target}
-                                  <Badge
-                                  // variant={
-                                  //   selectedEmployeeData.kpis.carsSold
-                                  //     .trend === "up"
-                                  //     ? "default"
-                                  //     : "destructive"
-                                  // }
-                                  >
-                                    {staffReports2Data?.rating?.percent}%
-                                  </Badge>
-                                </div>
-                              </div>
+                              </>
+                            ) : customersId?.role === "t" ? (
+                              <>
+                                <div>
+                                  <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center gap-2">
+                                      <Wrench className="h-5 w-5 text-yellow-600" />
+                                      <span className="font-medium">
+                                        {t("kpi.technikal")}
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                      <span className="text-2xl">
+                                        {staffReports2Data?.rating?.value}
+                                      </span>
+                                      /{staffReports2Data?.rating?.target}
+                                      <Badge
+                                      // variant={
+                                      //   selectedEmployeeData.kpis.carsSold
+                                      //     .trend === "up"
+                                      //     ? "default"
+                                      //     : "destructive"
+                                      // }
+                                      >
+                                        {staffReports2Data?.rating?.percent}%
+                                      </Badge>
+                                    </div>
+                                  </div>
 
-                              <Progress
-                                value={staffReports2Data?.rating?.percent}
-                                className="h-3"
-                              />
-                            </div>
-                          </>
-                        ) : customersId?.role === "t" ? (
-                          <>
-                            <div>
-                              <div className="flex items-center justify-between mb-2">
-                                <div className="flex items-center gap-2">
-                                  <Wrench className="h-5 w-5 text-yellow-600" />
-                                  <span className="font-medium">
-                                    Удовлетворенность клиентов
-                                  </span>
+                                  <Progress
+                                    value={staffReports2Data?.rating?.percent}
+                                    className="h-3"
+                                  />
                                 </div>
-                                <div className="flex items-center gap-3">
-                                  <span className="text-2xl">
-                                    {staffReports2Data?.rating?.value}
-                                  </span>
-                                  /{staffReports2Data?.rating?.target}
-                                  <Badge
-                                  // variant={
-                                  //   selectedEmployeeData.kpis.carsSold
-                                  //     .trend === "up"
-                                  //     ? "default"
-                                  //     : "destructive"
-                                  // }
-                                  >
-                                    {staffReports2Data?.rating?.percent}%
-                                  </Badge>
+                              </>
+                            ) : (
+                              <>
+                                <div>
+                                  <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center gap-2">
+                                      <PhoneCall className="h-5 w-5 text-[#E60012]" />
+                                      <span className="font-medium">
+                                        {t("kpi.callCenter")}
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                      <span className="text-2xl">
+                                        {staffReports2Data?.calls?.value}
+                                      </span>
+                                      <span className="text-muted-foreground">
+                                        / {staffReports2Data?.calls?.target}
+                                      </span>
+                                      <Badge
+                                      // variant={
+                                      //   selectedEmployeeData.kpis.carsSold
+                                      //     .trend === "up"
+                                      //     ? "default"
+                                      //     : "destructive"
+                                      // }
+                                      >
+                                        {staffReports2Data?.calls?.percent}%
+                                      </Badge>
+                                    </div>
+                                  </div>
+                                  <Progress
+                                    value={staffReports2Data?.calls?.percent}
+                                    className="h-3"
+                                  />
+                                  <p className="text-xs text-muted-foreground mt-1">
+                                    {t("kpi.theGoal")}{" "}
+                                    {staffReports2Data?.calls?.remaining}{" "}
+                                    {t("kpi.avto")}
+                                  </p>
                                 </div>
-                              </div>
 
-                              <Progress
-                                value={staffReports2Data?.rating?.percent}
-                                className="h-3"
-                              />
-                            </div>
-                          </>
-                        ) : (
-                          <>
-                            <div>
-                              <div className="flex items-center justify-between mb-2">
-                                <div className="flex items-center gap-2">
-                                  <PhoneCall className="h-5 w-5 text-[#E60012]" />
-                                  <span className="font-medium">Call</span>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                  <span className="text-2xl">
-                                    {staffReports2Data?.calls?.value}
-                                  </span>
-                                  <span className="text-muted-foreground">
-                                    / {staffReports2Data?.calls?.target}
-                                  </span>
-                                  <Badge
-                                  // variant={
-                                  //   selectedEmployeeData.kpis.carsSold
-                                  //     .trend === "up"
-                                  //     ? "default"
-                                  //     : "destructive"
-                                  // }
-                                  >
-                                    {staffReports2Data?.calls?.percent}%
-                                  </Badge>
-                                </div>
-                              </div>
-                              <Progress
-                                value={staffReports2Data?.calls?.percent}
-                                className="h-3"
-                              />
-                              <p className="text-xs text-muted-foreground mt-1">
-                                Осталось до цели:{" "}
-                                {staffReports2Data?.calls?.remaining} авто
-                              </p>
-                            </div>
+                                <div>
+                                  <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center gap-2">
+                                      <Star className="h-5 w-5 text-yellow-600" />
+                                      <span className="font-medium">
+                                        {t("kpi.customer")}
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                      <span className="text-2xl">
+                                        {staffReports2Data?.rating?.value}
+                                      </span>
+                                      /{staffReports2Data?.rating?.target}
+                                    </div>
+                                  </div>
 
-                            <div>
-                              <div className="flex items-center justify-between mb-2">
-                                <div className="flex items-center gap-2">
-                                  <Star className="h-5 w-5 text-yellow-600" />
-                                  <span className="font-medium">
-                                    Удовлетворенность клиентов
-                                  </span>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                  <span className="text-2xl">
-                                    {staffReports2Data?.rating?.value}
-                                  </span>
-                                  /{staffReports2Data?.rating?.target}
-                                </div>
-                              </div>
+                                  <Progress
+                                    value={staffReports2Data?.rating?.percent}
+                                    className="h-3"
+                                  />
 
-                              <Progress
-                                value={staffReports2Data?.rating?.percent}
-                                className="h-3"
-                              />
-
-                              {/* <div className="flex gap-1 mt-2">
+                                  {/* <div className="flex gap-1 mt-2">
                                 {[1, 2, 3, 4, 5].map((star) => (
                                   <Star
                                     key={star}
@@ -1389,11 +1423,11 @@ export function KPI() {
                                   />
                                 ))}
                               </div> */}
-                            </div>
-                          </>
-                        )}
+                                </div>
+                              </>
+                            )}
 
-                        {/* <div>
+                            {/* <div>
                           <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-2">
                               <Star className="h-5 w-5 text-yellow-600" />
@@ -1470,249 +1504,254 @@ export function KPI() {
                             ))}
                           </div>
                         </div> */}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-
-                {/* History Tab */}
-                <TabsContent value="history" className="space-y-4">
-                  {customersId?.role === "s" ? (
-                    <Card>
-                      <CardHeader>
-                        <CardTitle className="text-base">
-                          История продаж (5 месяцев)
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <ResponsiveContainer width="100%" height={300}>
-                          <AreaChart data={last5MonthsData}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="month" />
-                            <YAxis yAxisId="left" />
-                            <YAxis yAxisId="right" orientation="right" />
-                            <Tooltip
-                              formatter={(value: any, name: string) => {
-                                // revenue va target uchun formatPriceNoT funksiyasini ishlatish
-                                if (
-                                  name === "Выручка (млн)" ||
-                                  name === "Цель"
-                                ) {
-                                  return [formatPriceNoT(value), name];
-                                }
-                                return [value, name];
-                              }}
-                            />
-                            <Legend />
-                            <Area
-                              yAxisId="left"
-                              type="monotone"
-                              dataKey="sales_count"
-                              stroke="#E60012"
-                              fill="#E60012"
-                              fillOpacity={0.3}
-                              name="Продажи"
-                            />
-                            <Area
-                              yAxisId="right"
-                              type="monotone"
-                              dataKey="revenue"
-                              stroke="#10b981"
-                              fill="#10b981"
-                              fillOpacity={0.3}
-                              name="Выручка (млн)"
-                            />
-                            <Line
-                              yAxisId="right"
-                              type="monotone"
-                              dataKey="target"
-                              stroke="#cbd5e1"
-                              strokeWidth={2}
-                              strokeDasharray="5 5"
-                              name="Цель"
-                            />
-                          </AreaChart>
-                        </ResponsiveContainer>
-                      </CardContent>
-                    </Card>
-                  ) : (
-                    <></>
-                  )}
-
-                  {customersId?.role === "t" ? (
-                    ""
-                  ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <Card>
-                        <CardHeader>
-                          <CardTitle className="text-base">
-                            Лучший месяц
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="text-center">
-                            <p className="text-3xl text-[#E60012] mb-1">
-                              {yearly?.month?.slice(0, 3)}
-                            </p>
-                            <p className="text-muted-foreground text-sm">
-                              {yearly?.record_sales} продаж /
-                              {yearly?.revenue
-                                ? formatPriceNoT(yearly?.revenue)
-                                : ""}{" "}
-                              {t("dashboard.cars.mln")}
-                            </p>
                           </div>
                         </CardContent>
                       </Card>
+                    </TabsContent>
 
-                      <Card>
-                        <CardHeader>
-                          <CardTitle className="text-base">
-                            Средний результат
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="text-center">
-                            <p className="text-3xl text-blue-600 mb-1">
-                              {yearly?.average_sales}
-                            </p>
-                            <p className="text-muted-foreground text-sm">
-                              продаж в месяц
-                            </p>
-                          </div>
-                        </CardContent>
-                      </Card>
+                    {/* History Tab */}
+                    <TabsContent value="history" className="space-y-4">
+                      {customersId?.role === "s" ? (
+                        <Card>
+                          <CardHeader>
+                            <CardTitle className="text-base">
+                              История продаж (5 месяцев)
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <ResponsiveContainer width="100%" height={300}>
+                              <AreaChart data={last5MonthsData}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="month" />
+                                <YAxis yAxisId="left" />
+                                <YAxis yAxisId="right" orientation="right" />
+                                <Tooltip
+                                  formatter={(value: any, name: string) => {
+                                    // revenue va target uchun formatPriceNoT funksiyasini ishlatish
+                                    if (
+                                      name === "Выручка (млн)" ||
+                                      name === "Цель"
+                                    ) {
+                                      return [formatPriceNoT(value), name];
+                                    }
+                                    return [value, name];
+                                  }}
+                                />
+                                <Legend />
+                                <Area
+                                  yAxisId="left"
+                                  type="monotone"
+                                  dataKey="sales_count"
+                                  stroke="#E60012"
+                                  fill="#E60012"
+                                  fillOpacity={0.3}
+                                  name="Продажи"
+                                />
+                                <Area
+                                  yAxisId="right"
+                                  type="monotone"
+                                  dataKey="revenue"
+                                  stroke="#10b981"
+                                  fill="#10b981"
+                                  fillOpacity={0.3}
+                                  name="Выручка (млн)"
+                                />
+                                <Line
+                                  yAxisId="right"
+                                  type="monotone"
+                                  dataKey="target"
+                                  stroke="#cbd5e1"
+                                  strokeWidth={2}
+                                  strokeDasharray="5 5"
+                                  name="Цель"
+                                />
+                              </AreaChart>
+                            </ResponsiveContainer>
+                          </CardContent>
+                        </Card>
+                      ) : (
+                        <></>
+                      )}
 
-                      <Card>
-                        <CardHeader>
-                          <CardTitle className="text-base">Тренд</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="text-center flex items-center justify-center gap-2">
-                            {yearly?.quarterly_growth ? (
-                              <TrendingUp className="h-8 w-8 text-green-600" />
-                            ) : (
-                              <TrendingDown className="h-8 w-8 text-red-600" />
-                            )}
+                      {customersId?.role === "t" ? (
+                        ""
+                      ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          <Card>
+                            <CardHeader>
+                              <CardTitle className="text-base">
+                                {t("kpi.bestMonth")}
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="text-center">
+                                <p className="text-3xl text-[#E60012] mb-1">
+                                  {yearly?.month?.slice(0, 3)}
+                                </p>
+                                <p className="text-muted-foreground text-sm">
+                                  {yearly?.record_sales}{" "}
+                                  {t("kpi.bestMonthUnit")} /
+                                  {yearly?.revenue
+                                    ? formatPriceNoT(yearly?.revenue)
+                                    : ""}{" "}
+                                  {t("dashboard.cars.mln")}
+                                </p>
+                              </div>
+                            </CardContent>
+                          </Card>
 
-                            {yearly?.quarterly_growth ? (
-                              <p className="text-3xl text-green-600">
-                                `${+yearly?.quarterly_growth}%`{" "}
+                          <Card>
+                            <CardHeader>
+                              <CardTitle className="text-base">
+                                {t("kpi.averageResult")}
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="text-center">
+                                <p className="text-3xl text-blue-600 mb-1">
+                                  {yearly?.average_sales}
+                                </p>
+                                <p className="text-muted-foreground text-sm">
+                                  {t("kpi.averageResultUnit")}
+                                </p>
+                              </div>
+                            </CardContent>
+                          </Card>
+
+                          <Card>
+                            <CardHeader>
+                              <CardTitle className="text-base">
+                                {t("kpi.trend")}
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="text-center flex items-center justify-center gap-2">
+                                {yearly?.quarterly_growth ? (
+                                  <TrendingUp className="h-8 w-8 text-green-600" />
+                                ) : (
+                                  <TrendingDown className="h-8 w-8 text-red-600" />
+                                )}
+
+                                {yearly?.quarterly_growth ? (
+                                  <p className="text-3xl text-green-600">
+                                    `${+yearly?.quarterly_growth}%`{" "}
+                                  </p>
+                                ) : (
+                                  <p className="text-3xl text-red-600">0</p>
+                                )}
+                              </div>
+                              <p className="text-muted-foreground text-sm text-center mt-1">
+                                {t("kpi.trendUnit")}
                               </p>
+                            </CardContent>
+                          </Card>
+                        </div>
+                      )}
+                    </TabsContent>
+
+                    {/* Achievements Tab */}
+                    <TabsContent value="achievements" className="space-y-4">
+                      <div className="grid grid-cols-1 gap-4">
+                        <Card>
+                          <CardHeader>
+                            <CardTitle className="text-base">
+                              {t("kpi.allTimeStats")}
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            {customersId?.role === "sa" ? (
+                              "Super Admin"
+                            ) : customersId?.role === "s" ? (
+                              <div className="space-y-3">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-sm text-muted-foreground">
+                                    {t("kpi.totalSold")}
+                                  </span>
+                                  <span className="font-medium text-lg">
+                                    {generalStatisticsData?.total_sold}
+                                  </span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                  <span className="text-sm text-muted-foreground">
+                                    {t("kpi.totalRevenue1")}
+                                  </span>
+                                  <span className="font-medium text-lg">
+                                    {generalStatisticsData?.total_revenue}
+                                  </span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                  <span className="text-sm text-muted-foreground">
+                                    {t("kpi.happyCustomers")}
+                                  </span>
+                                  <span className="font-medium text-lg">
+                                    {generalStatisticsData?.satisfied_clients}
+                                  </span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                  <span className="text-sm text-muted-foreground">
+                                    {t("kpi.averageRating1")}
+                                  </span>
+                                  <span className="font-medium text-lg">
+                                    {generalStatisticsData?.average_rating} ⭐
+                                  </span>
+                                </div>
+                              </div>
+                            ) : customersId?.role === "t" ? (
+                              <div className="space-y-3">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-sm text-muted-foreground">
+                                    {t("kpi.uslog")}
+                                  </span>
+                                  <span className="font-medium text-lg">
+                                    {generalStatisticsData?.completed_services}
+                                  </span>
+                                </div>
+
+                                <div className="flex items-center justify-between">
+                                  <span className="text-sm text-muted-foreground">
+                                    {t("kpi.averageRating1")}
+                                  </span>
+                                  <span className="font-medium text-lg">
+                                    {generalStatisticsData?.average_rate} ⭐
+                                  </span>
+                                </div>
+                              </div>
                             ) : (
-                              <p className="text-3xl text-red-600">0</p>
+                              <div className="space-y-3">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-sm text-muted-foreground">
+                                    {t("kpi.kolechtvo")}
+                                  </span>
+                                  <span className="font-medium text-lg">
+                                    {generalStatisticsData?.total_calls}
+                                  </span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                  <span className="text-sm text-muted-foreground">
+                                    {t("kpi.happyCustomers")}
+                                  </span>
+                                  <span className="font-medium text-lg">
+                                    {generalStatisticsData?.positive_calls}
+                                  </span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                  <span className="text-sm text-muted-foreground">
+                                    {t("kpi.averageRating1")}
+                                  </span>
+                                  <span className="font-medium text-lg">
+                                    {generalStatisticsData?.average_score} ⭐
+                                  </span>
+                                </div>
+                              </div>
                             )}
-                          </div>
-                          <p className="text-muted-foreground text-sm text-center mt-1">
-                            рост за квартал
-                          </p>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  )}
-                </TabsContent>
-
-                {/* Achievements Tab */}
-                <TabsContent value="achievements" className="space-y-4">
-                  <div className="grid grid-cols-1 gap-4">
-                    <Card>
-                      <CardHeader>
-                        <CardTitle className="text-base">
-                          Статистика всего времени
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        {customersId?.role === "sa" ? (
-                          "Super Admin"
-                        ) : customersId?.role === "s" ? (
-                          <div className="space-y-3">
-                            <div className="flex items-center justify-between">
-                              <span className="text-sm text-muted-foreground">
-                                Всего продано
-                              </span>
-                              <span className="font-medium text-lg">
-                                {generalStatisticsData?.total_sold}
-                              </span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span className="text-sm text-muted-foreground">
-                                Общий доход
-                              </span>
-                              <span className="font-medium text-lg">
-                                {generalStatisticsData?.total_revenue}
-                              </span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span className="text-sm text-muted-foreground">
-                                Довольных клиентов
-                              </span>
-                              <span className="font-medium text-lg">
-                                {generalStatisticsData?.satisfied_clients}
-                              </span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span className="text-sm text-muted-foreground">
-                                Средний рейтинг
-                              </span>
-                              <span className="font-medium text-lg">
-                                {generalStatisticsData?.average_rating} ⭐
-                              </span>
-                            </div>
-                          </div>
-                        ) : customersId?.role === "t" ? (
-                          <div className="space-y-3">
-                            <div className="flex items-center justify-between">
-                              <span className="text-sm text-muted-foreground">
-                                Завершенные услуги
-                              </span>
-                              <span className="font-medium text-lg">
-                                {generalStatisticsData?.completed_services}
-                              </span>
-                            </div>
-
-                            <div className="flex items-center justify-between">
-                              <span className="text-sm text-muted-foreground">
-                                Средний рейтинг
-                              </span>
-                              <span className="font-medium text-lg">
-                                {generalStatisticsData?.average_rate} ⭐
-                              </span>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="space-y-3">
-                            <div className="flex items-center justify-between">
-                              <span className="text-sm text-muted-foreground">
-                                Общее количество звонков
-                              </span>
-                              <span className="font-medium text-lg">
-                                {generalStatisticsData?.total_calls}
-                              </span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span className="text-sm text-muted-foreground">
-                                Довольных клиентов
-                              </span>
-                              <span className="font-medium text-lg">
-                                {generalStatisticsData?.positive_calls}
-                              </span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span className="text-sm text-muted-foreground">
-                                Средний рейтинг
-                              </span>
-                              <span className="font-medium text-lg">
-                                {generalStatisticsData?.average_score} ⭐
-                              </span>
-                            </div>
-                          </div>
-                        )}
-                      </CardContent>
-                    </Card>
-                  </div>
-                </TabsContent>
-              </Tabs>
-            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    </TabsContent>
+                  </Tabs>
+                </div>
+              )}
+            </>
           )}
         </DialogContent>
       </Dialog>

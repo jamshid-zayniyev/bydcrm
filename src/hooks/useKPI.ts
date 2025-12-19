@@ -42,6 +42,7 @@ const useKPI = () => {
   const [staffReports2Data, setStaffReports2Data] = useState<staffReports2>();
   const [generalStatisticsData, setGeneralStatisticsData] =
     useState<generalStatistics>();
+  const [loading, setLoading] = useState(false);
 
   const getKpiMonthly = async () => {
     try {
@@ -150,14 +151,13 @@ const useKPI = () => {
 
   const btnEmployeeId = async (id: number, user: string) => {
     try {
+      setLoading(true);
       let monthlyData = null;
       let yearlyData = null;
       let weeklyData = null;
       let weeklyIndicatorsData = null;
       let last5MonthsData = null;
       let staffReports2Data = null;
-
-      console.log(user);
 
       if (user === "t") {
         const { data } = await api.get(`/kpi/staff-reports/monthly/${id}/`);
@@ -212,6 +212,8 @@ const useKPI = () => {
       setGeneralStatisticsData(generalStatistics?.data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -243,6 +245,7 @@ const useKPI = () => {
     last5MonthsData,
     staffReports2Data,
     generalStatisticsData,
+    loading,
   };
 };
 
