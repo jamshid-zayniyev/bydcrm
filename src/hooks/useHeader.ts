@@ -102,6 +102,7 @@ export const useHeader = () => {
   };
   const editBtn = async () => {
     try {
+      setLoading(true);
       const { data } = await api.get("/users/me/");
 
       setGetUpload(data);
@@ -122,6 +123,8 @@ export const useHeader = () => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 

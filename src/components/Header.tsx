@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { useAuthContext } from "../contexts/AuthContext";
 import { Edit, NoUser } from "@/assets";
 import { useHeader } from "@/hooks/useHeader";
+import Loading from "./ui/loading";
 
 interface HeaderProps {
   onMenuClick?: () => void;
@@ -348,116 +349,126 @@ export function Header({ onMenuClick }: HeaderProps) {
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm text-gray-700 mb-2">
-                    first_name
-                  </label>
-                  <input
-                    {...register("first_name")}
-                    placeholder={t("customers.addClientObj.enterName")}
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
-                      errors.first_name
-                        ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
-                        : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
-                    }`}
-                  />
-                  {errors.first_name && (
-                    <p className="text-[#E60012]">
-                      {errors.first_name.message}
-                    </p>
-                  )}
-                </div>
+              {loading ? (
+                <Loading />
+              ) : (
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm text-gray-700 mb-2">
+                        first_name
+                      </label>
+                      <input
+                        {...register("first_name")}
+                        placeholder={t("customers.addClientObj.enterName")}
+                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                          errors.first_name
+                            ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
+                            : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
+                        }`}
+                      />
+                      {errors.first_name && (
+                        <p className="text-[#E60012]">
+                          {errors.first_name.message}
+                        </p>
+                      )}
+                    </div>
 
-                <div>
-                  <label className="block text-sm text-gray-700 mb-2">
-                    last_name
-                  </label>
-                  <input
-                    {...register("last_name")}
-                    placeholder={t("customers.addClientObj.enterName")}
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
-                      errors.last_name
-                        ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
-                        : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
-                    }`}
-                  />
-                  {errors.last_name && (
-                    <p className="text-[#E60012]">{errors.last_name.message}</p>
-                  )}
-                </div>
+                    <div>
+                      <label className="block text-sm text-gray-700 mb-2">
+                        last_name
+                      </label>
+                      <input
+                        {...register("last_name")}
+                        placeholder={t("customers.addClientObj.enterName")}
+                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                          errors.last_name
+                            ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
+                            : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
+                        }`}
+                      />
+                      {errors.last_name && (
+                        <p className="text-[#E60012]">
+                          {errors.last_name.message}
+                        </p>
+                      )}
+                    </div>
 
-                <div>
-                  <label className="block text-sm text-gray-700 mb-2">
-                    {t("customers.addClientObj.phone")}
-                  </label>
-                  <input
-                    {...register("phone_number")}
-                    placeholder="+998 XX XXX XX XX"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
-                      errors.phone_number
-                        ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
-                        : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
-                    }`}
-                    onChange={handlePhoneChange}
-                    onBlur={handlePhoneBlur}
-                  />
-                  {errors.phone_number && (
-                    <p className="text-[#E60012]">
-                      {errors.phone_number.message}
-                    </p>
-                  )}
-                </div>
+                    <div>
+                      <label className="block text-sm text-gray-700 mb-2">
+                        {t("customers.addClientObj.phone")}
+                      </label>
+                      <input
+                        {...register("phone_number")}
+                        placeholder="+998 XX XXX XX XX"
+                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                          errors.phone_number
+                            ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
+                            : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
+                        }`}
+                        onChange={handlePhoneChange}
+                        onBlur={handlePhoneBlur}
+                      />
+                      {errors.phone_number && (
+                        <p className="text-[#E60012]">
+                          {errors.phone_number.message}
+                        </p>
+                      )}
+                    </div>
 
-                <div>
-                  <label className="block text-sm text-gray-700 mb-2">
-                    username
-                  </label>
-                  <input
-                    {...register("username")}
-                    placeholder={t("customers.addClientObj.enterName")}
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
-                      errors.username
-                        ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
-                        : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
-                    }`}
-                  />
-                  {errors.username && (
-                    <p className="text-[#E60012]">{errors.username.message}</p>
-                  )}
-                </div>
-              </div>
+                    <div>
+                      <label className="block text-sm text-gray-700 mb-2">
+                        username
+                      </label>
+                      <input
+                        {...register("username")}
+                        placeholder={t("customers.addClientObj.enterName")}
+                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                          errors.username
+                            ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
+                            : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
+                        }`}
+                      />
+                      {errors.username && (
+                        <p className="text-[#E60012]">
+                          {errors.username.message}
+                        </p>
+                      )}
+                    </div>
+                  </div>
 
-              <div className="flex items-center justify-center">
-                <div style={{ margin: "0 auto" }}>
-                  <img
-                    src={previewImage ? previewImage : NoUser}
-                    alt="Preview"
-                    className="w-40 h-40 object-cover border border-gray-300 rounded-full mx-auto"
-                  />
-                  <input
-                    type="file"
-                    ref={fileInputRef}
-                    onChange={handleAvatarChange}
-                    accept="image/*"
-                    className="hidden"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => fileInputRef.current?.click()}
-                    className="mt-2 w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-                  >
-                    Rasmni yuklash
-                  </button>
-                  {errors.avatar && (
-                    <p className="text-[#E60012] text-center mt-1">
-                      {typeof errors.avatar.message === "string"
-                        ? errors.avatar.message
-                        : "Rasm fayli noto'g'ri"}
-                    </p>
-                  )}
-                </div>
-              </div>
+                  <div className="flex items-center justify-center">
+                    <div style={{ margin: "0 auto" }}>
+                      <img
+                        src={previewImage ? previewImage : NoUser}
+                        alt="Preview"
+                        className="w-40 h-40 object-cover border border-gray-300 rounded-full mx-auto"
+                      />
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={handleAvatarChange}
+                        accept="image/*"
+                        className="hidden"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="mt-2 w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                      >
+                        Rasmni yuklash
+                      </button>
+                      {errors.avatar && (
+                        <p className="text-[#E60012] text-center mt-1">
+                          {typeof errors.avatar.message === "string"
+                            ? errors.avatar.message
+                            : "Rasm fayli noto'g'ri"}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
 
               <div className="flex gap-3 pt-4">
                 <button
