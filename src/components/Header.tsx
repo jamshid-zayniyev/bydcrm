@@ -1,7 +1,9 @@
-import { Bell, Menu, User, ChevronDown, Globe, LogOut } from "lucide-react";
+import { Bell, Menu, User, ChevronDown, Globe, LogOut, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useAuthContext } from "../contexts/AuthContext";
+import { Edit, NoUser } from "@/assets";
+import { useHeader } from "@/hooks/useHeader";
 
 interface HeaderProps {
   onMenuClick?: () => void;
@@ -46,6 +48,26 @@ export function Header({ onMenuClick }: HeaderProps) {
       ? "Technician"
       : "Call-Center";
   };
+  const {
+    closeModal,
+    setShowAddModal,
+    showAddModal,
+    onSubmit,
+    handleSubmit,
+    errors,
+    register,
+    watch,
+    setValue,
+    trigger,
+    editBtn,
+    previewImage,
+    loading,
+    handleAvatarChange,
+    fileInputRef,
+    getUpload,
+  } = useHeader();
+
+  console.log(getUpload);
 
   // Click outside to close dropdowns
   useEffect(() => {
@@ -67,6 +89,63 @@ export function Header({ onMenuClick }: HeaderProps) {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const formatPhoneNumber = useCallback((value: string): string => {
+    // Remove all non-digit characters except +
+    const numbers = value.replace(/[^\d+]/g, "");
+
+    // If starts with +998, format accordingly
+    if (numbers.startsWith("+998")) {
+      const digits = numbers.slice(4); // Remove +998
+
+      if (digits.length <= 2) {
+        return `+998 ${digits}`;
+      } else if (digits.length <= 5) {
+        return `+998 ${digits.slice(0, 2)} ${digits.slice(2)}`;
+      } else if (digits.length <= 8) {
+        return `+998 ${digits.slice(0, 2)} ${digits.slice(2, 5)} ${digits.slice(
+          5
+        )}`;
+      } else {
+        return `+998 ${digits.slice(0, 2)} ${digits.slice(2, 5)} ${digits.slice(
+          5,
+          7
+        )} ${digits.slice(7, 9)}`;
+      }
+    } else if (numbers.startsWith("998")) {
+      const digits = numbers.slice(3); // Remove 998
+
+      if (digits.length <= 2) {
+        return `+998 ${digits}`;
+      } else if (digits.length <= 5) {
+        return `+998 ${digits.slice(0, 2)} ${digits.slice(2)}`;
+      } else if (digits.length <= 8) {
+        return `+998 ${digits.slice(0, 2)} ${digits.slice(2, 5)} ${digits.slice(
+          5
+        )}`;
+      } else {
+        return `+998 ${digits.slice(0, 2)} ${digits.slice(2, 5)} ${digits.slice(
+          5,
+          7
+        )} ${digits.slice(7, 9)}`;
+      }
+    } else {
+      // For other cases, just return the numbers with +
+      return `+${numbers.replace(/\D/g, "")}`;
+    }
+  }, []);
+
+  const handlePhoneChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const formattedValue = formatPhoneNumber(e.target.value);
+      setValue("phone_number", formattedValue, { shouldValidate: true });
+    },
+    [formatPhoneNumber, setValue]
+  );
+
+  const handlePhoneBlur = useCallback(() => {
+    trigger("phone_number");
+  }, [trigger]);
 
   return (
     <header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4 shadow-sm">
@@ -180,7 +259,15 @@ export function Header({ onMenuClick }: HeaderProps) {
               className="flex items-center gap-2 sm:gap-3 pl-3 border-l border-gray-200"
             >
               <div className="w-8 h-8 sm:w-9 sm:h-9 bg-gradient-to-br from-[#E60012] to-[#b00010] rounded-full flex items-center justify-center">
-                <User className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                {getUpload?.avatar ? (
+                  <img
+                    className="object-cover border border-gray-300 rounded-full"
+                    src={getUpload?.avatar}
+                    alt={getUpload?.first_name}
+                  />
+                ) : (
+                  <User className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                )}
               </div>
               {/* Mobile da faqat icon, desktop da icon + chevron */}
               <ChevronDown
@@ -194,9 +281,13 @@ export function Header({ onMenuClick }: HeaderProps) {
             {isProfileOpen && (
               <div className="absolute top-full right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
                 <div className="px-4 py-3 border-b border-gray-100">
-                  <p className="font-medium text-gray-900">{user?.full_name}</p>
-                  <p className="text-sm text-gray-500">@{user?.username}</p>
-                  <div className="flex items-center gap-2 mt-1">
+                  <p className="font-medium text-gray-900">
+                    {getUpload?.first_name} {getUpload?.last_name}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    @{getUpload?.username}
+                  </p>
+                  <div className="flex items-center justify-between gap-2 mt-1">
                     <span
                       className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                         user?.role === "s"
@@ -206,6 +297,15 @@ export function Header({ onMenuClick }: HeaderProps) {
                     >
                       {getRoleName(user?.role || "e")}
                     </span>
+                    <img
+                      className="cursor-pointer"
+                      src={Edit}
+                      alt="no img?"
+                      onClick={() => {
+                        setShowAddModal(true);
+                        editBtn();
+                      }}
+                    />
                   </div>
                 </div>
 
@@ -231,6 +331,156 @@ export function Header({ onMenuClick }: HeaderProps) {
           {getRoleName(user?.role || "e")}
         </p>
       </div>
+
+      {showAddModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 bg-black/50 backdrop-blur">
+          <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-200 flex items-center justify-between">
+              <h2 className="text-gray-900">
+                {/* {t("customers.addClientObj.oneClient")} */}
+              </h2>
+              <button
+                onClick={closeModal}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    first_name
+                  </label>
+                  <input
+                    {...register("first_name")}
+                    placeholder={t("customers.addClientObj.enterName")}
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                      errors.first_name
+                        ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
+                        : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
+                    }`}
+                  />
+                  {errors.first_name && (
+                    <p className="text-[#E60012]">
+                      {errors.first_name.message}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    last_name
+                  </label>
+                  <input
+                    {...register("last_name")}
+                    placeholder={t("customers.addClientObj.enterName")}
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                      errors.last_name
+                        ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
+                        : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
+                    }`}
+                  />
+                  {errors.last_name && (
+                    <p className="text-[#E60012]">{errors.last_name.message}</p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    {t("customers.addClientObj.phone")}
+                  </label>
+                  <input
+                    {...register("phone_number")}
+                    placeholder="+998 XX XXX XX XX"
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                      errors.phone_number
+                        ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
+                        : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
+                    }`}
+                    onChange={handlePhoneChange}
+                    onBlur={handlePhoneBlur}
+                  />
+                  {errors.phone_number && (
+                    <p className="text-[#E60012]">
+                      {errors.phone_number.message}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    username
+                  </label>
+                  <input
+                    {...register("username")}
+                    placeholder={t("customers.addClientObj.enterName")}
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                      errors.username
+                        ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
+                        : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
+                    }`}
+                  />
+                  {errors.username && (
+                    <p className="text-[#E60012]">{errors.username.message}</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex items-center justify-center">
+                <div style={{ margin: "0 auto" }}>
+                  <img
+                    src={previewImage ? previewImage : NoUser}
+                    alt="Preview"
+                    className="w-40 h-40 object-cover border border-gray-300 rounded-full mx-auto"
+                  />
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleAvatarChange}
+                    accept="image/*"
+                    className="hidden"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="mt-2 w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                  >
+                    Rasmni yuklash
+                  </button>
+                  {errors.avatar && (
+                    <p className="text-[#E60012] text-center mt-1">
+                      {typeof errors.avatar.message === "string"
+                        ? errors.avatar.message
+                        : "Rasm fayli noto'g'ri"}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="flex-1 px-4 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors"
+                >
+                  {loading
+                    ? `...${t("customers.addClientObj.addClient")}`
+                    : `${t("customers.addClientObj.addClient")}`}
+                </button>
+                <button
+                  disabled={loading}
+                  onClick={closeModal}
+                  className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                >
+                  {t("customers.addClientObj.cancel")}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
