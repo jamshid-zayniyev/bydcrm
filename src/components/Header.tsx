@@ -356,11 +356,10 @@ export function Header({ onMenuClick }: HeaderProps) {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm text-gray-700 mb-2">
-                        first_name
+                        {t("header.first_name")}
                       </label>
                       <input
                         {...register("first_name")}
-                        placeholder={t("customers.addClientObj.enterName")}
                         className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
                           errors.first_name
                             ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
@@ -376,11 +375,10 @@ export function Header({ onMenuClick }: HeaderProps) {
 
                     <div>
                       <label className="block text-sm text-gray-700 mb-2">
-                        last_name
+                        {t("header.last_name")}
                       </label>
                       <input
                         {...register("last_name")}
-                        placeholder={t("customers.addClientObj.enterName")}
                         className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
                           errors.last_name
                             ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
@@ -396,7 +394,7 @@ export function Header({ onMenuClick }: HeaderProps) {
 
                     <div>
                       <label className="block text-sm text-gray-700 mb-2">
-                        {t("customers.addClientObj.phone")}
+                        {t("header.phone")}
                       </label>
                       <input
                         {...register("phone_number")}
@@ -418,7 +416,7 @@ export function Header({ onMenuClick }: HeaderProps) {
 
                     <div>
                       <label className="block text-sm text-gray-700 mb-2">
-                        username
+                        {t("header.username")}
                       </label>
                       <input
                         {...register("username")}
@@ -456,13 +454,13 @@ export function Header({ onMenuClick }: HeaderProps) {
                         onClick={() => fileInputRef.current?.click()}
                         className="mt-2 w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
                       >
-                        Rasmni yuklash
+                        {t("header.imageUpload")}
                       </button>
                       {errors.avatar && (
                         <p className="text-[#E60012] text-center mt-1">
                           {typeof errors.avatar.message === "string"
                             ? errors.avatar.message
-                            : "Rasm fayli noto'g'ri"}
+                            : t("header.imageFile")}
                         </p>
                       )}
                     </div>

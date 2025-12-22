@@ -27,6 +27,15 @@
   "formSave": "Saqlash",
 
   "pcs": "dona",
+
+  "header": {
+    "first_name": "Ism",
+    "last_name": "Familiya",
+    "phone": "Telefon",
+    "username": "Foydalanuvchi nomi",
+    "imageUpload": "Rasm yuklash",
+    "imageFile":"Rasm fayli noto'g'ri"
+  },
   "actions": {
     "cansel": "Bekor qilish",
     "ok": "Ha"

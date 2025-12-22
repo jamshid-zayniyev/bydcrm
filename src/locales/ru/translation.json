@@ -26,6 +26,15 @@
   "formSave": "Сохранить",
 
   "pcs": "шт",
+  "header": {
+    "first_name": "Имя",
+    "last_name": "Фамилия",
+    "phone": "Телефон",
+    "username": "Имя пользователя",
+    "imageUpload": "Загрузка изображения",
+    "imageFile": "Неверный файл изображения"
+  },
+
   "actions": {
     "cansel": "Отмена",
     "ok": "Да"
