@@ -342,7 +342,7 @@ export function Header({ onMenuClick }: HeaderProps) {
               </h2>
               <button
                 onClick={closeModal}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                className="cursor-pointer p-2 hover:bg-gray-100 rounded-lg transition-colors"
               >
                 <X className="w-5 h-5 text-gray-500" />
               </button>
@@ -452,7 +452,7 @@ export function Header({ onMenuClick }: HeaderProps) {
                       <button
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
-                        className="mt-2 w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                        className="cursor-pointer mt-2 w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
                       >
                         {t("header.imageUpload")}
                       </button>
@@ -472,7 +472,7 @@ export function Header({ onMenuClick }: HeaderProps) {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 px-4 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors"
+                  className="cursor-pointer flex-1 px-4 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors"
                 >
                   {loading
                     ? `...${t("customers.addClientObj.addClient")}`
@@ -481,7 +481,7 @@ export function Header({ onMenuClick }: HeaderProps) {
                 <button
                   disabled={loading}
                   onClick={closeModal}
-                  className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                  className="cursor-pointer flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
                 >
                   {t("customers.addClientObj.cancel")}
                 </button>

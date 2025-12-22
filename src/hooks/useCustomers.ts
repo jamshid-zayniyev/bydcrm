@@ -14,6 +14,7 @@ import {
   getUsersStatus,
   UsersStatus,
 } from "../api/customers";
+import { CustomersSelectVariants } from "@/types/customers";
 
 const createUserSchema = (t: any) =>
   z.object({
@@ -30,6 +31,7 @@ const createUserSchema = (t: any) =>
     notes: z.string().min(1, "To‘liq kiriting"),
     status: z.string().optional(),
     location: z.string().optional(),
+    variants: z.string().optional(),
   });
 
 export type User = z.infer<ReturnType<typeof createUserSchema>>;
@@ -43,6 +45,10 @@ export const useCustomers = () => {
   const [pgnCount, setPgnCount] = useState<number | null>(null);
   const [activePage, setActivePage] = useState(1);
   const [usersStatus, setUsersStatus] = useState<UsersStatus[]>([]);
+  const [loadingModel, setLoadingModel] = useState(false);
+  const [variantSelect, setVariantSelect] = useState<CustomersSelectVariants[]>(
+    []
+  );
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -158,9 +164,20 @@ export const useCustomers = () => {
         phone_number: data.phone_number,
         source: data.source,
         interested_in: `${data.interested_in}`,
+        variants: `${data.variants}`,
+
         status: `${data.status}`,
         notes: data.notes,
       });
+
+      // Agar customerda interested_in bo'lsa, variantlarni yuklash
+      if (data.interested_in) {
+        await editFormSelect(data.interested_in);
+
+        // API javobi kelgach, variant select ni to'g'ri qiymatga o'rnatish
+        // Bu useEffect orqali bajariladi
+      }
+
       setShowAddModal(true);
     } catch (err) {
       window.alert(err);
@@ -186,9 +203,20 @@ export const useCustomers = () => {
     fetchUsersStatus();
   }, []);
 
-  // const refetch = () => {
-  //   fetchUsers();
-  // };
+  const editFormSelect = async (id: number) => {
+    try {
+      setLoadingModel(true);
+
+      const { data } = await api.get(`/cars/variants/${id}/`);
+      console.log(data);
+
+      setVariantSelect(data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadingModel(false);
+    }
+  };
 
   return {
     register,
@@ -219,5 +247,8 @@ export const useCustomers = () => {
     loading,
     error,
     // refetch,
+    editFormSelect,
+    loadingModel,
+    variantSelect,
   };
 };

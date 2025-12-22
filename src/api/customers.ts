@@ -13,6 +13,7 @@ export interface Customers {
   source: string;
   updated_at: string;
   status: number;
+  variants: string;
   // email?: string;
 }
 

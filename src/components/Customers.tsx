@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Search,
   Filter,
@@ -52,6 +52,9 @@ export function Customers() {
     pgnCount,
     fetchUsers,
     setActivePage,
+    editFormSelect,
+    loadingModel,
+    variantSelect,
   } = useCustomers();
 
   const formatPhoneNumber = useCallback((value: string): string => {
@@ -117,14 +120,7 @@ export function Customers() {
     3: "bg-green-100 text-green-700 border-green-200",
     4: "bg-yellow-100 text-yellow-700 border-yellow-200",
     5: "bg-emerald-100 text-emerald-700 border-emerald-200",
-    // lost: "bg-red-100 text-red-700 border-red-200",
   };
-
-  // const sentimentIcons: Record<string, string> = {
-  //   p: "😊",
-  //   n: "😐",
-  //   negative: "😟",
-  // };
 
   return (
     <div className="space-y-6">
@@ -222,11 +218,6 @@ export function Customers() {
                         >
                           {customer.full_name}
                         </h3>
-                        {/* {customer.sentiment && (
-                          <span className="text-lg">
-                            {sentimentIcons[customer.sentiment]}
-                          </span>
-                        )} */}
                       </div>
                       <div className="flex gap-3">
                         <img
@@ -293,7 +284,17 @@ export function Customers() {
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-600">
                     <TrendingUp className="w-4 h-4 text-[#E60012]" />
-                    <span>{customer.interested_in}</span>
+                    <span>
+                      {customer.interested_in}
+                      {customer.variants ? (
+                        <>
+                          {" "}
+                          {"->"} {customer.variants}
+                        </>
+                      ) : (
+                        ""
+                      )}
+                    </span>
                   </div>
                 </div>
 
@@ -422,6 +423,7 @@ export function Customers() {
                     <p className="text-[#E60012]">{errors.source.message}</p>
                   )}
                 </div>
+
                 <div>
                   <label className="block text-sm text-gray-700 mb-2">
                     {t("customers.addClientObj.interestedModel")}
@@ -429,7 +431,16 @@ export function Customers() {
                   <select
                     {...register("interested_in")}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
+                    onChange={(e) => {
+                      if (e.target.value) {
+                        const selectedId = parseInt(e.target.value);
+                        editFormSelect(selectedId);
+                      }
+                    }}
                   >
+                    <option value="" disabled selected hidden>
+                      {/* {t("test-drive.select")} */}Model tanlang
+                    </option>
                     {carsModels.length ? (
                       carsModels.map((el) => (
                         <option key={el?.id} value={el?.id}>
@@ -448,6 +459,30 @@ export function Customers() {
                     </p>
                   )}
                 </div>
+
+                {variantSelect[0]?.variants?.length ? (
+                  <div>
+                    <label className="block text-sm text-gray-700 mb-2">
+                      {t("customers.addClientObj.interestedModel")}
+                    </label>
+                    <select
+                      {...register("variants")}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
+                    >
+                      {loadingModel ? (
+                        <option>{t("formLaoding")}</option>
+                      ) : (
+                        variantSelect[0]?.variants?.map((el) => (
+                          <option key={el?.id} value={el?.id}>
+                            {el?.series}
+                          </option>
+                        ))
+                      )}
+                    </select>
+                  </div>
+                ) : (
+                  <></>
+                )}
 
                 <div>
                   <label className="block text-sm text-gray-700 mb-2">
