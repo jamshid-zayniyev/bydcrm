@@ -59,6 +59,7 @@ const TestDrive = () => {
     pgnCount,
     activePage,
     setActivePage,
+    varinats,
   } = useTestDrive(tabsValue);
 
   const { carsModels } = useCustomers();
@@ -674,6 +675,32 @@ const TestDrive = () => {
                     </select>
                   </div>
                 )}
+
+                {customersId?.variants && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      {t("test-drive.seria")}
+                    </label>
+                    <select
+                      disabled
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed"
+                      style={{ height: "39px" }}
+                    >
+                      {loadingDrive ? (
+                        <option>{t("formLaoding")}</option>
+                      ) : (
+                        varinats
+                          .filter((car) => car.id === customersId?.variants)
+                          .map((car) => (
+                            <option key={car.id} value={customersId?.variants}>
+                              {car.series}
+                            </option>
+                          ))
+                      )}
+                    </select>
+                  </div>
+                )}
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     {t("test-drive.email")}

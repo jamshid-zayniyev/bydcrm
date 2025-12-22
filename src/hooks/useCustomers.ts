@@ -170,7 +170,7 @@ export const useCustomers = () => {
         notes: data.notes,
       });
 
-      // Agar customerda interested_in bo'lsa, variantlarni yuklash
+     
       if (data.interested_in) {
         await editFormSelect(data.interested_in);
 

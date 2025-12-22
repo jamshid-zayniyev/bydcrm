@@ -463,7 +463,7 @@ export function Customers() {
                 {variantSelect[0]?.variants?.length ? (
                   <div>
                     <label className="block text-sm text-gray-700 mb-2">
-                      {t("customers.addClientObj.interestedModel")}
+                      {t("test-drive.seria")}
                     </label>
                     <select
                       {...register("variants")}

@@ -11,6 +11,7 @@ import {
   TestDriveSchema,
 } from "@/types/testDrive";
 import { api } from "@/api/axios";
+import { GetVariants } from "@/types/cars";
 
 export const useTestDrive = (tabsValue?: string) => {
   const { t } = useTranslation();
@@ -32,6 +33,7 @@ export const useTestDrive = (tabsValue?: string) => {
 
   const [pgnCount, setPgnCount] = useState<number | null>(null);
   const [activePage, setActivePage] = useState(1);
+  const [varinats, setVarinats] = useState<GetVariants[]>([]);
 
   const {
     register,
@@ -106,6 +108,11 @@ export const useTestDrive = (tabsValue?: string) => {
       setLoadingDrive(true);
       const { data } = await api.get(`/users/customers/${id}/`);
       setCustomersId(data);
+      
+      let {
+        data: [{ variants }],
+      } = await api.get(`/cars/variants/${data?.interested_in}/`);
+      setVarinats(variants);
     } catch (error) {
       console.log(error);
     } finally {
@@ -218,5 +225,6 @@ export const useTestDrive = (tabsValue?: string) => {
     pgnCount,
     activePage,
     setActivePage,
+    varinats,
   };
 };

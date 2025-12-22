@@ -34,7 +34,7 @@
     "phone": "Telefon",
     "username": "Foydalanuvchi nomi",
     "imageUpload": "Rasm yuklash",
-    "imageFile":"Rasm fayli noto'g'ri"
+    "imageFile": "Rasm fayli noto'g'ri"
   },
   "actions": {
     "cansel": "Bekor qilish",
@@ -494,6 +494,7 @@
     "customerError": "Mijozni tanlash majburiy",
     "PENDING": "Jarayonda",
     "PLANNED": "Rejalashtirilgan",
-    "COMPLETED": "Tugallangan"
+    "COMPLETED": "Tugallangan",
+    "seria": "Model seria"
   }
 }

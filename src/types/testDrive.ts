@@ -30,6 +30,7 @@ export interface CustomersList {
   full_name: string;
   phone_number: string;
   interested_in: number;
+  variants: number;
 }
 
 export interface TestDrive {
