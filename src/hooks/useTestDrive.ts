@@ -108,7 +108,7 @@ export const useTestDrive = (tabsValue?: string) => {
       setLoadingDrive(true);
       const { data } = await api.get(`/users/customers/${id}/`);
       setCustomersId(data);
-      
+
       let {
         data: [{ variants }],
       } = await api.get(`/cars/variants/${data?.interested_in}/`);
@@ -119,6 +119,13 @@ export const useTestDrive = (tabsValue?: string) => {
       setLoadingDrive(false);
     }
   };
+
+  // async function interestedIn(interest: number) {
+  //   let {
+  //     data: [{ variants }],
+  //   } = await api.get(`/cars/variants/${interest}/`);
+  //   setVarinats(variants);
+  // }
 
   const getTestDrive = async (
     tabs: string = currentTab,
