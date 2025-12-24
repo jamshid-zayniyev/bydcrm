@@ -369,19 +369,31 @@
     },
     "manualRegistration": {
       "title": "Qo'lda ro'yxatga olish",
+      "fastRegistration": {
+        "title": "Tezkor ro‘yxatdan o‘tish",
+        "description": "Tashrif buyuruvchilar kirishda QR-kodni skanerlab, tizimda avtomatik ro‘yxatdan o‘tadilar"
+      },
+      "visitTracking": {
+        "title": "Tashriflarni hisobga olish",
+        "description": "Barcha tashriflar keyinchalik tahlil qilish uchun mijoz tarixida saqlanadi"
+      },
       "form": {
         "clientName": {
-          "label": "Mijoz ismi",
-          "placeholder": "Ismni kiriting"
+          "label": "Mijoz Ismi",
+          "placeholder": "Ismni kiriting",
+          "errorFullName": "Ism va familiya to‘liq kiritilishi shart!"
         },
         "phone": {
-          "label": "Telefon"
+          "label": "Telefon",
+          "errorPhone": "Telefon raqamni kiritilishi shart!"
         },
         "email": {
           "label": "Email (ixtiyoriy)"
         },
         "interestedModel": {
-          "label": "Qiziqtirgan model"
+          "label": "Qiziqtirgan model",
+          "labelSelect": "Modelni tanlang",
+          "errorInterestedModel": "Modelni tanlash shart!"
         }
       },
       "submitButton": "Tashrif buyuruvchini ro'yxatga olish"

@@ -1,44 +1,28 @@
-import { QrCode, Camera, UserPlus, CheckCircle } from "lucide-react";
+import { QrCode, Camera, UserPlus, CheckCircle, Clock } from "lucide-react";
 import { useState } from "react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useTranslation } from "react-i18next";
-import QrCodeScanner from "./ui/qrCodeScanner";
+import { QRCode } from "@/assets";
+import UseQrScanner from "@/hooks/useQrScanner";
+import Loading from "./ui/loading";
 
 export function QRScanner() {
   const { t } = useTranslation();
-  const [isScanning, setIsScanning] = useState(false);
-  const [scannedCustomer, setScannedCustomer] = useState<string | null>(null);
-  const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    email: "",
-    vehicle: "",
-  });
 
-  const handleScan = () => {
-    setIsScanning(true);
-    // Simulate scanning
-    setTimeout(() => {
-      setIsScanning(false);
-      setScannedCustomer("Азиз Турсунов");
-    }, 2000);
-  };
+  const {
+    register,
+    handleSubmit,
+    onSubmit,
+    errors,
 
-  const handleReset = () => {
-    setScannedCustomer(null);
-    setIsScanning(false);
-  };
+    cars,
+    loading,
 
-  const handleManualRegister = () => {
-    if (formData.name && formData.phone && formData.vehicle) {
-      alert(`Клиент ${formData.name} успешно зарегистрирован!`);
-      setFormData({ name: "", phone: "", email: "", vehicle: "" });
-    } else {
-      alert("Пожалуйста, заполните все обязательные поля");
-    }
-  };
-
-  console.log(isScanning);
+    handlePhoneChange,
+    handlePhoneBlur,
+    daily,
+    loadingDaily,
+  } = UseQrScanner();
 
   return (
     <div className="space-y-6">
@@ -67,72 +51,27 @@ export function QRScanner() {
       {/* QR Scanner */}
       <div className="bg-white rounded-xl border-2 border-gray-200 p-6 shadow-sm">
         <div className="max-w-md mx-auto">
-          <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl mb-6 relative overflow-hidden border-2 border-gray-200">
-            {isScanning ? (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-64 h-64 border-4 border-[#E60012] rounded-xl relative animate-pulse">
-                  <div className="absolute top-0 left-0 w-full h-1 bg-[#E60012] animate-pulse"></div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <Camera className="w-12 h-12 text-[#E60012] animate-pulse" />
-                  </div>
-                </div>
-              </div>
-            ) : scannedCustomer ? (
-              <div className="absolute inset-0 flex items-center justify-center bg-green-50">
-                <div className="text-center">
-                  <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
-                  <h3 className="text-gray-900 mb-2">
-                    Клиент зарегистрирован!
-                  </h3>
-                  <p className="text-sm text-gray-600">{scannedCustomer}</p>
-                </div>
-              </div>
-            ) : (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <QrCode className="w-24 h-24 text-gray-400" />
-              </div>
-            )}
+          <div className="w-[247px] h-[398px]">
+            <img className="w-full object-cover" src={QRCode} alt="no img-?" />
           </div>
-
-          <button
-            onClick={scannedCustomer ? handleReset : handleScan}
-            disabled={isScanning}
-            className="w-full px-6 py-3 bg-[#E60012] text-white rounded-xl hover:bg-[#b00010] disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-colors shadow-md"
-          >
-            {isScanning ? (
-              <>
-                <Camera className="w-5 h-5 animate-pulse" />
-                <span>{t("qr.scanning.scan")}</span>
-              </>
-            ) : scannedCustomer ? (
-              <>
-                <UserPlus className="w-5 h-5" />
-                <span>{t("qr.scanning.againScan")}</span>
-              </>
-            ) : (
-              <>
-                <Camera className="w-5 h-5" />
-                <span>{t("qr.scanning.startScanning")}</span>
-              </>
-            )}
-          </button>
         </div>
       </div>
 
       {/* Features */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
           <div className="w-12 h-12 bg-red-50 border-2 border-[#E60012] rounded-xl flex items-center justify-center mb-3">
             <QrCode className="w-6 h-6 text-[#E60012]" />
           </div>
-          <h3 className="text-gray-900 mb-2">Быстрая регистрация</h3>
+          <h3 className="text-gray-900 mb-2">
+            {t("qr.manualRegistration.fastRegistration.title")}
+          </h3>
           <p className="text-sm text-gray-600">
-            Посетители сканируют QR-код при входе для автоматической регистрации
-            в систем��
+            {t("qr.manualRegistration.fastRegistration.description")}
           </p>
         </div>
 
-        <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
+        {/* <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
           <div className="w-12 h-12 bg-green-50 border-2 border-green-600 rounded-xl flex items-center justify-center mb-3">
             <UserPlus className="w-6 h-6 text-green-600" />
           </div>
@@ -140,15 +79,17 @@ export function QRScanner() {
           <p className="text-sm text-gray-600">
             Система автоматически создает профиль клиента с базовой информацией
           </p>
-        </div>
+        </div> */}
 
         <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
           <div className="w-12 h-12 bg-gray-100 border-2 border-black rounded-xl flex items-center justify-center mb-3">
             <CheckCircle className="w-6 h-6 text-black" />
           </div>
-          <h3 className="text-gray-900 mb-2">Учет посещений</h3>
+          <h3 className="text-gray-900 mb-2">
+            {t("qr.manualRegistration.visitTracking.title")}
+          </h3>
           <p className="text-sm text-gray-600">
-            Все визиты записываются в историю клиента для дальнейшего анализа
+            {t("qr.manualRegistration.visitTracking.description")}
           </p>
         </div>
       </div>
@@ -158,7 +99,7 @@ export function QRScanner() {
         <div className="p-5 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-transparent">
           <h3 className="text-gray-900">{t("qr.manualRegistration.title")}</h3>
         </div>
-        <div className="p-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="p-5">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
               <label className="block text-sm text-gray-700 mb-2">
@@ -169,68 +110,82 @@ export function QRScanner() {
                 placeholder={t(
                   "qr.manualRegistration.form.clientName.placeholder"
                 )}
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012] focus:border-transparent"
+                {...register("full_name")}
+                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012] focus:border-transparent
+                 ${
+                   errors.full_name
+                     ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
+                     : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
+                 }`}
               />
+              {errors.full_name && (
+                <p className="mt-2 text-sm text-[#E60012] font-medium">
+                  {errors.full_name.message}
+                </p>
+              )}
             </div>
             <div>
               <label className="block text-sm text-gray-700 mb-2">
                 {t("qr.manualRegistration.form.phone.label")} *
               </label>
               <input
+                {...register("phone_number")}
                 type="tel"
                 placeholder="+998 XX XXX XX XX"
-                value={formData.phone}
-                onChange={(e) =>
-                  setFormData({ ...formData, phone: e.target.value })
-                }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012] focus:border-transparent"
+                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012] focus:border-transparent ${
+                  errors.phone_number
+                    ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
+                    : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
+                }`}
+                onChange={handlePhoneChange}
+                onBlur={handlePhoneBlur}
               />
+              {errors.phone_number && (
+                <p className="text-[#E60012]">{errors.phone_number.message}</p>
+              )}
             </div>
-            <div>
-              <label className="block text-sm text-gray-700 mb-2">
-                {t("qr.manualRegistration.form.email.label")}
-              </label>
-              <input
-                type="email"
-                placeholder="email@example.com"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012] focus:border-transparent"
-              />
-            </div>
+
             <div>
               <label className="block text-sm text-gray-700 mb-2">
                 {t("qr.manualRegistration.form.interestedModel.label")} *
               </label>
               <select
-                value={formData.vehicle}
-                onChange={(e) =>
-                  setFormData({ ...formData, vehicle: e.target.value })
-                }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012] focus:border-transparent"
+                {...register("interested_in")}
+                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012] focus:border-transparent
+                 ${
+                   errors.interested_in
+                     ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
+                     : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
+                 }`}
               >
-                <option value="">Выберите модель</option>
-                <option>BYD Song Plus</option>
-                <option>BYD Han</option>
-                <option>BYD Tang</option>
-                <option>BYD Atto 3</option>
-                <option>BYD Seal</option>
+                <option value="" disabled>
+                  {t("qr.manualRegistration.form.interestedModel.labelSelect")}
+                </option>
+                {cars.map((el) => (
+                  <option key={el?.id} value={el?.id}>
+                    {el?.model}
+                  </option>
+                ))}
               </select>
+              {errors.interested_in && (
+                <p className="mt-2 text-sm text-[#E60012] font-medium">
+                  {errors.interested_in.message}
+                </p>
+              )}
             </div>
           </div>
           <button
-            onClick={handleManualRegister}
-            className="px-6 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors shadow-sm"
+            disabled={loading}
+            type="submit"
+            className="px-6 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors shadow-sm disabled:opacity-50 disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
-            {t("qr.manualRegistration.submitButton")}
+            {loading ? (
+              <>{t("qr.manualRegistration.submitButton")}...</>
+            ) : (
+              t("qr.manualRegistration.submitButton")
+            )}
           </button>
-        </div>
+        </form>
       </div>
 
       {/* Recent Walk-ins */}
@@ -239,38 +194,35 @@ export function QRScanner() {
           <h3 className="text-gray-900">{t("qr.recentVisits")}</h3>
         </div>
         <div className="divide-y divide-gray-200">
-          {[
-            {
-              name: "Олим Юлдашев",
-              time: "10 минут назад",
-              model: "BYD Song Plus",
-            },
-            {
-              name: "Мадина Хасанова",
-              time: "25 минут назад",
-              model: "BYD Han",
-            },
-            {
-              name: "Жавлон Каримов",
-              time: "1 час назад",
-              model: "BYD Atto 3",
-            },
-          ].map((visitor, index) => (
-            <div key={index} className="p-4 hover:bg-gray-50 transition-colors">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-red-50 border-2 border-[#E60012] rounded-full flex items-center justify-center">
-                    <UserPlus className="w-5 h-5 text-[#E60012]" />
+          {loading ? (
+            <Loading />
+          ) : (
+            daily.map((el) => (
+              <div
+                key={el?.id}
+                className="p-4 hover:bg-gray-50 transition-colors"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-red-50 border-2 border-[#E60012] rounded-full flex items-center justify-center">
+                      <UserPlus className="w-5 h-5 text-[#E60012]" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-900">{el?.full_name}</p>
+                      <p className="text-xs text-gray-500">
+                        {el?.interested_in}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm text-gray-900">{visitor.name}</p>
-                    <p className="text-xs text-gray-500">{visitor.model}</p>
-                  </div>
+
+                  <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-xs font-medium text-gray-600 dark:text-gray-300 transition-colors hover:bg-gray-200 dark:hover:bg-gray-700">
+                    <Clock className="w-4 h-4" />
+                    {el?.updated_at.split("T")[1].slice(0, 5)}
+                  </span>
                 </div>
-                <span className="text-xs text-gray-500">{visitor.time}</span>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
     </div>
