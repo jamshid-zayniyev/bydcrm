@@ -2,7 +2,7 @@ import { QrCode, Camera, UserPlus, CheckCircle, Clock } from "lucide-react";
 import { useState } from "react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useTranslation } from "react-i18next";
-import { QRCode } from "@/assets";
+import { QRCode, QRScan } from "@/assets";
 import UseQrScanner from "@/hooks/useQrScanner";
 import Loading from "./ui/loading";
 
@@ -51,8 +51,8 @@ export function QRScanner() {
       {/* QR Scanner */}
       <div className="bg-white rounded-xl border-2 border-gray-200 p-6 shadow-sm">
         <div className="max-w-md mx-auto">
-          <div className="w-[247px] h-[398px]">
-            <img className="w-full object-cover" src={QRCode} alt="no img-?" />
+          <div className="mx-auto" style={{ width: "370px", height: "370px" }}>
+            <img className="w-full object-cover" src={QRScan} alt="no img-?" />
           </div>
         </div>
       </div>
