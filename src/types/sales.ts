@@ -2,11 +2,11 @@ import z from "zod";
 
 export const createSaleContractSchema = (t: any) =>
   z.object({
-    customer_id: z.string().optional(),
-    car: z.string().optional(),
+    customer_id: z.string().min(1, t("sales.customerSelectError")),
+    car: z.string().min(1, t("sales.carSelectError")),
     price: z.string().min(1, t("cars.priceError")),
-    sold_by: z.string().optional(),
-    status: z.string().optional(),
+    // sold_by: z.string().min(1, t("sales.soldBySelectError")),
+    status: z.string().min(1, t("sales.statusSelectError")),
   });
 export type SaleContractSchema = z.infer<
   ReturnType<typeof createSaleContractSchema>

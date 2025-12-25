@@ -8,6 +8,7 @@ import { useCustomers } from "@/hooks/useCustomers";
 import { useService } from "@/hooks/useService";
 import EditDelete from "./ui/edit-delete";
 import DeleteModal from "./ui/delete-modal";
+import AddEditSelect from "@/hooks/addEditSelect";
 
 export function Sales() {
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
@@ -311,14 +312,26 @@ export function Sales() {
                   </label>
                   <select
                     {...register("customer_id")}
-                    className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent border-red-500`}
+                    className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent border-red-500 ${
+                      errors.customer_id
+                        ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
+                        : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
+                    }`}
                   >
+                    <option value="" disabled>
+                      {t("sales.customerSelect")}
+                    </option>
                     {customers.map((customer) => (
                       <option key={customer.id} value={customer.id}>
                         {customer.full_name}
                       </option>
                     ))}
                   </select>
+                  {errors.customer_id && (
+                    <p className="text-[#E60012]">
+                      {errors.customer_id.message}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -327,8 +340,15 @@ export function Sales() {
                   </label>
                   <select
                     {...register("car")}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
+                    className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent border-red-500 ${
+                      errors.car
+                        ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
+                        : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
+                    }`}
                   >
+                    <option value="" disabled>
+                      {t("sales.carSelect")}
+                    </option>
                     {carsModels.length ? (
                       carsModels.map((el) => (
                         <option key={el?.id} value={el?.id}>
@@ -341,6 +361,9 @@ export function Sales() {
                       </option>
                     )}
                   </select>
+                  {errors.car && (
+                    <p className="text-[#E60012]">{errors.car.message}</p>
+                  )}
                 </div>
 
                 <div>
@@ -355,7 +378,28 @@ export function Sales() {
                         ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
                         : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
                     }`}
-                    type="number"
+                    type="text"
+                    onChange={(e) => {
+                      // Faqat raqamlarni qoldirish
+                      let value = e.target.value.replace(/,/g, "");
+
+                      // Agar son bo'lsa, formatlash
+                      if (value && !isNaN(Number(value))) {
+                        // Vergul bilan formatlash
+                        const formatted = Number(value).toLocaleString("en-US");
+                        e.target.value = formatted;
+
+                        // React Hook Form uchun asl qiymatni saqlash
+                        e.target.setAttribute("data-value", value);
+                      }
+                    }}
+                    onBlur={(e) => {
+                      // Blur paytida asl qiymatni register ga yuborish
+                      const rawValue = e.target.value.replace(/,/g, "");
+                      register("price").onChange({
+                        target: { value: rawValue, name: "price" },
+                      });
+                    }}
                   />
                   {errors.price && (
                     <p className="text-[#E60012]">{errors.price.message}</p>
@@ -364,39 +408,28 @@ export function Sales() {
 
                 <div>
                   <label className="block text-sm text-gray-700 mb-2">
-                    {t("sales.soldBy")}
-                  </label>
-                  <select
-                    {...register("sold_by")}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
-                  >
-                    {employees.length ? (
-                      employees.map((el) => (
-                        <option key={el?.id} value={el?.id}>
-                          {el?.full_name}
-                        </option>
-                      ))
-                    ) : (
-                      <option value="" disabled>
-                        {t("noInformation")}
-                      </option>
-                    )}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm text-gray-700 mb-2">
                     {t("service.status")}
                   </label>
+
                   <select
                     {...register("status")}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                      errors.price
+                        ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
+                        : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
+                    }`}
                   >
+                    <option value="" disabled>
+                      {t("sales.statusSelect")}
+                    </option>
                     <option value={"cp"}>{t("sales.COMPLETED")}</option>
                     <option value={"p"}>{t("sales.PENDING")}</option>
                     <option value={"r"}>{t("sales.REVISED")}</option>
                     <option value={"cc"}>{t("sales.CANCELLED")}</option>
                   </select>
+                  {errors.status && (
+                    <p className="text-[#E60012]">{errors.status.message}</p>
+                  )}
                 </div>
               </div>
 
@@ -405,9 +438,7 @@ export function Sales() {
                   type="submit"
                   className="flex-1 px-4 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors"
                 >
-                  {loading
-                    ? `...${t("customers.addClientObj.addClient")}`
-                    : `${t("customers.addClientObj.addClient")}`}
+                  <AddEditSelect selected={selected} loading={loading} t={t} />
                 </button>
                 <button
                   disabled={loading}

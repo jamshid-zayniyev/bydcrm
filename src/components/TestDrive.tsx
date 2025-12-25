@@ -13,6 +13,7 @@ import { useState } from "react";
 import { PaginationDemo } from "./ui/paginationApi";
 import { PgntTestDrive } from "./ui/pgntTestDrive";
 import { count } from "console";
+import AddEditSelect from "@/hooks/addEditSelect";
 
 const TestDrive = () => {
   const { t } = useTranslation();
@@ -755,9 +756,7 @@ const TestDrive = () => {
                   type="submit"
                   className="flex-1 px-4 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors"
                 >
-                  {loading
-                    ? `...${t("customers.addClientObj.addClient")}`
-                    : `${t("customers.addClientObj.addClient")}`}
+                  <AddEditSelect selected={selected} loading={loading} t={t} />
                 </button>
                 <button
                   disabled={loading}

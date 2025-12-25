@@ -26,6 +26,11 @@
   "formSave": "Сохранить",
 
   "pcs": "шт",
+
+  "sale": "Клиент",
+  "add": "добавлять",
+  "edit": "редактировать",
+
   "header": {
     "first_name": "Имя",
     "last_name": "Фамилия",
@@ -206,8 +211,19 @@
     "CANCELLED": "Отменено",
 
     "customer": "Клиент",
+    "customerSelect": "Выберите клиента",
+    "customerSelectError": "Выбор клиента обязателен!",
+
     "car": "Машина",
-    "soldBy": "Продавец"
+    "carSelect": "Выберите машину",
+    "carSelectError": "Выбор машины обязателен!",
+
+    "soldBy": "Продавец",
+    "soldBySelect": "Выберите продавца",
+    "soldBySelectError": "Выбор продавца обязателен!",
+
+    "statusSelect": "Выберите статус",
+    "statusSelectError": "Выбор статуса обязателен!"
   },
   "service": {
     "serviceMaintenance": "Сервисное обслуживание",

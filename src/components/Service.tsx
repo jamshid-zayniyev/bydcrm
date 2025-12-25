@@ -23,6 +23,7 @@ import {
   statusColors,
   statusIcons,
 } from "@/hooks/useColorLabelsIcons";
+import AddEditSelect from "@/hooks/addEditSelect";
 
 export function Service() {
   const { t } = useTranslation();
@@ -521,9 +522,7 @@ export function Service() {
                   type="submit"
                   className="flex-1 px-4 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors"
                 >
-                  {loading
-                    ? `...${t("customers.addClientObj.addClient")}`
-                    : `${t("customers.addClientObj.addClient")}`}
+                  <AddEditSelect selected={selected} loading={loading} t={t} />
                 </button>
                 <button
                   disabled={loading}

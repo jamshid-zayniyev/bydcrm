@@ -39,7 +39,12 @@ export const useSales = () => {
     control,
   } = useForm<SaleContractSchema>({
     resolver: zodResolver(saleContractSchema),
-    defaultValues: {},
+    defaultValues: {
+      customer_id: "",
+      car: "",
+      price: "",
+      status: "",
+    },
   });
 
   const onSubmit = async (data: SaleContractSchema) => {
@@ -50,7 +55,6 @@ export const useSales = () => {
         customer_id: Number(data?.customer_id),
         car: Number(data?.car),
         price: Number(data?.price),
-        sold_by: Number(data?.sold_by),
       };
 
       if (selected === null) {
@@ -98,11 +102,10 @@ export const useSales = () => {
     setSelected(null);
     setShowAddModal(false);
     reset({
-      // customer_id: `${data.customer_id}`,
-      // car: `${data.car}`,
+      customer_id: "",
+      car: "",
       price: "",
-      // sold_by: `${data.sold_by}`,
-      // status: "",
+      status: "",
     });
   };
 
@@ -139,7 +142,6 @@ export const useSales = () => {
       customer_id: `${data.customer_id}`,
       car: `${data.car}`,
       price: `${data.price}`,
-      sold_by: `${data.sold_by}`,
       status: data.status,
     });
 

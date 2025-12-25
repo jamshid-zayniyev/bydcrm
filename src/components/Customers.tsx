@@ -18,6 +18,7 @@ import NoData from "../assets/no-data.svg";
 
 import DeleteModal from "./ui/delete-modal";
 import { PaginationDemo } from "./ui/paginationApi";
+import AddEditSelect from "@/hooks/addEditSelect";
 
 export function Customers() {
   const [selectedCustomer, setSelectedCustomer] = useState<Customers | null>(
@@ -564,9 +565,7 @@ export function Customers() {
                   type="submit"
                   className="flex-1 px-4 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors"
                 >
-                  {loading
-                    ? `...${t("customers.addClientObj.addClient")}`
-                    : `${t("customers.addClientObj.addClient")}`}
+                  <AddEditSelect selected={selected} loading={loading} t={t} />
                 </button>
                 <button
                   disabled={loading}

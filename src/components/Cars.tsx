@@ -18,6 +18,7 @@ import Variants from "./ui/variants";
 import Loading from "./ui/loading";
 import Nodata from "./ui/no-data";
 import DeleteDialog from "./ui/delete-dialog";
+import AddEditSelect from "@/hooks/addEditSelect";
 
 const Cars = () => {
   const [selectedVehicle, setSelectedVehicle] = useState<CarType | null>(null);
@@ -983,7 +984,11 @@ const Cars = () => {
                   className="flex-1 px-4 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors"
                   disabled={uploadLoading}
                 >
-                  {uploadLoading ? t("formLaoding") : t("formSave")}
+                  <AddEditSelect
+                    selected={selected}
+                    loading={uploadLoading}
+                    t={t}
+                  />
                 </button>
                 <button
                   type="button"

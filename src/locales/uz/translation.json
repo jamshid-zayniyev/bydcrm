@@ -28,6 +28,10 @@
 
   "pcs": "dona",
 
+  "sale": "Mijoz",
+  "add": "qo'shish",
+  "edit": "tahrirlash",
+
   "header": {
     "first_name": "Ism",
     "last_name": "Familiya",
@@ -207,8 +211,19 @@
     "CANCELLED": "Bekor qilindi",
 
     "customer": "Mijoz",
+    "customerSelect": "Mijozni tanlang",
+    "customerSelectError": "Mijoz tanlanilishligi shart!",
+
     "car": "Avtomobil",
-    "soldBy": "Sotuvchi"
+    "carSelect": "Avtomobilni tanlang",
+    "carSelectError": "Avtomobil tanlanilishligi shart!",
+
+    "soldBy": "Sotuvchi",
+    "soldBySelect": "Sotuvchini tanlang",
+    "soldBySelectError": "Sotuvchi tanlanilishligi shart!",
+
+    "statusSelect": "Holatni tanlang",
+    "statusSelectError": "Holat tanlanilishligi shart!"
   },
   "service": {
     "serviceMaintenance": "Xizmat ko'rsatish",
