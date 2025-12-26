@@ -10,6 +10,7 @@ export interface ServicesType {
   status: string;
   technician: number;
   rate: number;
+  variants: string;
 }
 
 export interface Employees {
@@ -48,6 +49,7 @@ export const serviceSchema = z.object({
   status: z.string().optional(),
   technician: z.string().optional(),
   vehicle: z.string().optional(),
+  variants: z.string().optional(),
 });
 
 export type ServiceFormData = z.infer<typeof serviceSchema>;

@@ -59,6 +59,10 @@ export function Service() {
     reports,
 
     loadingPost,
+
+    editFormSelect,
+    loadingModel,
+    variantSelect,
   } = useService();
   const { carsModels, customers } = useCustomers();
   // const statusColors: Record<string, string> = {
@@ -258,6 +262,14 @@ export function Service() {
                             </h4>
                             <p className="text-sm text-gray-500">
                               {request.vehicle}
+                              {request.variants ? (
+                                <>
+                                  {" "}
+                                  {"->"} {request.variants}
+                                </>
+                              ) : (
+                                ""
+                              )}
                             </p>
                           </div>
                         </div>
@@ -415,6 +427,12 @@ export function Service() {
                   <select
                     {...register("vehicle")}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
+                    onChange={(e) => {
+                      if (e.target.value) {
+                        const selectedId = parseInt(e.target.value);
+                        editFormSelect(selectedId);
+                      }
+                    }}
                   >
                     {carsModels.length ? (
                       carsModels.map((el) => (
@@ -429,6 +447,30 @@ export function Service() {
                     )}
                   </select>
                 </div>
+
+                {variantSelect[0]?.variants?.length ? (
+                  <div>
+                    <label className="block text-sm text-gray-700 mb-2">
+                      {t("test-drive.seria")}
+                    </label>
+                    <select
+                      {...register("variants")}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
+                    >
+                      {loadingModel ? (
+                        <option>{t("formLaoding")}</option>
+                      ) : (
+                        variantSelect[0]?.variants?.map((el) => (
+                          <option key={el?.id} value={el?.id}>
+                            {el?.series}
+                          </option>
+                        ))
+                      )}
+                    </select>
+                  </div>
+                ) : (
+                  <></>
+                )}
 
                 <div>
                   <label className="block text-sm text-gray-700 mb-2">

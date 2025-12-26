@@ -9,6 +9,7 @@ export interface Sales {
   status: string;
   created_at: number;
   updated_at: number;
+  variants: string;
 }
 
 export interface SalesStatistics {

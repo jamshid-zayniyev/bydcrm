@@ -241,7 +241,18 @@ const TestDrive = () => {
                       {customer.car ? (
                         <div className="flex items-center gap-2 text-sm text-gray-600">
                           <TrendingUp className="w-4 h-4 text-[#E60012]" />
-                          <span>{customer.car}</span>
+                          <span>
+                            {customer?.car}
+
+                            {customer?.variants ? (
+                              <>
+                                {" "}
+                                {"->"} {customer?.variants}
+                              </>
+                            ) : (
+                              ""
+                            )}
+                          </span>
                         </div>
                       ) : null}
                     </div>

@@ -12,6 +12,7 @@ import { createSaleContractSchema, SaleContractSchema } from "@/types/sales";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "@/api/axios";
+import { CustomersSelectVariants } from "@/types/customers";
 
 export const useSales = () => {
   const [loading, setLoading] = useState(true);
@@ -28,6 +29,10 @@ export const useSales = () => {
   const [isDeleteModal, setDeleteModal] = useState(false);
 
   const [loadingPost, setLoadingPost] = useState(false);
+  const [loadingModel, setLoadingModel] = useState(false);
+  const [variantSelect, setVariantSelect] = useState<CustomersSelectVariants[]>(
+    []
+  );
 
   const { t } = useTranslation();
   const saleContractSchema = createSaleContractSchema(t);
@@ -57,6 +62,7 @@ export const useSales = () => {
         customer_id: Number(data?.customer_id),
         car: Number(data?.car),
         price: Number(data?.price),
+        variants: Number(data?.variants),
       };
 
       if (selected === null) {
@@ -110,7 +116,9 @@ export const useSales = () => {
       car: "",
       price: "",
       status: "",
+      // variants: "",
     });
+    setVariantSelect([]);
   };
 
   const fetchSalesBanner = async () => {
@@ -145,9 +153,14 @@ export const useSales = () => {
     reset({
       customer_id: `${data.customer_id}`,
       car: `${data.car}`,
+      variants: `${data.variants}`,
+
       price: `${data.price}`,
       status: data.status,
     });
+    if (data.car) {
+      await editFormSelect(data.car);
+    }
 
     setShowAddModal(true);
   };
@@ -163,6 +176,19 @@ export const useSales = () => {
     await api.delete(`/sales/sales-contract/${id}/`);
     closeDeleteModal();
     fetchSales();
+  };
+
+  const editFormSelect = async (id: number) => {
+    try {
+      setLoadingModel(true);
+
+      const { data } = await api.get(`/cars/variants/${id}/`);
+      setVariantSelect(data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadingModel(false);
+    }
   };
 
   return {
@@ -195,5 +221,9 @@ export const useSales = () => {
     selected,
 
     loadingPost,
+
+    editFormSelect,
+    loadingModel,
+    variantSelect,
   };
 };

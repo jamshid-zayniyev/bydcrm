@@ -12,6 +12,7 @@ import {
 } from "../types/service";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CustomersSelectVariants } from "@/types/customers";
 
 export const useService = () => {
   const {
@@ -48,6 +49,10 @@ export const useService = () => {
     average_rating: 0,
   });
   const [loadingPost, setLoadingPost] = useState(false);
+  const [loadingModel, setLoadingModel] = useState(false);
+  const [variantSelect, setVariantSelect] = useState<CustomersSelectVariants[]>(
+    []
+  );
 
   const fetchService = async (
     active = 1,
@@ -129,6 +134,7 @@ export const useService = () => {
       // customer_name: "",
       date: new Date().toISOString().split("T")[0],
     });
+    setVariantSelect([]);
   };
 
   const closeDeleteModal = () => {
@@ -189,10 +195,31 @@ export const useService = () => {
         status: data.status,
         technician: `${data.technician}`,
         vehicle: `${data.vehicle}`,
+        variants: `${data.variants}`,
       });
+
+      if (data.vehicle) {
+        await editFormSelect(data.vehicle);
+      }
+
       setShowAddModal(true);
     } catch (err) {
       window.alert(err);
+    }
+  };
+
+  const editFormSelect = async (id: number) => {
+    try {
+      setLoadingModel(true);
+
+      const { data } = await api.get(`/cars/variants/${id}/`);
+      console.log(data);
+
+      setVariantSelect(data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadingModel(false);
     }
   };
 
@@ -224,5 +251,9 @@ export const useService = () => {
     reports,
 
     loadingPost,
+
+    editFormSelect,
+    loadingModel,
+    variantSelect,
   };
 };

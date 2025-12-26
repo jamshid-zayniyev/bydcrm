@@ -40,6 +40,7 @@ export interface TestDrive {
   email: string;
   phone_number: string;
   car: number;
+  variants: string;
   employee: number;
   employee_name: string;
   status: string;

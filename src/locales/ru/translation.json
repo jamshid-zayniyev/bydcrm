@@ -223,7 +223,9 @@
     "soldBySelectError": "Выбор продавца обязателен!",
 
     "statusSelect": "Выберите статус",
-    "statusSelectError": "Выбор статуса обязателен!"
+    "statusSelectError": "Выбор статуса обязателен!",
+
+    "variants": "Выберите модель"
   },
   "service": {
     "serviceMaintenance": "Сервисное обслуживание",

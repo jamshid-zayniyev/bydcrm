@@ -261,28 +261,6 @@ export function Customers() {
                     >
                       {customer.status}
                     </span>
-
-                    {/* {customer.status ? (
-                      <span
-                        className={`inline-block px-3 py-1 rounded-lg text-xs border ${
-                          statusColors[customer.status]
-                        }`}
-                      >
-                        {customer.status === 1
-                          ? t("customers.addClientObj.statusObj.new")
-                          : customer.status === 2
-                          ? t("customers.addClientObj.statusObj.connected")
-                          : customer.status === 3
-                          ? t("customers.addClientObj.statusObj.qualified")
-                          : customer.status === 4
-                          ? t("customers.addClientObj.statusObj.negotiable")
-                          : t("customers.addClientObj.statusObj.sale")}
-                      </span>
-                    ) : (
-                      <span className="inline-block px-3 py-1 rounded-lg text-xs border bg-primary text-primary-foreground">
-                        {t("noInformation")}
-                      </span>
-                    )} */}
                   </div>
                 </div>
 

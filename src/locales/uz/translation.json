@@ -223,7 +223,11 @@
     "soldBySelectError": "Sotuvchi tanlanilishligi shart!",
 
     "statusSelect": "Holatni tanlang",
-    "statusSelectError": "Holat tanlanilishligi shart!"
+    "statusSelectError": "Holat tanlanilishligi shart!",
+
+    "variantsLabel": "Seria",
+    "variants": "Seriani tanlang",
+    "variantsError": "Seria tanlanilishligi shart!"
   },
   "service": {
     "serviceMaintenance": "Xizmat ko'rsatish",

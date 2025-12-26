@@ -111,6 +111,7 @@ export const useCustomers = () => {
       interested_in: "",
       notes: "",
     });
+    setVariantSelect([]);
   };
 
   const fetchCarsModels = async () => {
