@@ -27,7 +27,7 @@ const createUserSchema = (t: any) =>
         message: "Telefon raqam formati noto'g'ri. Format: +998 XX XXX XX XX",
       }),
     source: z.string().optional(),
-    interested_in: z.string().optional(),
+    interested_in: z.string().min(1, "Model tanlash shart!"),
     notes: z.string().min(1, "To‘liq kiriting"),
     status: z.string().optional(),
     location: z.string().optional(),
@@ -68,7 +68,7 @@ export const useCustomers = () => {
       phone_number: "",
       full_name: "",
       source: "o",
-      // interested_in: "",
+      interested_in: "",
       notes: "",
     },
   });
@@ -76,7 +76,6 @@ export const useCustomers = () => {
   const onSubmit = async (data: User) => {
     try {
       setLoading(true);
-      console.log(data);
 
       let newData = {
         ...data,
@@ -109,7 +108,7 @@ export const useCustomers = () => {
       phone_number: "",
       full_name: "",
       source: "o",
-      // interested_in: "",
+      interested_in: "",
       notes: "",
     });
   };
@@ -135,7 +134,8 @@ export const useCustomers = () => {
   const fetchUsers = async (
     active = 1,
     search = "",
-    status: string | number = "all"
+    status: string | number = "all",
+    created_date=""
   ) => {
     try {
       setLoading(true);
@@ -157,7 +157,6 @@ export const useCustomers = () => {
     try {
       setSelected(id);
       let data = await getOneCustomer(id);
-      console.log(data);
 
       reset({
         full_name: data.full_name,
@@ -170,7 +169,6 @@ export const useCustomers = () => {
         notes: data.notes,
       });
 
-     
       if (data.interested_in) {
         await editFormSelect(data.interested_in);
 

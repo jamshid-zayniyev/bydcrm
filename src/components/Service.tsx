@@ -57,6 +57,8 @@ export function Service() {
     serives,
     weeklyStatistic,
     reports,
+
+    loadingPost,
   } = useService();
   const { carsModels, customers } = useCustomers();
   // const statusColors: Record<string, string> = {
@@ -522,7 +524,11 @@ export function Service() {
                   type="submit"
                   className="flex-1 px-4 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors"
                 >
-                  <AddEditSelect selected={selected} loading={loading} t={t} />
+                  <AddEditSelect
+                    selected={selected}
+                    loading={loadingPost}
+                    t={t}
+                  />
                 </button>
                 <button
                   disabled={loading}

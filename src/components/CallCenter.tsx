@@ -245,7 +245,7 @@ export function CallCenter() {
                   </p>
                   <p className="text-sm text-gray-900">{call.agent_name}</p>
                   <div className="flex gap-2 mt-2">
-                    {call.recorded && (
+                    {/* {call.recorded && (
                       <button
                         onClick={() => handlePlayRecording(call.id)}
                         className={`p-2 rounded-lg transition-colors ${
@@ -256,7 +256,16 @@ export function CallCenter() {
                       >
                         <PlayCircle className="w-5 h-5" />
                       </button>
-                    )}
+                    )} */}
+                    <button
+                      className={`p-2 rounded-lg transition-colors ${
+                        selectedCall === call.id && isPlaying
+                          ? "bg-[#E60012] text-white"
+                          : "text-[#E60012] hover:bg-red-50"
+                      }`}
+                    >
+                      <PlayCircle className="w-5 h-5" />
+                    </button>
                     <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
                       <Download className="w-5 h-5" />
                     </button>

@@ -47,6 +47,7 @@ export const useService = () => {
     completed: 0,
     average_rating: 0,
   });
+  const [loadingPost, setLoadingPost] = useState(false);
 
   const fetchService = async (
     active = 1,
@@ -79,6 +80,7 @@ export const useService = () => {
 
   const onSubmit = async (data: ServiceFormData) => {
     try {
+      setLoadingPost(true);
       let newData = {
         ...data,
         customer_id: Number(data?.customer_id),
@@ -97,6 +99,8 @@ export const useService = () => {
       fetchService();
     } catch (error) {
       console.error("Xatolik:", error);
+    } finally {
+      setLoadingPost(false);
     }
   };
 
@@ -218,5 +222,7 @@ export const useService = () => {
     serives,
     weeklyStatistic,
     reports,
+
+    loadingPost,
   };
 };

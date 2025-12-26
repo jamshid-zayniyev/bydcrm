@@ -28,6 +28,7 @@ export function Customers() {
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
   const [searchFilter, setSearchFilter] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
+  const [searchData, setSearchData] = useState("");
 
   const {
     register,
@@ -181,6 +182,18 @@ export function Customers() {
                 </option>
               ))}
             </select>
+          </div>
+          <div className="flex items-center gap-2">
+            <input
+              className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#E60012] focus:border-transparent"
+              type="date"
+              value={searchData}
+              onChange={(e) => {
+                const value = e.target.value;
+                setSearchData(value);
+                // fetchUsers(1, value, filterStatus);
+              }}
+            />
           </div>
         </div>
       </div>
@@ -413,7 +426,7 @@ export function Customers() {
                     <option value={"p"}>
                       {t("customers.addClientObj.sourceObj.phone")}
                     </option>
-                    <option value={"w"}>
+                    <option value={"v"}>
                       {t("customers.addClientObj.sourceObj.visit")}
                     </option>
                     <option value={"r"}>
@@ -431,7 +444,12 @@ export function Customers() {
                   </label>
                   <select
                     {...register("interested_in")}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                      errors.interested_in
+                        ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
+                        : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
+                    }`}
+                    // className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
                     onChange={(e) => {
                       if (e.target.value) {
                         const selectedId = parseInt(e.target.value);
@@ -439,20 +457,14 @@ export function Customers() {
                       }
                     }}
                   >
-                    <option value="" disabled selected hidden>
+                    <option value="" disabled>
                       {/* {t("test-drive.select")} */}Model tanlang
                     </option>
-                    {carsModels.length ? (
-                      carsModels.map((el) => (
-                        <option key={el?.id} value={el?.id}>
-                          {el?.model}
-                        </option>
-                      ))
-                    ) : (
-                      <option value="" disabled>
-                        {t("noInformation")}
+                    {carsModels.map((el) => (
+                      <option key={el?.id} value={el?.id}>
+                        {el?.model}
                       </option>
-                    )}
+                    ))}
                   </select>
                   {errors.interested_in && (
                     <p className="text-[#E60012]">
@@ -505,10 +517,8 @@ export function Customers() {
                       </option>
                     )}
                   </select>
-                  {errors.interested_in && (
-                    <p className="text-[#E60012]">
-                      {errors.interested_in.message}
-                    </p>
+                  {errors.status && (
+                    <p className="text-[#E60012]">{errors.status.message}</p>
                   )}
                 </div>
 
@@ -533,10 +543,8 @@ export function Customers() {
                       </option>
                     )} */}
                   </select>
-                  {errors.interested_in && (
-                    <p className="text-[#E60012]">
-                      {errors.interested_in.message}
-                    </p>
+                  {errors.location && (
+                    <p className="text-[#E60012]">{errors.location.message}</p>
                   )}
                 </div>
               </div>

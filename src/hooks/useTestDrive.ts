@@ -34,6 +34,7 @@ export const useTestDrive = (tabsValue?: string) => {
   const [pgnCount, setPgnCount] = useState<number | null>(null);
   const [activePage, setActivePage] = useState(1);
   const [varinats, setVarinats] = useState<GetVariants[]>([]);
+  const [loadingPost, setLoadingPost] = useState(false);
 
   const {
     register,
@@ -60,6 +61,7 @@ export const useTestDrive = (tabsValue?: string) => {
 
   const onSubmit = async (data: TestDriveSchema) => {
     try {
+      setLoadingPost(true);
       if (selected === null) {
         await api.post("/kpi/test-drive/create/", data);
       } else {
@@ -70,6 +72,8 @@ export const useTestDrive = (tabsValue?: string) => {
       getTestDrive(currentTab);
     } catch (error) {
       console.error("Xatolik:", error);
+    } finally {
+      setLoadingPost(false);
     }
   };
 
@@ -233,5 +237,7 @@ export const useTestDrive = (tabsValue?: string) => {
     activePage,
     setActivePage,
     varinats,
+
+    loadingPost,
   };
 };

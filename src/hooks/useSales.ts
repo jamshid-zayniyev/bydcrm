@@ -27,6 +27,8 @@ export const useSales = () => {
   const [selected, setSelected] = useState<number | null>(null);
   const [isDeleteModal, setDeleteModal] = useState(false);
 
+  const [loadingPost, setLoadingPost] = useState(false);
+
   const { t } = useTranslation();
   const saleContractSchema = createSaleContractSchema(t);
   const {
@@ -49,7 +51,7 @@ export const useSales = () => {
 
   const onSubmit = async (data: SaleContractSchema) => {
     try {
-      console.log(data);
+      setLoadingPost(true);
       let newData = {
         ...data,
         customer_id: Number(data?.customer_id),
@@ -67,6 +69,8 @@ export const useSales = () => {
       fetchSales();
     } catch (err) {
       window.alert(err);
+    } finally {
+      setLoadingPost(false);
     }
   };
 
@@ -189,5 +193,7 @@ export const useSales = () => {
 
     // selected
     selected,
+
+    loadingPost,
   };
 };
