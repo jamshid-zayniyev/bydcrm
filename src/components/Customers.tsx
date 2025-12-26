@@ -156,7 +156,7 @@ export function Customers() {
               onChange={(e) => {
                 const value = e.target.value;
                 setSearchFilter(value);
-                fetchUsers(1, value, filterStatus);
+                fetchUsers(1, value, filterStatus, searchData);
               }}
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#E60012] focus:border-transparent"
             />
@@ -169,7 +169,7 @@ export function Customers() {
               onChange={(e) => {
                 const value = e.target.value;
                 setFilterStatus(value);
-                fetchUsers(1, searchFilter, value);
+                fetchUsers(1, searchFilter, value, searchData);
               }}
               className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#E60012] focus:border-transparent"
             >
@@ -191,7 +191,7 @@ export function Customers() {
               onChange={(e) => {
                 const value = e.target.value;
                 setSearchData(value);
-                // fetchUsers(1, value, filterStatus);
+                fetchUsers(1, searchFilter, filterStatus, value);
               }}
             />
           </div>
@@ -338,7 +338,7 @@ export function Customers() {
               searchFilter={searchFilter}
               filterStatus={filterStatus}
               filterService=""
-              filterDate=""
+              filterDate={searchData}
             />
           ) : (
             ""

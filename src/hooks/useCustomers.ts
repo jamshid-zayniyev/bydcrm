@@ -135,12 +135,17 @@ export const useCustomers = () => {
     active = 1,
     search = "",
     status: string | number = "all",
-    created_date=""
+    created_date = ""
   ) => {
     try {
       setLoading(true);
       setError(null);
-      const { results, count } = await getCustomers(active, search, status);
+      const { results, count } = await getCustomers(
+        active,
+        search,
+        status,
+        created_date
+      );
       setCustomers(results);
       setPgnCount(count);
 

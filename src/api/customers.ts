@@ -37,12 +37,13 @@ export interface UsersStatus {
 export const getCustomers = async (
   active: number,
   search: string,
-  status: number | string
+  status: number | string,
+  created_date: string
 ): Promise<ApiResponse<Customers>> => {
   const response = await api.get(
     `/users/customers/?page=${active}&search=${search}&status=${
       status === "all" ? "" : status
-    }`
+    }&created_date=${created_date}`
   );
   return response.data;
 };
