@@ -15,6 +15,13 @@ export interface Customers {
   status: number;
   variants: string;
   // email?: string;
+  ai_probability: number;
+  ai_stage: string;
+  ai_recommendation: {
+    text: string;
+    analyzed_at: string;
+  };
+  ai_last_analyzed: string;
 }
 
 export interface CarsModels {

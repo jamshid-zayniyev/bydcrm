@@ -7,6 +7,7 @@ import {
   MapPin,
   TrendingUp,
   X,
+  Brain,
 } from "lucide-react";
 
 import { useTranslation } from "react-i18next";
@@ -676,6 +677,27 @@ export function Customers() {
                     }}
                   >
                     {selectedCustomer.notes}
+                  </p>
+                </div>
+              )}
+
+              {selectedCustomer?.ai_recommendation?.text && (
+                <div className="pt-4 border-t border-gray-200">
+                  <div className="flex items-center gap-3 mb-3">
+                    <Brain className="lucide lucide-map-pin w-5 h-5 text-[#E60012]" />
+                    <h3 className="text-gray-900">Ai tafsiya</h3>
+                  </div>
+
+                  <p
+                    className="text-sm text-gray-600"
+                    style={{
+                      display: "-webkit-box",
+                      WebkitBoxOrient: "vertical",
+                      WebkitLineClamp: 3,
+                      overflow: "hidden",
+                    }}
+                  >
+                    {selectedCustomer?.ai_recommendation?.text}
                   </p>
                 </div>
               )}
