@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { QRCode, QRScan } from "@/assets";
 import UseQrScanner from "@/hooks/useQrScanner";
 import Loading from "./ui/loading";
+import { useTestDrive } from "@/hooks/useTestDrive";
 
 export function QRScanner() {
   const { t } = useTranslation();
@@ -23,6 +24,8 @@ export function QRScanner() {
     daily,
     loadingDaily,
   } = UseQrScanner();
+
+  const { employees } = useTestDrive();
 
   return (
     <div className="space-y-6">
@@ -70,16 +73,6 @@ export function QRScanner() {
             {t("qr.manualRegistration.fastRegistration.description")}
           </p>
         </div>
-
-        {/* <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-          <div className="w-12 h-12 bg-green-50 border-2 border-green-600 rounded-xl flex items-center justify-center mb-3">
-            <UserPlus className="w-6 h-6 text-green-600" />
-          </div>
-          <h3 className="text-gray-900 mb-2">Автоматический профиль</h3>
-          <p className="text-sm text-gray-600">
-            Система автоматически создает профиль клиента с базовой информацией
-          </p>
-        </div> */}
 
         <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
           <div className="w-12 h-12 bg-gray-100 border-2 border-black rounded-xl flex items-center justify-center mb-3">
@@ -170,6 +163,35 @@ export function QRScanner() {
               {errors.interested_in && (
                 <p className="mt-2 text-sm text-[#E60012] font-medium">
                   {errors.interested_in.message}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm text-gray-700 mb-2">
+                {t("qr.manualRegistration.form.assignedTo.label")} *
+              </label>
+              <select
+                {...register("assigned_to")}
+                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012] focus:border-transparent
+                 ${
+                   errors.assigned_to
+                     ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
+                     : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
+                 }`}
+              >
+                <option value="" disabled>
+                  {t("qr.manualRegistration.form.assignedTo.labelSelect")}
+                </option>
+                {employees.map((el) => (
+                  <option key={el?.id} value={el?.id}>
+                    {el?.full_name}
+                  </option>
+                ))}
+              </select>
+              {errors.assigned_to && (
+                <p className="mt-2 text-sm text-[#E60012] font-medium">
+                  {errors.assigned_to.message}
                 </p>
               )}
             </div>

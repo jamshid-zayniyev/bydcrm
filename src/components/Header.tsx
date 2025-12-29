@@ -68,8 +68,6 @@ export function Header({ onMenuClick }: HeaderProps) {
     getUpload,
   } = useHeader();
 
-  console.log(getUpload);
-
   // Click outside to close dropdowns
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

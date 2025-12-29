@@ -22,6 +22,8 @@ import { PaginationDemo } from "./ui/paginationApi";
 import AddEditSelect from "@/hooks/addEditSelect";
 import { formatDate } from "@/hooks/dateMonthYear";
 import Loading from "./ui/loading";
+import { useTestDrive } from "@/hooks/useTestDrive";
+import { useAuthContext } from "@/contexts/AuthContext";
 
 export function Customers() {
   const [selectedCustomer, setSelectedCustomer] = useState<Customers | null>(
@@ -32,6 +34,9 @@ export function Customers() {
   const [searchFilter, setSearchFilter] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [searchData, setSearchData] = useState("");
+  const {
+    user: { role },
+  } = useAuthContext();
 
   const {
     register,
@@ -66,6 +71,7 @@ export function Customers() {
     totayStats,
     totalLoading,
   } = useCustomers();
+  const { employees } = useTestDrive();
 
   const formatPhoneNumber = useCallback((value: string): string => {
     // Remove all non-digit characters except +
@@ -609,6 +615,37 @@ export function Customers() {
                     type="date"
                   />
                 </div>
+
+                {role === "sa" || role === "m" ? (
+                  <div>
+                    <label className="block text-sm text-gray-700 mb-2">
+                      {t("qr.manualRegistration.form.assignedTo.label")} *
+                    </label>
+                    <select
+                      {...register("assigned_to")}
+                      className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012] focus:border-transparent
+                 ${
+                   errors.assigned_to
+                     ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
+                     : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
+                 }`}
+                    >
+                      <option value="" disabled>
+                        {t("qr.manualRegistration.form.assignedTo.labelSelect")}
+                      </option>
+                      {employees.map((el) => (
+                        <option key={el?.id} value={el?.id}>
+                          {el?.full_name}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.assigned_to && (
+                      <p className="mt-2 text-sm text-[#E60012] font-medium">
+                        {errors.assigned_to.message}
+                      </p>
+                    )}
+                  </div>
+                ) : null}
               </div>
 
               <div>

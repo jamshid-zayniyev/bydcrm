@@ -20,8 +20,9 @@ import {
   Districed,
   StatusResponse,
 } from "@/types/customers";
+import { useAuthContext } from "@/contexts/AuthContext";
 
-const createUserSchema = (t: any) =>
+const createUserSchema = (t: any, role: string) =>
   z.object({
     full_name: z.string().min(1, "Ismni to‘liq kiriting"),
     phone_number: z
@@ -39,6 +40,13 @@ const createUserSchema = (t: any) =>
     variants: z.string().optional(),
     district: z.string().min(1, "Tuman yoki shahar tanlash shart!"),
     date_joined: z.string().optional(),
+    ...(role === "sa" || role === "m"
+      ? {
+          assigned_to: z
+            .string()
+            .min(1, t("qr.manualRegistration.form.assignedTo.errorAssignedTo")),
+        }
+      : {}),
   });
 
 export type User = z.infer<ReturnType<typeof createUserSchema>>;
@@ -64,7 +72,10 @@ export const useCustomers = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { t } = useTranslation();
-  const userSchema = createUserSchema(t);
+  const {
+    user: { role },
+  } = useAuthContext();
+  const userSchema = createUserSchema(t, role);
 
   const {
     register,
@@ -82,6 +93,7 @@ export const useCustomers = () => {
       interested_in: "",
       district: "",
       date_joined: "",
+      assigned_to: "",
 
       notes: "",
     },
@@ -104,6 +116,7 @@ export const useCustomers = () => {
         date_joined: data?.date_joined
           ? data?.date_joined
           : new Date().toISOString().split("T")[0],
+        assigned_to: Number(data?.assigned_to),
 
         // interested_in: 3,
       };
@@ -132,6 +145,7 @@ export const useCustomers = () => {
       interested_in: "",
       district: "",
       date_joined: "",
+      assigned_to: "",
 
       notes: "",
     });
@@ -196,6 +210,8 @@ export const useCustomers = () => {
         variants: `${data.variants}`,
         district: `${data.district}`,
         date_joined: `${data.date_joined}`,
+
+        assigned_to: `${data.assigned_to}`,
 
         status: `${data.status}`,
         notes: data.notes,
@@ -267,7 +283,7 @@ export const useCustomers = () => {
       setAnalytic(data);
     } catch (error) {
       console.log(error);
-    }finally {
+    } finally {
       setTotalLoading(false);
     }
   };

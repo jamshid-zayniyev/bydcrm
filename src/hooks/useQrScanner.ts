@@ -5,7 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import z from "zod";
 
 const UseQrScanner = () => {
   const { t } = useTranslation();
@@ -23,6 +22,7 @@ const UseQrScanner = () => {
       phone_number: "",
       full_name: "",
       interested_in: "",
+      assigned_to: "",
     },
   });
 
@@ -51,11 +51,17 @@ const UseQrScanner = () => {
       let newData = {
         ...data,
         interested_in: Number(data.interested_in),
+        assigned_to: Number(data.assigned_to),
       };
       await api.post("/users/customers/create/", newData);
       Daily();
 
-      reset({ phone_number: "", full_name: "", interested_in: "" });
+      reset({
+        phone_number: "",
+        full_name: "",
+        interested_in: "",
+        assigned_to: "",
+      });
     } catch (error) {
       console.log(error);
       error;

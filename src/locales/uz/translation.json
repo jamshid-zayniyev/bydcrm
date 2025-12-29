@@ -423,6 +423,11 @@
           "label": "Qiziqtirgan model",
           "labelSelect": "Modelni tanlang",
           "errorInterestedModel": "Modelni tanlash shart!"
+        },
+        "assignedTo": {
+          "label": "Sotuvchini biriktirish",
+          "labelSelect": "Sotuvchini tanlang",
+          "errorAssignedTo": "Sotuvchi tanlash shart!"
         }
       },
       "submitButton": "Tashrif buyuruvchini ro'yxatga olish"

@@ -18,6 +18,9 @@ export const userSchema = (t: any) =>
         1,
         t("qr.manualRegistration.form.interestedModel.errorInterestedModel")
       ),
+    assigned_to: z
+      .string()
+      .min(1, t("qr.manualRegistration.form.assignedTo.errorAssignedTo")),
   });
 
 // Type definition
