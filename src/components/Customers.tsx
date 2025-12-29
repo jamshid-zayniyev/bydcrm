@@ -20,6 +20,7 @@ import NoData from "../assets/no-data.svg";
 import DeleteModal from "./ui/delete-modal";
 import { PaginationDemo } from "./ui/paginationApi";
 import AddEditSelect from "@/hooks/addEditSelect";
+import { formatDate } from "@/hooks/dateMonthYear";
 
 export function Customers() {
   const [selectedCustomer, setSelectedCustomer] = useState<Customers | null>(
@@ -58,6 +59,9 @@ export function Customers() {
     editFormSelect,
     loadingModel,
     variantSelect,
+    district,
+
+    analytic,
   } = useCustomers();
 
   const formatPhoneNumber = useCallback((value: string): string => {
@@ -136,6 +140,14 @@ export function Customers() {
             {t("customers.totalClients")}: {pgnCount}
           </p>
         </div>
+
+        <div>
+          <h2 className="text-gray-900 mb-1">Bugun eng ko‘p so‘ralgan model</h2>
+          <p className="text-gray-500 text-sm">
+            {analytic?.model_name}: {analytic?.requests_count}
+          </p>
+        </div>
+
         <button
           onClick={() => setShowAddModal(true)}
           className="cursor-pointer flex items-center gap-2 px-4 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors shadow-sm"
@@ -297,10 +309,10 @@ export function Customers() {
                       {t("customers.manager")}: {customer.assigned_to}
                     </span>
 
-                    {customer.created_at && (
+                    {customer.date_joined && (
                       <span className="text-gray-500">
-                        {t("customers.contact")}:{" "}
-                        {customer.created_at.split("T")[0]}
+                        {/* {customer.created_at.split("T")[0]} */}
+                        {formatDate(customer.date_joined)}{" "}
                       </span>
                     )}
                   </div>
@@ -437,7 +449,7 @@ export function Customers() {
                     }}
                   >
                     <option value="" disabled>
-                      {/* {t("test-drive.select")} */}Model tanlang
+                      {t("customers.modelLabel")}
                     </option>
                     {carsModels.map((el) => (
                       <option key={el?.id} value={el?.id}>
@@ -525,6 +537,47 @@ export function Customers() {
                   {errors.location && (
                     <p className="text-[#E60012]">{errors.location.message}</p>
                   )}
+                </div>
+
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    {t("customers.customerLabel")}
+                  </label>
+                  <select
+                    {...register("district")}
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                      errors.district
+                        ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
+                        : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
+                    }`}
+                  >
+                    <option value="" disabled>
+                      {t("customers.customerSelect")}
+                    </option>
+                    {district.map((el) => (
+                      <option key={el?.id} value={el?.id}>
+                        {el?.title}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.district && (
+                    <p className="text-[#E60012]">{errors.district.message}</p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    {t("customers.dateLabel")}
+                  </label>
+                  <input
+                    {...register("date_joined")}
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                      errors.date_joined
+                        ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
+                        : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
+                    }`}
+                    type="date"
+                  />
                 </div>
               </div>
 

@@ -14,6 +14,8 @@ export interface Customers {
   updated_at: string;
   status: number;
   variants: string;
+  district: number;
+  date_joined: string;
   // email?: string;
   ai_probability: number;
   ai_stage: string;

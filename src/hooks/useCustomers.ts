@@ -14,7 +14,11 @@ import {
   getUsersStatus,
   UsersStatus,
 } from "../api/customers";
-import { CustomersSelectVariants } from "@/types/customers";
+import {
+  Analytic,
+  CustomersSelectVariants,
+  Districed,
+} from "@/types/customers";
 
 const createUserSchema = (t: any) =>
   z.object({
@@ -32,6 +36,8 @@ const createUserSchema = (t: any) =>
     status: z.string().optional(),
     location: z.string().optional(),
     variants: z.string().optional(),
+    district: z.string().min(1, "Tuman yoki shahar tanlash shart!"),
+    date_joined: z.string().optional(),
   });
 
 export type User = z.infer<ReturnType<typeof createUserSchema>>;
@@ -49,6 +55,8 @@ export const useCustomers = () => {
   const [variantSelect, setVariantSelect] = useState<CustomersSelectVariants[]>(
     []
   );
+  const [district, setDistrict] = useState<Districed[]>([]);
+  const [analytic, setAnalytic] = useState<Analytic | null>(null);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -69,6 +77,9 @@ export const useCustomers = () => {
       full_name: "",
       source: "o",
       interested_in: "",
+      district: "",
+      date_joined: "",
+
       notes: "",
     },
   });
@@ -76,6 +87,7 @@ export const useCustomers = () => {
   const onSubmit = async (data: User) => {
     try {
       setLoading(true);
+      console.log(Boolean(data?.date_joined));
 
       let newData = {
         ...data,
@@ -84,6 +96,12 @@ export const useCustomers = () => {
         // sentiment: "p",
         interested_in: Number(data?.interested_in),
         status: Number(data?.status),
+        district: Number(data?.district),
+
+        date_joined: data?.date_joined
+          ? data?.date_joined
+          : new Date().toISOString().split("T")[0],
+
         // interested_in: 3,
       };
       if (selected === null) {
@@ -109,6 +127,9 @@ export const useCustomers = () => {
       full_name: "",
       source: "o",
       interested_in: "",
+      district: "",
+      date_joined: "",
+
       notes: "",
     });
     setVariantSelect([]);
@@ -170,6 +191,8 @@ export const useCustomers = () => {
         source: data.source,
         interested_in: `${data.interested_in}`,
         variants: `${data.variants}`,
+        district: `${data.district}`,
+        date_joined: `${data.date_joined}`,
 
         status: `${data.status}`,
         notes: data.notes,
@@ -205,6 +228,8 @@ export const useCustomers = () => {
     fetchUsers();
     fetchCarsModels();
     fetchUsersStatus();
+    getDistrict();
+    getAnalytics();
   }, []);
 
   const editFormSelect = async (id: number) => {
@@ -219,6 +244,24 @@ export const useCustomers = () => {
       console.log(error);
     } finally {
       setLoadingModel(false);
+    }
+  };
+
+  const getDistrict = async () => {
+    try {
+      const { data } = await api.get(`/users/district/`);
+      setDistrict(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getAnalytics = async () => {
+    try {
+      const { data } = await api.get(`/users/analytics/`);
+      setAnalytic(data);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -254,5 +297,7 @@ export const useCustomers = () => {
     editFormSelect,
     loadingModel,
     variantSelect,
+    district,
+    analytic,
   };
 };

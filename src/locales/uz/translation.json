@@ -181,7 +181,11 @@
     },
     "AI": {
       "AI_note": "AI tafsiya"
-    }
+    },
+    "modelLabel": "Modelni tanlang",
+    "customerLabel": "Mijoz yashash manzili",
+    "customerSelect": "Shahar yoki tumanni tanlang",
+    "dateLabel": "Kiritilgan sana"
   },
   "callCenter": {
     "call": "Aloqa-markaz",
