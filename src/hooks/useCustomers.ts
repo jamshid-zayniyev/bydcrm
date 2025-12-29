@@ -18,6 +18,7 @@ import {
   Analytic,
   CustomersSelectVariants,
   Districed,
+  StatusResponse,
 } from "@/types/customers";
 
 const createUserSchema = (t: any) =>
@@ -57,6 +58,8 @@ export const useCustomers = () => {
   );
   const [district, setDistrict] = useState<Districed[]>([]);
   const [analytic, setAnalytic] = useState<Analytic | null>(null);
+  const [totayStats, setTotayStats] = useState<StatusResponse | null>(null);
+  const [totalLoading, setTotalLoading] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -230,6 +233,7 @@ export const useCustomers = () => {
     fetchUsersStatus();
     getDistrict();
     getAnalytics();
+    getTotayStats();
   }, []);
 
   const editFormSelect = async (id: number) => {
@@ -258,10 +262,25 @@ export const useCustomers = () => {
 
   const getAnalytics = async () => {
     try {
+      setTotalLoading(true);
       const { data } = await api.get(`/users/analytics/`);
       setAnalytic(data);
     } catch (error) {
       console.log(error);
+    }finally {
+      setTotalLoading(false);
+    }
+  };
+
+  const getTotayStats = async () => {
+    try {
+      setTotalLoading(true);
+      const { data } = await api.get(`/users/customers/today-stats/`);
+      setTotayStats(data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTotalLoading(false);
     }
   };
 
@@ -299,5 +318,7 @@ export const useCustomers = () => {
     variantSelect,
     district,
     analytic,
+    totayStats,
+    totalLoading,
   };
 };

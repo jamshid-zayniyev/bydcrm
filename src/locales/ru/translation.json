@@ -125,6 +125,8 @@
   "customers": {
     "clientManagement": "Управление клиентами",
     "totalClients": "Всего клиентов",
+    "totalDay": "Клиенты за сегодня",
+    "totalTopModel": "Сегодня самая запрашиваемая модель",
     "addClient": "Добавить клиента",
     "addClientObj": {
       "addNewClient": "Добавить нового клиента",

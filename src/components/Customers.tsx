@@ -21,6 +21,7 @@ import DeleteModal from "./ui/delete-modal";
 import { PaginationDemo } from "./ui/paginationApi";
 import AddEditSelect from "@/hooks/addEditSelect";
 import { formatDate } from "@/hooks/dateMonthYear";
+import Loading from "./ui/loading";
 
 export function Customers() {
   const [selectedCustomer, setSelectedCustomer] = useState<Customers | null>(
@@ -62,6 +63,8 @@ export function Customers() {
     district,
 
     analytic,
+    totayStats,
+    totalLoading,
   } = useCustomers();
 
   const formatPhoneNumber = useCallback((value: string): string => {
@@ -132,25 +135,52 @@ export function Customers() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h2 className="text-gray-900 mb-1">
-            {t("customers.clientManagement")}
-          </h2>
-          <p className="text-gray-500 text-sm">
-            {t("customers.totalClients")}: {pgnCount}
-          </p>
-        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 align-center justify-center gap-4">
+          <div>
+            <h2 className="text-gray-900 mb-1">
+              {t("customers.clientManagement")}
+            </h2>
+            <p className="text-gray-500 text-sm">
+              {t("customers.totalClients")}: {pgnCount}
+            </p>
+          </div>
 
-        <div>
-          <h2 className="text-gray-900 mb-1">Bugun eng ko‘p so‘ralgan model</h2>
-          <p className="text-gray-500 text-sm">
-            {analytic?.model_name}: {analytic?.requests_count}
-          </p>
+          <div>
+            <h2 className="text-gray-900 mb-1">
+              {t("customers.totalDay")}:{" "}
+              {totalLoading ? t("loadingCount") : totayStats?.total_customers}
+            </h2>
+            <p className="text-gray-500 text-sm">
+              {totalLoading
+                ? t("loading")
+                : totayStats?.statuses.map((el) => (
+                    <span key={el.status_id}>
+                      {el?.status_name}: {el?.count}{" "}
+                    </span>
+                  ))}
+            </p>
+          </div>
+
+          <div>
+            <h2 className="text-gray-900 mb-1">
+              {t("customers.totalTopModel")}
+            </h2>
+            <p className="text-gray-500 text-sm">
+              {loading ? (
+                t("loading")
+              ) : (
+                <>
+                  {analytic?.model_name}: {analytic?.requests_count}
+                </>
+              )}
+            </p>
+          </div>
         </div>
 
         <button
           onClick={() => setShowAddModal(true)}
           className="cursor-pointer flex items-center gap-2 px-4 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors shadow-sm"
+          style={{ height: "36px" }}
         >
           <Plus className="w-4 h-4" />
           <span className="text-sm">{t("customers.addClient")}</span>

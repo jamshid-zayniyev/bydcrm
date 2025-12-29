@@ -13,6 +13,7 @@
     "version": "Versiya"
   },
   "loading": "Yuklanmoqda...",
+  "loadingCount": "...",
   "selectLanguage": "Tilni tanlang",
   "logout": "Chiqish",
   "welcome": "Xush kelibsiz",
@@ -125,6 +126,8 @@
   "customers": {
     "clientManagement": "Mijozlarni boshqarish",
     "totalClients": "Jami mijozlar",
+    "totalDay": "Bugungi mijozlar",
+    "totalTopModel": "Bugun eng ko‘p so‘ralgan model",
     "addClient": "Mijoz qo'shish",
     "addClientObj": {
       "addNewClient": "Yangi mijoz qo'shish",
