@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import {
   Search,
   Filter,
@@ -21,9 +21,8 @@ import DeleteModal from "./ui/delete-modal";
 import { PaginationDemo } from "./ui/paginationApi";
 import AddEditSelect from "@/hooks/addEditSelect";
 import { formatDate } from "@/hooks/dateMonthYear";
-import Loading from "./ui/loading";
-import { useTestDrive } from "@/hooks/useTestDrive";
 import { useAuthContext } from "@/contexts/AuthContext";
+import Employee from "@/hooks/employees";
 
 export function Customers() {
   const [selectedCustomer, setSelectedCustomer] = useState<Customers | null>(
@@ -72,7 +71,8 @@ export function Customers() {
     totalLoading,
     totalStatusLoading,
   } = useCustomers();
-  const { employees } = useTestDrive();
+
+  const { employees } = Employee();
 
   const formatPhoneNumber = useCallback((value: string): string => {
     // Remove all non-digit characters except +

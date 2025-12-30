@@ -1,11 +1,11 @@
-import { QrCode, Camera, UserPlus, CheckCircle, Clock } from "lucide-react";
-import { useState } from "react";
+import { QrCode, UserPlus, CheckCircle, Clock } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useTranslation } from "react-i18next";
-import { QRCode, QRScan } from "@/assets";
+import { QRScan } from "@/assets";
 import UseQrScanner from "@/hooks/useQrScanner";
 import Loading from "./ui/loading";
-import { useTestDrive } from "@/hooks/useTestDrive";
+
+import Employee from "@/hooks/employees";
 
 export function QRScanner() {
   const { t } = useTranslation();
@@ -25,7 +25,7 @@ export function QRScanner() {
     loadingDaily,
   } = UseQrScanner();
 
-  const { employees } = useTestDrive();
+  const { employees } = Employee();
 
   return (
     <div className="space-y-6">
