@@ -24,21 +24,21 @@ import { useAuthContext } from "@/contexts/AuthContext";
 
 const createUserSchema = (t: any, role: string) =>
   z.object({
-    full_name: z.string().min(1, "Ismni to‘liq kiriting"),
+    full_name: z.string().min(1, t("customers.fullNameError")),
     phone_number: z
       .string()
-      .min(1, "Telefon raqamni kiriting")
+      .min(1, t("customers.phoneNumberError"))
       .transform((val) => val.replace(/\s/g, "")) // Remove spaces for storage
       .refine((val) => /^\+998\d{9}$/.test(val), {
-        message: "Telefon raqam formati noto'g'ri. Format: +998 XX XXX XX XX",
+        message: "+998 XX XXX XX XX",
       }),
     source: z.string().optional(),
-    interested_in: z.string().min(1, "Model tanlash shart!"),
-    notes: z.string().min(1, "To‘liq kiriting"),
+    interested_in: z.string().min(1, t("customers.interestedInError")),
+    notes: z.string().min(1, t("customers.notes")),
     status: z.string().optional(),
     location: z.string().optional(),
     variants: z.string().optional(),
-    district: z.string().min(1, "Tuman yoki shahar tanlash shart!"),
+    district: z.string().min(1, t("customers.district")),
     date_joined: z.string().optional(),
     ...(role === "sa" || role === "m"
       ? {
@@ -68,6 +68,7 @@ export const useCustomers = () => {
   const [analytic, setAnalytic] = useState<Analytic | null>(null);
   const [totayStats, setTotayStats] = useState<StatusResponse | null>(null);
   const [totalLoading, setTotalLoading] = useState(false);
+  const [totalStatusLoading, setTotalStatusLoading] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -189,6 +190,9 @@ export const useCustomers = () => {
       setPgnCount(count);
 
       setActivePage(active);
+
+      getAnalytics();
+      getTotayStats();
     } catch (err) {
       setError("Mashinalarni yuklab boʻlmadi");
       console.error("Error fetching cars:", err);
@@ -290,13 +294,13 @@ export const useCustomers = () => {
 
   const getTotayStats = async () => {
     try {
-      setTotalLoading(true);
+      setTotalStatusLoading(true);
       const { data } = await api.get(`/users/customers/today-stats/`);
       setTotayStats(data);
     } catch (error) {
       console.log(error);
     } finally {
-      setTotalLoading(false);
+      setTotalStatusLoading(false);
     }
   };
 
@@ -336,5 +340,6 @@ export const useCustomers = () => {
     analytic,
     totayStats,
     totalLoading,
+    totalStatusLoading,
   };
 };

@@ -188,7 +188,16 @@
     "modelLabel": "Modelni tanlang",
     "customerLabel": "Mijoz yashash manzili",
     "customerSelect": "Shahar yoki tumanni tanlang",
-    "dateLabel": "Kiritilgan sana"
+    "dateLabel": "Kiritilgan sana",
+
+    "fullNameError": "Ism va familiya kiritilishligi shart!",
+    "phoneNumberError": "Telefon raqam kiritilishligi shart!",
+    "interestedInError": "Model tanlash shart!",
+    "notes": "Izoh yozish shart!",
+    "district": "Tuman yoki shahar tanlash shart!",
+
+    "dayNow": "Bugun kun uchun ma’lumot yo‘q",
+    "dayModelNow": "Bugun suralgan model yo‘q"
   },
   "callCenter": {
     "call": "Aloqa-markaz",

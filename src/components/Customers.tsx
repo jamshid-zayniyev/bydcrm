@@ -70,6 +70,7 @@ export function Customers() {
     analytic,
     totayStats,
     totalLoading,
+    totalStatusLoading,
   } = useCustomers();
   const { employees } = useTestDrive();
 
@@ -154,16 +155,22 @@ export function Customers() {
           <div>
             <h2 className="text-gray-900 mb-1">
               {t("customers.totalDay")}:{" "}
-              {totalLoading ? t("loadingCount") : totayStats?.total_customers}
+              {totalStatusLoading
+                ? t("loadingCount")
+                : totayStats?.total_customers}
             </h2>
             <p className="text-gray-500 text-sm">
-              {totalLoading
-                ? t("loading")
-                : totayStats?.statuses.map((el) => (
-                    <span key={el.status_id}>
-                      {el?.status_name}: {el?.count}{" "}
-                    </span>
-                  ))}
+              {totalStatusLoading ? (
+                t("loading")
+              ) : totayStats?.statuses.length ? (
+                totayStats?.statuses.map((el) => (
+                  <span key={el.status_id}>
+                    {el?.status_name}: {el?.count}{" "}
+                  </span>
+                ))
+              ) : (
+                <>{t("customers.dayNow")}</>
+              )}
             </p>
           </div>
 
@@ -172,11 +179,18 @@ export function Customers() {
               {t("customers.totalTopModel")}
             </h2>
             <p className="text-gray-500 text-sm">
-              {loading ? (
+              {totalLoading ? (
                 t("loading")
               ) : (
                 <>
-                  {analytic?.model_name}: {analytic?.requests_count}
+                  {analytic?.model_name && analytic?.requests_count ? (
+                    <>
+                      {" "}
+                      {analytic?.model_name}: {analytic?.requests_count}
+                    </>
+                  ) : (
+                    t("customers.dayModelNow")
+                  )}
                 </>
               )}
             </p>
