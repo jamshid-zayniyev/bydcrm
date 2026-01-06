@@ -11,10 +11,14 @@ import {
 } from "lucide-react";
 import { aiRecommendations } from "../data/mockData";
 import { useTranslation } from "react-i18next";
+import useAiRecommendations from "@/hooks/useAiRecommendations";
+import Loading from "./ui/loading";
 
 export function AIRecommendations() {
   const [dismissedIds, setDismissedIds] = useState<string[]>([]);
   const { t } = useTranslation();
+
+  const { aiRecommendation, loading } = useAiRecommendations();
 
   const typeIcons: Record<string, any> = {
     "lead-scoring": Target,
@@ -81,39 +85,52 @@ export function AIRecommendations() {
             <Brain className="w-6 h-6" />
           </div>
           <div className="flex-1">
-            <h3 className="mb-2">Искусственный интеллект в работе</h3>
-            <p className="text-sm text-red-100 mb-4">
-              ИИ анализирует данные о клиентах, звонках и продажах, чтобы
-              предоставить персонализированные рекомендации для каждого отдела.
-              Все предложения основаны на реальных показателях и прогнозном
-              моделировании.
-            </p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div>
-                <p className="text-sm text-red-100">
-                  {t("ai.aiWork.analyses")}
-                </p>
-                <p className="text-white mt-1">1,247</p>
+            <h3 className="mb-2">{t("ai.heading")}</h3>
+            <p className="text-sm text-red-100 mb-4">{t("ai.description")}</p>
+            {loading ? (
+              <div className="space-y-4 sm:space-y-6 mt-5">
+                <div className="flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                  </div>
+                </div>
               </div>
-              <div>
-                <p className="text-sm text-red-100">
-                  {t("ai.aiWork.forecasts")}
-                </p>
-                <p className="text-white mt-1">87%</p>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div>
+                  <p className="text-sm text-red-100">
+                    {t("ai.aiWork.analyses")}
+                  </p>
+                  <p className="text-white mt-1">
+                    {aiRecommendation?.daily_analyses}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-red-100">
+                    {t("ai.aiWork.forecasts")}
+                  </p>
+                  <p className="text-white mt-1">
+                    {aiRecommendation?.forecast_accuracy}%
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-red-100">
+                    {t("ai.aiWork.active")}
+                  </p>
+                  <p className="text-white mt-1">
+                    {aiRecommendation?.active_recommendations}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-red-100">
+                    {t("ai.aiWork.aiConversion")}
+                  </p>
+                  <p className="text-white mt-1">
+                    +{aiRecommendation?.conversion_growth}%
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm text-red-100">{t("ai.aiWork.active")}</p>
-                <p className="text-white mt-1">
-                  {activeRecommendations.length}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm text-red-100">
-                  {t("ai.aiWork.aiConversion")}
-                </p>
-                <p className="text-white mt-1">+24%</p>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
@@ -226,9 +243,9 @@ export function AIRecommendations() {
                     <Check className="w-4 h-4" />
                     {t("ai.person.apply")}
                   </button>
-                  <button className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors text-sm">
+                  {/* <button className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors text-sm">
                     {t("ai.person.details")}
-                  </button>
+                  </button> */}
                   <button
                     onClick={() => handleDismiss(recommendation.id)}
                     className="px-4 py-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors text-sm flex items-center gap-2"

@@ -395,7 +395,9 @@
     },
     "effectivenessStats": {
       "title": "Samaradorlik statistikasi"
-    }
+    },
+    "heading": "Sun’iy intellekt ish jarayonida",
+    "description": "Sun’iy intellekt mijozlar, qo‘ng‘iroqlar va savdolar haqidagi ma’lumotlarni tahlil qilib, har bir bo‘lim uchun shaxsiy tavsiyalar beradi. Barcha takliflar real ko‘rsatkichlar va prognoz modellashtirish asosida yaratiladi."
   },
   "qr": {
     "title": "QR-kodlarni ro'yxatdan o'tkazish",
