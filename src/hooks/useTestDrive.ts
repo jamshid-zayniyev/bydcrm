@@ -62,6 +62,7 @@ export const useTestDrive = (tabsValue?: string) => {
   const onSubmit = async (data: TestDriveSchema) => {
     try {
       setLoadingPost(true);
+
       if (selected === null) {
         await api.post("/kpi/test-drive/create/", data);
       } else {
@@ -160,13 +161,17 @@ export const useTestDrive = (tabsValue?: string) => {
   const editBtn = async (id: number) => {
     setSelected(id);
     const { data } = await api.get(`/kpi/test-drive/${id}/`);
-    console.log(data);
+
+    const scheduledTime = data.scheduled_time
+      ? new Date(data.scheduled_time).toISOString().slice(0, 16)
+      : "";
 
     reset({
       customer: `${data.customer}`,
       email: data.email,
       employee: `${data.employee}`,
       status: `${data.status}`,
+      scheduled_time: scheduledTime,
     });
 
     editForm(data.customer);

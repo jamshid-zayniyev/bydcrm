@@ -14,6 +14,7 @@ import { PaginationDemo } from "./ui/paginationApi";
 import { PgntTestDrive } from "./ui/pgntTestDrive";
 import { count } from "console";
 import AddEditSelect from "@/hooks/addEditSelect";
+import { formatDate } from "@/hooks/dateMonthYear";
 
 const TestDrive = () => {
   const { t } = useTranslation();
@@ -264,12 +265,15 @@ const TestDrive = () => {
                           </span>
                         ) : null}
 
-                        {/* {customer.created_at && (
+                        {customer.scheduled_time && (
                           <span className="text-gray-500">
-                            {t("customers.contact")}:{" "}
-                            {customer.created_at.split("T")[0]}
+                            {formatDate(customer.scheduled_time)}{" "}
+                            {customer.scheduled_time
+                              .split("T")[1]
+                              .split("+")[0]
+                              .slice(0, 5)}
                           </span>
-                        )} */}
+                        )}
                       </div>
                     </div>
                   </div>
@@ -409,12 +413,15 @@ const TestDrive = () => {
                           </span>
                         ) : null}
 
-                        {/* {customer.created_at && (
+                        {customer.scheduled_time && (
                           <span className="text-gray-500">
-                            {t("customers.contact")}:{" "}
-                            {customer.created_at.split("T")[0]}
+                            {formatDate(customer.scheduled_time)}{" "}
+                            {customer.scheduled_time
+                              .split("T")[1]
+                              .split("+")[0]
+                              .slice(0, 5)}
                           </span>
-                        )} */}
+                        )}
                       </div>
                     </div>
                   </div>
@@ -553,12 +560,15 @@ const TestDrive = () => {
                           </span>
                         ) : null}
 
-                        {/* {customer.created_at && (
+                        {customer.scheduled_time && (
                           <span className="text-gray-500">
-                            {t("customers.contact")}:{" "}
-                            {customer.created_at.split("T")[0]}
+                            {formatDate(customer.scheduled_time)}{" "}
+                            {customer.scheduled_time
+                              .split("T")[1]
+                              .split("+")[0]
+                              .slice(0, 5)}
                           </span>
-                        )} */}
+                        )}
                       </div>
                     </div>
                   </div>
@@ -761,6 +771,26 @@ const TestDrive = () => {
                     <option value={"pl"}> {t("test-drive.PLANNED")}</option>
                     <option value={"c"}>{t("test-drive.COMPLETED")}</option>
                   </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Test-drive qilish kuni va vaqti
+                  </label>
+                  <input
+                    type="datetime-local"
+                    {...register("scheduled_time", {
+                      setValueAs: (value) =>
+                        value ? new Date(value).toISOString() : "",
+                    })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
+                    style={{ height: "39px" }}
+                  />
+                  {errors.scheduled_time && (
+                    <p className="text-[#E60012]">
+                      {errors.scheduled_time.message}
+                    </p>
+                  )}
                 </div>
               </div>
 

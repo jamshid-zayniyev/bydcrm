@@ -22,6 +22,7 @@ export const createTestDriveSchema = (t: any) =>
       ),
     employee: z.string().optional(),
     status: z.string().optional(),
+    scheduled_time: z.string().nonempty("Test-drive vaqti tanlanishi shart"),
   });
 export type TestDriveSchema = z.infer<ReturnType<typeof createTestDriveSchema>>;
 
@@ -44,6 +45,7 @@ export interface TestDrive {
   employee: number;
   employee_name: string;
   status: string;
+  scheduled_time: string;
 }
 
 export interface Employees {
