@@ -22,7 +22,21 @@ export const createTestDriveSchema = (t: any) =>
       ),
     employee: z.string().optional(),
     status: z.string().optional(),
-    scheduled_time: z.string().nonempty("Test-drive vaqti tanlanishi shart"),
+    scheduled_time: z
+      .string()
+      .nonempty("Test-drive vaqti tanlanishi shart")
+      .refine(
+        (value) => {
+          // ISO formatida bo'lishi kerak (YYYY-MM-DDTHH:mm:ss.sssZ)
+          // Yoki kamida datetime-local formatida (YYYY-MM-DDTHH:mm)
+          return (
+            value && (value.includes("T") || /^\d{4}-\d{2}-\d{2}T/.test(value))
+          );
+        },
+        {
+          message: "Iltimos, to'g'ri vaqt formatida kiriting",
+        }
+      ),
   });
 export type TestDriveSchema = z.infer<ReturnType<typeof createTestDriveSchema>>;
 

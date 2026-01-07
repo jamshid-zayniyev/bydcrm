@@ -162,9 +162,24 @@ export const useTestDrive = (tabsValue?: string) => {
     setSelected(id);
     const { data } = await api.get(`/kpi/test-drive/${id}/`);
 
-    const scheduledTime = data.scheduled_time
-      ? new Date(data.scheduled_time).toISOString().slice(0, 16)
-      : "";
+    // API dan kelgan ISO formatni datetime-local formatiga o'zgartirish
+    let scheduledTime = "";
+    if (data.scheduled_time) {
+      try {
+        // ISO formatini datetime-local formatiga aylantiramiz
+        // "2024-01-07T10:30:00Z" -> "2024-01-07T10:30"
+        const date = new Date(data.scheduled_time);
+        if (!isNaN(date.getTime())) {
+          // UTC+5 (Toshkent vaqti) uchun soatni tuzatish
+          const localDate = new Date(
+            date.getTime() - date.getTimezoneOffset() * 60000
+          );
+          scheduledTime = localDate.toISOString().slice(0, 16);
+        }
+      } catch (error) {
+        console.error("Vaqt formatini o'zgartirishda xatolik:", error);
+      }
+    }
 
     reset({
       customer: `${data.customer}`,
@@ -191,6 +206,14 @@ export const useTestDrive = (tabsValue?: string) => {
     closeDeleteModal();
     getTestDrive();
   };
+
+  // useEffect(() => {
+  //   const subscription = watch((value) => {
+  //     console.log("Form qiymatlari:", value);
+  //     console.log("Scheduled time kuzatilmoqda:", value?.scheduled_time);
+  //   });
+  //   return () => subscription.unsubscribe();
+  // }, [watch]);
 
   useEffect(() => {
     getTestDrive(currentTab);

@@ -780,8 +780,23 @@ const TestDrive = () => {
                   <input
                     type="datetime-local"
                     {...register("scheduled_time", {
-                      setValueAs: (value) =>
-                        value ? new Date(value).toISOString() : "",
+                      setValueAs: (value) => {
+                        // Agar qiymat bo'sh bo'lsa, undefined qaytar
+                        if (!value) return undefined;
+
+                        // Agar qiymat allaqachon ISO formatida bo'lsa (backenddan kelgan)
+                        if (value.includes("Z") || value.includes("+")) {
+                          return value;
+                        }
+
+                        // datetime-local formatidan ISO formatiga o'tkazish
+                        // datetime-local: "2024-01-07T14:30"
+                        // ISO: "2024-01-07T14:30:00.000Z"
+                        const date = new Date(value);
+                        return isNaN(date.getTime())
+                          ? undefined
+                          : date.toISOString();
+                      },
                     })}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
                     style={{ height: "39px" }}
