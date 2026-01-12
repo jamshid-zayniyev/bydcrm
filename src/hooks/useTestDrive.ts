@@ -84,8 +84,6 @@ export const useTestDrive = (tabsValue?: string) => {
     reset({
       customer: "",
       email: "",
-      // employee: "",
-      // status: "",
     });
     setCustomersId(null);
   };

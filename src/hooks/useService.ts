@@ -13,6 +13,7 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CustomersSelectVariants } from "@/types/customers";
+import { CustomersList } from "@/types/testDrive";
 
 export const useService = () => {
   const {
@@ -53,6 +54,7 @@ export const useService = () => {
   const [variantSelect, setVariantSelect] = useState<CustomersSelectVariants[]>(
     []
   );
+  const [carustomersList, setCustomersList] = useState<CustomersList[]>([]);
 
   const fetchService = async (
     active = 1,
@@ -174,6 +176,8 @@ export const useService = () => {
     getSerives();
     getWeeklyStatistic();
     getReports();
+
+    getCustomersList();
   }, []);
 
   const refetch = () => {
@@ -223,6 +227,15 @@ export const useService = () => {
     }
   };
 
+  const getCustomersList = async () => {
+    try {
+      const { data } = await api.get("/users/customers/list/");
+      setCustomersList(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     errors,
     register,
@@ -255,5 +268,7 @@ export const useService = () => {
     editFormSelect,
     loadingModel,
     variantSelect,
+
+    carustomersList,
   };
 };

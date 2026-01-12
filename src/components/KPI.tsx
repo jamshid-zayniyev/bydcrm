@@ -49,6 +49,7 @@ import formatCurrency from "@/hooks/formatCurrents";
 import { NoUser } from "@/assets";
 import { formatPriceNoT } from "@/hooks/mlnNumberNoT";
 import Loading from "./ui/loading";
+import Modal from "./ui/modal";
 
 interface SalesmanKPI {
   id: string;
@@ -126,6 +127,18 @@ export function KPI() {
     staffReports2Data,
     generalStatisticsData,
     loading,
+
+    // modal
+    closeModal,
+    showAddModal,
+    setShowAddModal,
+
+    onSubmit,
+    handleSubmit,
+    register,
+    errors,
+    onSubmitRevenue,
+    onSubmitPerformance,
   } = useKPI();
   const { bestSeller } = usePieChart();
 
@@ -342,7 +355,7 @@ export function KPI() {
           <h1 className="text-3xl mb-2">{t("kpi.dashboard_title")}</h1>
           <p className="text-muted-foreground">{t("kpi.dashboard_subtitle")}</p>
         </div>
-        <div className="flex items-center gap-2">
+        {/* <div className="flex items-center gap-2">
           <Button variant="outline" size="sm">
             <Download className="h-4 w-4 mr-2" />
             {t("kpi.export")}
@@ -351,9 +364,8 @@ export function KPI() {
             <Plus className="h-4 w-4 mr-2" />
             {t("kpi.addGoal")}
           </Button>
-        </div>
+        </div> */}
       </div>
-
       {/* Overview Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
         <Card className="border-l-4 border-l-[#E60012]">
@@ -365,8 +377,17 @@ export function KPI() {
                 </p>
                 <p className="text-3xl">{kpiMonthly?.current_sales}</p>
               </div>
-              <div className="h-12 w-12 rounded-full bg-red-100 flex items-center justify-center">
-                <Car className="h-6 w-6 text-[#E60012]" />
+              <div className="flex gap-2">
+                <div className="h-12 w-12 rounded-full bg-red-100 flex items-center justify-center">
+                  <Car className="h-6 w-6 text-[#E60012]" />
+                </div>
+
+                <div
+                  className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center cursor-pointer"
+                  onClick={() => setShowAddModal(true)}
+                >
+                  <Plus className="h-5 w-5" />
+                </div>
               </div>
             </div>
             <div className="flex items-center gap-1 mt-2 text-sm">
@@ -393,12 +414,27 @@ export function KPI() {
                 <p className="text-sm text-muted-foreground mb-1">
                   {t("kpi.revenue")}
                 </p>
-                <p className="text-3xl">
-                  {formatPrice(kpiRevenue?.revenue_current)}
+                <p className="text-2xl">
+                  {/* {formatPrice(kpiRevenue?.revenue_current)} */}
+                  {formatCurrency(
+                    kpiRevenue?.revenue_current
+                      ? kpiRevenue?.revenue_current
+                      : 0
+                  )}
                 </p>
               </div>
-              <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center">
-                <DollarSign className="h-6 w-6 text-green-600" />
+
+              <div className="flex gap-2">
+                <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center">
+                  <DollarSign className="h-6 w-6 text-green-600" />
+                </div>
+
+                <div
+                  className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center cursor-pointer"
+                  onClick={() => setShowAddModal(true)}
+                >
+                  <Plus className="h-5 w-5" />
+                </div>
               </div>
             </div>
             <div className="flex items-center gap-1 mt-2 text-sm">
@@ -412,12 +448,12 @@ export function KPI() {
               className="mt-3 h-2"
             />
             <p className="text-xs text-muted-foreground mt-1">
-              {t("kpi.target")}: {formatPrice(kpiRevenue?.target)}
+              {t("kpi.target")}:{" "}
+              {formatCurrency(kpiRevenue?.target ? kpiRevenue?.target : 0)}
             </p>
           </CardContent>
         </Card>
       </div>
-
       {/* Main Tabs */}
       <Tabs defaultValue="overview" className="space-y-4">
         <TabsList className="grid w-full grid-cols-2">
@@ -474,7 +510,15 @@ export function KPI() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <Card>
               <CardHeader>
-                <CardTitle>{t("kpi.review.dynamics")}</CardTitle>
+                <div className="flex items-center justify-between">
+                  <CardTitle>{t("kpi.review.dynamics")}</CardTitle>
+                  <div
+                    className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center cursor-pointer"
+                    onClick={() => setShowAddModal(true)}
+                  >
+                    <Plus className="h-5 w-5" />
+                  </div>
+                </div>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
@@ -554,7 +598,10 @@ export function KPI() {
               </CardHeader>
               <CardContent>
                 <p className="text-2xl mb-2">
-                  {formatPrice(kpiMostSoldCar?.price)}
+                  {/* {formatPrice(kpiMostSoldCar?.price)} */}
+                  {formatCurrency(
+                    kpiMostSoldCar?.price ? kpiMostSoldCar?.price : 0
+                  )}
                 </p>
               </CardContent>
             </Card>
@@ -920,7 +967,6 @@ export function KPI() {
           </div>
         </TabsContent>
       </Tabs>
-
       {/* Detailed Report Dialog */}
       <Dialog
         open={!!selectedEmployee}
@@ -1755,6 +1801,33 @@ export function KPI() {
           )}
         </DialogContent>
       </Dialog>
+      <Modal
+        showAddModal={showAddModal}
+        closeModal={closeModal}
+        onSubmit={onSubmit}
+        handleSubmit={handleSubmit}
+        register={register}
+        errors={errors}
+        loading={loading}
+      />
+      <Modal
+        showAddModal={showAddModal}
+        closeModal={closeModal}
+        onSubmit={onSubmitRevenue}
+        handleSubmit={handleSubmit}
+        register={register}
+        errors={errors}
+        loading={loading}
+      />
+      <Modal
+        showAddModal={showAddModal}
+        closeModal={closeModal}
+        onSubmit={onSubmitPerformance}
+        handleSubmit={handleSubmit}
+        register={register}
+        errors={errors}
+        loading={loading}
+      />
     </div>
   );
 }

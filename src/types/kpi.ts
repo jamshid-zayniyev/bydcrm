@@ -1,3 +1,5 @@
+import z from "zod";
+
 export interface kpiMonthly {
   month: string;
   current_sales: number;
@@ -175,3 +177,9 @@ export interface generalStatistics {
   total_revenue: number;
   total_sold: number;
 }
+
+export const createKpiSchema = (t: any) =>
+  z.object({
+    target: z.string().min(1, t("test-drive.customerError")),
+  });
+export type KpiSchema = z.infer<ReturnType<typeof createKpiSchema>>;

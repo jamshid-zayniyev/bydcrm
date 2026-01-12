@@ -15,6 +15,7 @@ import { PgntTestDrive } from "./ui/pgntTestDrive";
 import { count } from "console";
 import AddEditSelect from "@/hooks/addEditSelect";
 import { formatDate } from "@/hooks/dateMonthYear";
+import { NameSelect } from "./ui/name-select";
 
 const TestDrive = () => {
   const { t } = useTranslation();
@@ -92,6 +93,8 @@ const TestDrive = () => {
     pl: "bg-purple-100 text-purple-700 border-purple-200",
     c: "bg-green-100 text-green-700 border-green-200",
   };
+
+  const [selectedName, setSelectedName] = useState("");
 
   return (
     <div>
@@ -619,6 +622,17 @@ const TestDrive = () => {
 
             <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* <div className="mb-12">
+                  <label className="block text-sm text-gray-700 mb-2">
+                    {t("cars.brandColor")}
+                  </label>
+                  <NameSelect
+                    names={carustomersList}
+                    selectedName={selectedName}
+                    onSelect={setSelectedName}
+                  />
+                </div> */}
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     {t("test-drive.customer")}
@@ -775,7 +789,7 @@ const TestDrive = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Test-drive qilish kuni va vaqti
+                    {t("test-drive.testDriveLabel")}
                   </label>
                   <input
                     type="datetime-local"
@@ -798,7 +812,11 @@ const TestDrive = () => {
                           : date.toISOString();
                       },
                     })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
+                    className={`w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]  ${
+                      errors.scheduled_time
+                        ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
+                        : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
+                    }`}
                     style={{ height: "39px" }}
                   />
                   {errors.scheduled_time && (

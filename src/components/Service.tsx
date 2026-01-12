@@ -24,6 +24,7 @@ import {
   statusIcons,
 } from "@/hooks/useColorLabelsIcons";
 import AddEditSelect from "@/hooks/addEditSelect";
+import { SelectFilter } from "./SelectFilter";
 
 export function Service() {
   const { t } = useTranslation();
@@ -63,8 +64,10 @@ export function Service() {
     editFormSelect,
     loadingModel,
     variantSelect,
+
+    carustomersList,
   } = useService();
-  const { carsModels, customers } = useCustomers();
+  const { carsModels } = useCustomers();
   // const statusColors: Record<string, string> = {
   //   s: "bg-blue-100 text-blue-700 border-blue-200",
   //   i: "bg-yellow-100 text-yellow-700 border-yellow-200",
@@ -109,6 +112,7 @@ export function Service() {
           </div>
         </div>
       </div>
+      <SelectFilter />
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -186,7 +190,6 @@ export function Service() {
               className="w-[200px] px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#E60012] focus:border-transparent"
               onChange={(e) => {
                 const value = e.target.value;
-                console.log(value);
 
                 setFilterStatus(value);
                 fetchService(1, searchFilter, value, filterService, filterDate);
@@ -412,7 +415,7 @@ export function Service() {
                     {...register("customer_id")}
                     className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent border-red-500`}
                   >
-                    {customers.map((customer) => (
+                    {carustomersList.map((customer) => (
                       <option key={customer.id} value={customer.id}>
                         {customer.full_name}
                       </option>

@@ -32,6 +32,7 @@
   "sale": "Mijoz",
   "add": "qo'shish",
   "edit": "tahrirlash",
+  "target":"Maqsad",
 
   "header": {
     "first_name": "Ism",
@@ -552,6 +553,7 @@
     "PENDING": "Jarayonda",
     "PLANNED": "Rejalashtirilgan",
     "COMPLETED": "Tugallangan",
-    "seria": "Model seria"
+    "seria": "Model seria",
+    "testDriveLabel": "Test-drive qilish kuni va vaqti"
   }
 }

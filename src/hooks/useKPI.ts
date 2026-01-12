@@ -3,10 +3,12 @@ import { useAuthContext } from "@/contexts/AuthContext";
 import { User } from "@/types/auth";
 import {
   BestStaff,
+  createKpiSchema,
   generalStatistics,
   kpiMonthly,
   KpiMostSoldCar,
   kpiRevenue,
+  KpiSchema,
   last5Months,
   monthlyId,
   SalesPerformance,
@@ -18,9 +20,13 @@ import {
   WeeklyIndicators,
   yearly,
 } from "@/types/kpi";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 const useKPI = () => {
+  const { t } = useTranslation();
   const [kpiMonthly, setKpiMonthly] = useState<kpiMonthly>();
   const [kpiRevenue, setKpiRevenue] = useState<kpiRevenue>();
   const [bestStaff, setBestStaff] = useState<BestStaff[]>([]);
@@ -43,6 +49,19 @@ const useKPI = () => {
   const [generalStatisticsData, setGeneralStatisticsData] =
     useState<generalStatistics>();
   const [loading, setLoading] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const kpiSchema = createKpiSchema(t);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<KpiSchema>({
+    resolver: zodResolver(kpiSchema),
+    defaultValues: {
+      target: "",
+    },
+  });
 
   const getKpiMonthly = async () => {
     try {
@@ -117,38 +136,6 @@ const useKPI = () => {
     }
   };
 
-  /*const btnEmployeeId = async (id: number, user: User) => {
-    try {
-      // const { data } = await api.get(`/kpi/staff-reports/monthly/${id}/`);
-      // if (user.role !== "t") {
-      //   const res2 = await api.get(`/kpi/staff-reports/year-record/${id}/`);
-      //   const res3 = await api.get(`/kpi/staff-reports/weekly/${id}`);
-      // }
-
-      if (user.role === "t") {
-      const { data } = await api.get(`/kpi/staff-reports/monthly/${id}/`);
-      
-      } else {
-        const res2 = await api.get(`/kpi/staff-reports/year-record/${id}/`);
-        const res3 = await api.get(`/kpi/staff-reports/weekly/${id}`);
-        const res1 = await api.get(`/kpi/staff-reports/monthly/${id}/`);
-
-      }
-
-      // const [monthlyRes, yearlyRes, weekly] = await Promise.all([
-      //   api.get(`/kpi/staff-reports/monthly/${id}/`),
-      //   api.get(`/kpi/staff-reports/year-record/${id}/`),
-      //   api.get(`/kpi/staff-reports/weekly/${id}`),
-      // ]);
-
-      setCustomersId(data);
-      setYearly(res2?.data);
-      console.log(res3?.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };*/
-
   const btnEmployeeId = async (id: number, user: string) => {
     try {
       setLoading(true);
@@ -217,6 +204,55 @@ const useKPI = () => {
     }
   };
 
+  const closeModal = () => {
+    setShowAddModal(false);
+    reset({
+      target: "",
+    });
+  };
+
+  const onSubmit = async (data: KpiSchema) => {
+    try {
+      setLoading(true);
+      await api.put("/kpi/monthly-sales-target", data);
+
+      getKpiMonthly();
+      closeModal();
+    } catch (error) {
+      console.error("Xatolik:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onSubmitRevenue = async (data: KpiSchema) => {
+    try {
+      setLoading(true);
+      await api.put("/kpi/monthly-revenue-target", data);
+
+      getKpiRevenue();
+      closeModal();
+    } catch (error) {
+      console.error("Xatolik:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onSubmitPerformance = async (data: KpiSchema) => {
+    try {
+      setLoading(true);
+      await api.put("/kpi/employee-performance-target", data);
+
+      getKpiSalesPerformance();
+      closeModal();
+    } catch (error) {
+      console.error("Xatolik:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     getKpiMonthly();
     getKpiRevenue();
@@ -246,6 +282,18 @@ const useKPI = () => {
     staffReports2Data,
     generalStatisticsData,
     loading,
+
+    closeModal,
+    showAddModal,
+    setShowAddModal,
+
+    onSubmit,
+    handleSubmit,
+    register,
+    errors,
+
+    onSubmitRevenue,
+    onSubmitPerformance,
   };
 };
 
