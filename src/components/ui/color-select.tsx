@@ -32,8 +32,6 @@ export function ColorSelect({
   const numericValue = value ? parseInt(value) : undefined;
   const selectedColor = colors.find((c) => c.id === numericValue);
 
-  console.log(numericValue);
-
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -83,7 +81,7 @@ export function ColorSelect({
             <span className="text-gray-500">{placeholder}</span>
           )}
         </div>
-        {/* <svg
+        <svg
           className={`w-4 h-4 transition-transform ${
             isOpen ? "rotate-180" : ""
           }`}
@@ -97,7 +95,7 @@ export function ColorSelect({
             strokeWidth={2}
             d="M19 14l-7 7m0 0l-7-7m7 7V3"
           />
-        </svg> */}
+        </svg>
       </button>
 
       {isOpen && (

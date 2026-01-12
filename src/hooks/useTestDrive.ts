@@ -44,6 +44,7 @@ export const useTestDrive = (tabsValue?: string) => {
     watch,
     setValue,
     trigger,
+    control,
   } = useForm<TestDriveSchema>({
     resolver: zodResolver(testDriveSchema),
     defaultValues: {
@@ -265,5 +266,7 @@ export const useTestDrive = (tabsValue?: string) => {
     varinats,
 
     loadingPost,
+
+    control,
   };
 };

@@ -15,6 +15,8 @@ import { PgntTestDrive } from "./ui/pgntTestDrive";
 import { count } from "console";
 import AddEditSelect from "@/hooks/addEditSelect";
 import { formatDate } from "@/hooks/dateMonthYear";
+
+import { Controller } from "react-hook-form";
 import { NameSelect } from "./ui/name-select";
 
 const TestDrive = () => {
@@ -65,6 +67,8 @@ const TestDrive = () => {
     varinats,
 
     loadingPost,
+
+    control,
   } = useTestDrive(tabsValue);
 
   const { carsModels } = useCustomers();
@@ -622,18 +626,53 @@ const TestDrive = () => {
 
             <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* <div className="mb-12">
-                  <label className="block text-sm text-gray-700 mb-2">
-                    {t("cars.brandColor")}
-                  </label>
-                  <NameSelect
-                    names={carustomersList}
-                    selectedName={selectedName}
-                    onSelect={setSelectedName}
-                  />
-                </div> */}
-
                 <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    {t("test-drive.customer")}
+                  </label>
+                  {/* <Controller
+                    name="customer"
+                    control={control}
+                    rules={{ required: "Mijozni tanlash shart" }}
+                    render={({ field }) => (
+                      <>
+                        <NameSelect
+                          names={carustomersList}
+                          selectedName={field.value}
+                          onSelect={(value) => field.onChange(value)}
+                        />
+                        {errors.customer && (
+                          <p className="text-[#E60012]">
+                            {errors.customer.message}
+                          </p>
+                        )}
+                      </>
+                    )}
+                  /> */}
+                  <Controller
+                    name="customer"
+                    control={control}
+                    render={({ field }) => (
+                      <>
+                        <NameSelect
+                          colors={carustomersList}
+                          editForm={editForm}
+                          value={field.value ? field.value.toString() : ""}
+                          onChange={field.onChange}
+                          placeholder={t("cars.customers")}
+                          errorsColor={!!errors.customer}
+                        />
+                        {errors.customer && (
+                          <p className="text-[#E60012] text-sm mt-1">
+                            {errors.customer.message}
+                          </p>
+                        )}
+                      </>
+                    )}
+                  />
+                </div>
+
+                {/* <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     {t("test-drive.customer")}
                   </label>
@@ -663,7 +702,7 @@ const TestDrive = () => {
                   {errors.customer && (
                     <p className="text-[#E60012]">{errors.customer.message}</p>
                   )}
-                </div>
+                </div> */}
 
                 {customersId?.phone_number && (
                   <div>

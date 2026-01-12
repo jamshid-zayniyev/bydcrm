@@ -24,7 +24,6 @@ import {
   statusIcons,
 } from "@/hooks/useColorLabelsIcons";
 import AddEditSelect from "@/hooks/addEditSelect";
-import { SelectFilter } from "./SelectFilter";
 
 export function Service() {
   const { t } = useTranslation();
@@ -112,7 +111,6 @@ export function Service() {
           </div>
         </div>
       </div>
-      <SelectFilter />
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

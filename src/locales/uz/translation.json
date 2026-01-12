@@ -32,7 +32,7 @@
   "sale": "Mijoz",
   "add": "qo'shish",
   "edit": "tahrirlash",
-  "target":"Maqsad",
+  "target": "Maqsad",
 
   "header": {
     "first_name": "Ism",
@@ -539,7 +539,8 @@
     "seriesError": "Seria tanlash majburiy",
     "colorError": "Rangni tanlash majburiy",
     "batteryError": "Quvvat nomi majburiy",
-    "stockError": "Summa kiritishlikki shart"
+    "stockError": "Summa kiritishlikki shart",
+    "customers": "Mijoz tanlang"
   },
   "test-drive": {
     "filter": "Ism familya, telefon va email bo‘yicha qidirish...",
