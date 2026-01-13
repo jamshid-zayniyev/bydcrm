@@ -115,7 +115,7 @@ export function Customers() {
       }
     } else {
       // For other cases, just return the numbers with +
-      return `+${numbers.replace(/\D/g, "")}`;
+      return `+998${numbers.replace(/\D/g, "")}`;
     }
   }, []);
 
@@ -731,17 +731,17 @@ export function Customers() {
 
             <div className="p-6 space-y-4">
               <div>
-                <h3 className="text-gray-900 mb-3">
+                <h3 className="text-gray-900 mb-2">
                   {t("customers.person.contactInfo")}
                 </h3>
                 <div className="space-y-2">
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
                     <Phone className="w-5 h-5 text-[#E60012]" />
                     <span className="text-gray-700">
                       {selectedCustomer.phone_number}
                     </span>
                   </div>
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
                     <MapPin className="w-5 h-5 text-[#E60012]" />
                     <span className="text-gray-700">
                       {selectedCustomer.location}
@@ -750,11 +750,11 @@ export function Customers() {
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-gray-200">
+              <div className="pt-3 border-t border-gray-200">
                 <h3 className="text-gray-900 mb-3">
                   {t("customers.person.leadDetails")}
                 </h3>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-2">
                   <div>
                     <p className="text-xs text-gray-500 mb-1">
                       {t("customers.person.source")}
@@ -797,7 +797,7 @@ export function Customers() {
               </div>
 
               {selectedCustomer.notes && (
-                <div className="pt-4 border-t border-gray-200">
+                <div className="pt-3 border-t border-gray-200">
                   <h3 className="text-gray-900 mb-2">
                     {t("customers.person.notes")}
                   </h3>
@@ -816,7 +816,7 @@ export function Customers() {
               )}
 
               {selectedCustomer?.ai_recommendation?.text && (
-                <div className="pt-4 border-t border-gray-200">
+                <div className="pt-3 border-t border-gray-200">
                   <div className="flex items-center gap-3 mb-3">
                     <Brain className="lucide lucide-map-pin w-5 h-5 text-[#E60012]" />
                     <h3 className="text-gray-900">
@@ -825,20 +825,22 @@ export function Customers() {
                   </div>
 
                   <p
-                    className="text-sm text-gray-600"
-                    style={{
-                      display: "-webkit-box",
-                      WebkitBoxOrient: "vertical",
-                      WebkitLineClamp: 3,
-                      overflow: "hidden",
-                    }}
+                    className="text-sm text-gray-600 overflow-y-auto"
+                    // style={{
+                    //   display: "-webkit-box",
+                    //   WebkitBoxOrient: "vertical",
+                    //   WebkitLineClamp: 3,
+                    //   overflow: "hidden",
+                    // }}
+                    // style={{ height: "50px", overflowY: "auto" }}
+                    style={{ height: "50px" }}
                   >
                     {selectedCustomer?.ai_recommendation?.text}
                   </p>
                 </div>
               )}
 
-              <div className="pt-4 border-t border-gray-200 flex gap-3">
+              <div className="pt-3 border-t border-gray-200 flex gap-3">
                 <button className="flex-1 px-4 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors text-sm">
                   {t("customers.person.call")}
                 </button>

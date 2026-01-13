@@ -69,6 +69,8 @@ const TestDrive = () => {
     loadingPost,
 
     control,
+
+    getCustomersList,
   } = useTestDrive(tabsValue);
 
   const { carsModels } = useCustomers();
@@ -97,8 +99,6 @@ const TestDrive = () => {
     pl: "bg-purple-100 text-purple-700 border-purple-200",
     c: "bg-green-100 text-green-700 border-green-200",
   };
-
-  const [selectedName, setSelectedName] = useState("");
 
   return (
     <div>
@@ -657,6 +657,7 @@ const TestDrive = () => {
                         <NameSelect
                           colors={carustomersList}
                           editForm={editForm}
+                          getCustomersList={getCustomersList}
                           value={field.value ? field.value.toString() : ""}
                           onChange={field.onChange}
                           placeholder={t("cars.customers")}

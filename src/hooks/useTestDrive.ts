@@ -86,6 +86,7 @@ export const useTestDrive = (tabsValue?: string) => {
       customer: "",
       email: "",
     });
+    // getCustomersList();
     setCustomersId(null);
   };
 
@@ -98,9 +99,13 @@ export const useTestDrive = (tabsValue?: string) => {
     }
   };
 
-  const getCustomersList = async () => {
+  const getCustomersList = async (search = "") => {
     try {
-      const { data } = await api.get("/users/customers/list/");
+      const { data } = await api.get("/users/customers/list/", {
+        params: {
+          search,
+        },
+      });
       setCustomersList(data);
     } catch (error) {
       console.log(error);
@@ -123,13 +128,6 @@ export const useTestDrive = (tabsValue?: string) => {
       setLoadingDrive(false);
     }
   };
-
-  // async function interestedIn(interest: number) {
-  //   let {
-  //     data: [{ variants }],
-  //   } = await api.get(`/cars/variants/${interest}/`);
-  //   setVarinats(variants);
-  // }
 
   const getTestDrive = async (
     tabs: string = currentTab,
@@ -206,21 +204,11 @@ export const useTestDrive = (tabsValue?: string) => {
     getTestDrive();
   };
 
-  // useEffect(() => {
-  //   const subscription = watch((value) => {
-  //     console.log("Form qiymatlari:", value);
-  //     console.log("Scheduled time kuzatilmoqda:", value?.scheduled_time);
-  //   });
-  //   return () => subscription.unsubscribe();
-  // }, [watch]);
-
   useEffect(() => {
     getTestDrive(currentTab);
     getCustomersList();
     getEmployees();
   }, []);
-
-  const refetch = () => {};
 
   return {
     // form-validation
@@ -268,5 +256,7 @@ export const useTestDrive = (tabsValue?: string) => {
     loadingPost,
 
     control,
+
+    getCustomersList,
   };
 };

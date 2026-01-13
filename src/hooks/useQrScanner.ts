@@ -123,7 +123,7 @@ const UseQrScanner = () => {
       }
     } else {
       // For other cases, just return the numbers with +
-      return `+${numbers.replace(/\D/g, "")}`;
+      return `+998 ${numbers.replace(/\D/g, "")}`;
     }
   }, []);
 

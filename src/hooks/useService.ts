@@ -21,6 +21,7 @@ export const useService = () => {
     handleSubmit,
     formState: { errors },
     reset,
+    control,
   } = useForm<ServiceFormData>({
     resolver: zodResolver(serviceSchema),
     defaultValues: {
@@ -227,9 +228,13 @@ export const useService = () => {
     }
   };
 
-  const getCustomersList = async () => {
+  const getCustomersList = async (search = "") => {
     try {
-      const { data } = await api.get("/users/customers/list/");
+      const { data } = await api.get("/users/customers/list/", {
+        params: {
+          search,
+        },
+      });
       setCustomersList(data);
     } catch (error) {
       console.log(error);
@@ -238,6 +243,7 @@ export const useService = () => {
 
   return {
     errors,
+    control,
     register,
     handleSubmit,
     onSubmit,
@@ -270,5 +276,6 @@ export const useService = () => {
     variantSelect,
 
     carustomersList,
+    getCustomersList,
   };
 };

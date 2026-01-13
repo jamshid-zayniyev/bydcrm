@@ -24,6 +24,8 @@ import {
   statusIcons,
 } from "@/hooks/useColorLabelsIcons";
 import AddEditSelect from "@/hooks/addEditSelect";
+import { Controller } from "react-hook-form";
+import { NameSelect } from "./ui/name-select";
 
 export function Service() {
   const { t } = useTranslation();
@@ -40,6 +42,8 @@ export function Service() {
     handleSubmit,
     register,
     errors,
+    control,
+
     employees,
     setShowAddModal,
     closeModal,
@@ -65,25 +69,10 @@ export function Service() {
     variantSelect,
 
     carustomersList,
+    getCustomersList,
   } = useService();
   const { carsModels } = useCustomers();
-  // const statusColors: Record<string, string> = {
-  //   s: "bg-blue-100 text-blue-700 border-blue-200",
-  //   i: "bg-yellow-100 text-yellow-700 border-yellow-200",
-  //   c: "bg-green-100 text-green-700 border-green-200",
-  // };
 
-  // const statusLabels: Record<string, string> = {
-  //   s: t("service.SCHEDULED"),
-  //   i: t("service.IN_PROGRESS"),
-  //   c: t("service.completed"),
-  // };
-
-  // const statusIcons: Record<string, any> = {
-  //   s: Calendar,
-  //   i: Clock,
-  //   c: CheckCircle,
-  // };
   const statusLabels: Record<string, string> = getStatusLabels(t);
 
   return (
@@ -385,31 +374,32 @@ export function Service() {
 
             <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* <div>
-                  <label className="block text-sm text-gray-700 mb-2">
-                    {t("service.customerName")}
-                  </label>
-                  <input
-                    {...register("customer_name")}
-                    placeholder={t("service.enterName")}
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
-                      errors.customer_name
-                        ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
-                        : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
-                    }`}
-                  />
-                  {errors.customer_name && (
-                    <p className="text-[#E60012]">
-                      {errors.customer_name.message}
-                    </p>
-                  )}
-                </div> */}
-
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     customer_id
                   </label>
-                  <select
+                  <Controller
+                    name="customer_id"
+                    control={control}
+                    render={({ field }) => (
+                      <>
+                        <NameSelect
+                          colors={carustomersList}
+                          getCustomersList={getCustomersList}
+                          value={field.value ? field.value.toString() : ""}
+                          onChange={field.onChange}
+                          placeholder={t("cars.customers")}
+                          errorsColor={!!errors.customer_id}
+                        />
+                        {errors.customer_id && (
+                          <p className="text-[#E60012] text-sm mt-1">
+                            {errors.customer_id.message}
+                          </p>
+                        )}
+                      </>
+                    )}
+                  />
+                  {/* <select
                     {...register("customer_id")}
                     className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent border-red-500`}
                   >
@@ -418,7 +408,7 @@ export function Service() {
                         {customer.full_name}
                       </option>
                     ))}
-                  </select>
+                  </select> */}
                 </div>
 
                 <div>
