@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "@/api/axios";
 import { CustomersSelectVariants } from "@/types/customers";
+import { CustomersList } from "@/types/testDrive";
 
 export const useSales = () => {
   const [loading, setLoading] = useState(true);
@@ -33,6 +34,7 @@ export const useSales = () => {
   const [variantSelect, setVariantSelect] = useState<CustomersSelectVariants[]>(
     []
   );
+  const [carustomersList, setCustomersList] = useState<CustomersList[]>([]);
 
   const { t } = useTranslation();
   const saleContractSchema = createSaleContractSchema(t);
@@ -73,6 +75,7 @@ export const useSales = () => {
 
       closeModal();
       fetchSales();
+      getCustomersList();
     } catch (err) {
       window.alert(err);
     } finally {
@@ -139,6 +142,7 @@ export const useSales = () => {
     fetchSales();
     fetchSalesStatistics();
     fetchSalesBanner();
+    getCustomersList();
   }, []);
 
   const refetch = () => {
@@ -191,6 +195,19 @@ export const useSales = () => {
     }
   };
 
+  const getCustomersList = async (search = "") => {
+    try {
+      const { data } = await api.get("/users/customers/list/", {
+        params: {
+          search,
+        },
+      });
+      setCustomersList(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     sales,
     salesStatistics,
@@ -225,5 +242,9 @@ export const useSales = () => {
     editFormSelect,
     loadingModel,
     variantSelect,
+
+    control,
+    carustomersList,
+    getCustomersList,
   };
 };

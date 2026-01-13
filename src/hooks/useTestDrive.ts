@@ -72,6 +72,7 @@ export const useTestDrive = (tabsValue?: string) => {
 
       closeModal();
       getTestDrive(currentTab);
+      getCustomersList();
     } catch (error) {
       console.error("Xatolik:", error);
     } finally {

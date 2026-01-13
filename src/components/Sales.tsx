@@ -8,11 +8,14 @@ import { useCustomers } from "@/hooks/useCustomers";
 import { useService } from "@/hooks/useService";
 import EditDelete from "./ui/edit-delete";
 import DeleteModal from "./ui/delete-modal";
-import AddEditSelect from "@/hooks/addEditSelect";
+
+import { Controller } from "react-hook-form";
+import { NameSelect } from "./ui/name-select";
 
 export function Sales() {
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
   const { t } = useTranslation();
+
   const {
     salesBanner,
     sales,
@@ -46,6 +49,10 @@ export function Sales() {
     editFormSelect,
     loadingModel,
     variantSelect,
+
+    control,
+    carustomersList,
+    getCustomersList,
   } = useSales();
 
   const { carsModels, customers } = useCustomers();
@@ -327,7 +334,28 @@ export function Sales() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     {t("sales.customer")}
                   </label>
-                  <select
+                  <Controller
+                    name="customer_id"
+                    control={control}
+                    render={({ field }) => (
+                      <>
+                        <NameSelect
+                          colors={carustomersList}
+                          getCustomersList={getCustomersList}
+                          value={field.value ? field.value.toString() : ""}
+                          onChange={field.onChange}
+                          placeholder={t("cars.customers")}
+                          errorsColor={!!errors.customer_id}
+                        />
+                        {errors.customer_id && (
+                          <p className="text-[#E60012] text-sm mt-1">
+                            {errors.customer_id.message}
+                          </p>
+                        )}
+                      </>
+                    )}
+                  />
+                  {/* <select
                     {...register("customer_id")}
                     className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent border-red-500 ${
                       errors.customer_id
@@ -348,7 +376,7 @@ export function Sales() {
                     <p className="text-[#E60012]">
                       {errors.customer_id.message}
                     </p>
-                  )}
+                  )} */}
                 </div>
 
                 <div>

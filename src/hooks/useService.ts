@@ -105,6 +105,7 @@ export const useService = () => {
       }
       closeModal();
       fetchService();
+      getCustomersList();
     } catch (error) {
       console.error("Xatolik:", error);
     } finally {

@@ -15,7 +15,7 @@ export const AddEditSelect: React.FC<SimpleButtonTextProps> = ({
       ? t("customers.addClientObj.addClient")
       : `${t("sale")} ${t("edit")}`;
 
-  return loading ? `...${baseText}` : baseText;
+  return loading ? `${baseText}...` : baseText;
 };
 
 export default AddEditSelect;
