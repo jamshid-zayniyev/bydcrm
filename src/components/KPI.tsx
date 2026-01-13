@@ -129,7 +129,8 @@ export function KPI() {
     loading,
 
     // modal
-    closeModal,
+    closeSalesModal,
+    closePerformanceModal,
     showAddModal,
     setShowAddModal,
 
@@ -138,7 +139,13 @@ export function KPI() {
     register,
     errors,
     onSubmitRevenue,
+    closeRevenueModal,
+    showRevenueModal,
+    setShowRevenueModal,
+
     onSubmitPerformance,
+    showPerformanceModal,
+    setShowPerformanceModal,
   } = useKPI();
   const { bestSeller } = usePieChart();
 
@@ -431,7 +438,7 @@ export function KPI() {
 
                 <div
                   className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center cursor-pointer"
-                  onClick={() => setShowAddModal(true)}
+                  onClick={() => setShowRevenueModal(true)}
                 >
                   <Plus className="h-5 w-5" />
                 </div>
@@ -514,7 +521,7 @@ export function KPI() {
                   <CardTitle>{t("kpi.review.dynamics")}</CardTitle>
                   <div
                     className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center cursor-pointer"
-                    onClick={() => setShowAddModal(true)}
+                    onClick={() => setShowPerformanceModal(true)}
                   >
                     <Plus className="h-5 w-5" />
                   </div>
@@ -1803,25 +1810,27 @@ export function KPI() {
       </Dialog>
       <Modal
         showAddModal={showAddModal}
-        closeModal={closeModal}
+        closeModal={closeSalesModal}
         onSubmit={onSubmit}
         handleSubmit={handleSubmit}
         register={register}
         errors={errors}
         loading={loading}
       />
+
       <Modal
-        showAddModal={showAddModal}
-        closeModal={closeModal}
+        showAddModal={showRevenueModal}
+        closeModal={closeRevenueModal}
         onSubmit={onSubmitRevenue}
         handleSubmit={handleSubmit}
         register={register}
         errors={errors}
         loading={loading}
       />
+
       <Modal
-        showAddModal={showAddModal}
-        closeModal={closeModal}
+        showAddModal={showPerformanceModal}
+        closeModal={closePerformanceModal}
         onSubmit={onSubmitPerformance}
         handleSubmit={handleSubmit}
         register={register}

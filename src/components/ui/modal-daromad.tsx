@@ -22,7 +22,7 @@ interface ModalProps {
   loading: boolean;
 }
 
-const Modal = ({
+const ModalDaromad = ({
   showAddModal,
   closeModal,
   onSubmit,
@@ -121,4 +121,4 @@ const Modal = ({
   );
 };
 
-export default Modal;
+export default ModalDaromad;

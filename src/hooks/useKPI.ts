@@ -63,6 +63,9 @@ const useKPI = () => {
     },
   });
 
+  const [showRevenueModal, setShowRevenueModal] = useState(false);
+  const [showPerformanceModal, setShowPerformanceModal] = useState(false);
+
   const getKpiMonthly = async () => {
     try {
       let { data } = await api.get("/kpi/monthly/");
@@ -204,8 +207,22 @@ const useKPI = () => {
     }
   };
 
-  const closeModal = () => {
+  const closeSalesModal = () => {
     setShowAddModal(false);
+    reset({
+      target: "",
+    });
+  };
+
+  const closeRevenueModal = () => {
+    setShowRevenueModal(false);
+    reset({
+      target: "",
+    });
+  };
+
+  const closePerformanceModal = () => {
+    setShowPerformanceModal(false);
     reset({
       target: "",
     });
@@ -217,7 +234,7 @@ const useKPI = () => {
       await api.put("/kpi/monthly-sales-target", data);
 
       getKpiMonthly();
-      closeModal();
+      closeSalesModal();
     } catch (error) {
       console.error("Xatolik:", error);
     } finally {
@@ -231,7 +248,7 @@ const useKPI = () => {
       await api.put("/kpi/monthly-revenue-target", data);
 
       getKpiRevenue();
-      closeModal();
+      closeRevenueModal();
     } catch (error) {
       console.error("Xatolik:", error);
     } finally {
@@ -245,7 +262,7 @@ const useKPI = () => {
       await api.put("/kpi/employee-performance-target", data);
 
       getKpiSalesPerformance();
-      closeModal();
+      closePerformanceModal();
     } catch (error) {
       console.error("Xatolik:", error);
     } finally {
@@ -283,7 +300,7 @@ const useKPI = () => {
     generalStatisticsData,
     loading,
 
-    closeModal,
+    closeSalesModal,
     showAddModal,
     setShowAddModal,
 
@@ -292,6 +309,13 @@ const useKPI = () => {
     register,
     errors,
 
+    closeRevenueModal,
+    showRevenueModal,
+    setShowRevenueModal,
+
+    closePerformanceModal,
+    showPerformanceModal,
+    setShowPerformanceModal,
     onSubmitRevenue,
     onSubmitPerformance,
   };
