@@ -395,10 +395,19 @@
       "reject": "Rad etish"
     },
     "aiFunctions": {
-      "title": "AI Funksiyalari"
+      "title": "AI Funksiyalari",
+
+      "titleAnalaz": "Mijozlarning hissiy holatini tahlil qilish",
+      "titlePrognoz": "Xarid qilish ehtimolini bashorat qilish",
+      "titleOptimiztion": "Mijoz bilan aloqa vaqtini optimallashtirish",
+      "titleRecomation": "Qo‘shimcha sotuvlar bo‘yicha tavsiyalar",
+      "titleOshenka": "Qo‘ng‘iroqlar va xizmat sifatini baholash"
     },
     "effectivenessStats": {
-      "title": "Samaradorlik statistikasi"
+      "title": "Samaradorlik statistikasi",
+      "acceptance_rate": "Qabul qilingan tavsiyalar",
+      "conversion_rate": "Konversiya o‘sishi",
+      "prediction_accuracy": "Prognozlar aniqligi"
     },
     "heading": "Sun’iy intellekt ish jarayonida",
     "description": "Sun’iy intellekt mijozlar, qo‘ng‘iroqlar va savdolar haqidagi ma’lumotlarni tahlil qilib, har bir bo‘lim uchun shaxsiy tavsiyalar beradi. Barcha takliflar real ko‘rsatkichlar va prognoz modellashtirish asosida yaratiladi."

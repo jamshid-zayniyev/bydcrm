@@ -231,7 +231,7 @@ const useKPI = () => {
   const onSubmit = async (data: KpiSchema) => {
     try {
       setLoading(true);
-      await api.put("/kpi/monthly-sales-target", data);
+      await api.put("/kpi/monthly-sales-target/", data);
 
       getKpiMonthly();
       closeSalesModal();
@@ -245,7 +245,7 @@ const useKPI = () => {
   const onSubmitRevenue = async (data: KpiSchema) => {
     try {
       setLoading(true);
-      await api.put("/kpi/monthly-revenue-target", data);
+      await api.put("/kpi/monthly-revenue-target/", data);
 
       getKpiRevenue();
       closeRevenueModal();
@@ -259,7 +259,7 @@ const useKPI = () => {
   const onSubmitPerformance = async (data: KpiSchema) => {
     try {
       setLoading(true);
-      await api.put("/kpi/employee-performance-target", data);
+      await api.put("/kpi/employee-performance-target/", data);
 
       getKpiSalesPerformance();
       closePerformanceModal();
