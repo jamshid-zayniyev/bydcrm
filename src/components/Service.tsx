@@ -266,9 +266,6 @@ export function Service() {
 
                         <div className="flex flex-wrap gap-3 ml-13">
                           <span className="text-sm text-gray-700">
-                            {/* {request.service_type === "s"
-                              ? "Плановое ТО"
-                              : "Диагностика"} */}
                             {request.service_type}
                           </span>
                           <span className="text-sm text-gray-500">
@@ -580,38 +577,7 @@ export function Service() {
       <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
         <h3 className="text-gray-900 mb-4">{t("service.writing")}</h3>
         <div className="space-y-3">
-          {/* {[
-            "Понедельник",
-            "Вторник",
-            "Среда",
-            "Четверг",
-            "Пятница",
-            "Суббота",
-          ].map((day, index) => {
-            const count = Math.floor(Math.random() * 5) + 1;
-            const percentage = (count / 5) * 100;
-            return (
-              <div key={day}>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-gray-700">{day}</span>
-                  <span className="text-sm text-gray-900">
-                    {count} {t("service.records")}
-                  </span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div
-                    className="bg-[#E60012] h-2 rounded-full transition-all"
-                    style={{ width: `${percentage}%` }}
-                  ></div>
-                </div>
-              </div>
-            );
-          })} */}
-
           {weeklyStatistic.map(({ day, created, percent }, idx) => (
-            // const count = Math.floor(Math.random() * 5) + 1;
-            // const percentage = (count / 5) * 100;
-            // return (
             <div key={idx}>
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-gray-700">

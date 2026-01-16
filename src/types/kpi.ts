@@ -183,3 +183,11 @@ export const createKpiSchema = (t: any) =>
     target: z.string().min(1, t("test-drive.customerError")),
   });
 export type KpiSchema = z.infer<ReturnType<typeof createKpiSchema>>;
+
+export const createEmployeeSchema = () =>
+  z.object({
+    target: z.string().optional(),
+    revenue_target: z.string().optional(),
+    rating_target: z.string().optional(),
+  });
+export type Employee = z.infer<ReturnType<typeof createEmployeeSchema>>;

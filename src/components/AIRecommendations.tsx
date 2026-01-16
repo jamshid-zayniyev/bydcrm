@@ -10,7 +10,6 @@ import {
   Headset,
   Gauge,
 } from "lucide-react";
-import { aiRecommendations } from "../data/mockData";
 import { useTranslation } from "react-i18next";
 import useAiRecommendations from "@/hooks/useAiRecommendations";
 import Loading from "./ui/loading";
@@ -40,7 +39,6 @@ export function AIRecommendations() {
     sq: "bg-orange-100 text-orange-700 border-orange-200",
     cq: "bg-pink-100 text-pink-700 border-pink-200",
     u: "bg-red-100 text-red-700 border-red-200",
-    // medium: "bg-yellow-100 text-yellow-700 border-yellow-200",
     ot: "bg-purple-100 text-purple-700 border-purple-200",
     td: "bg-blue-100 text-blue-700 border-blue-200",
   };
@@ -65,32 +63,11 @@ export function AIRecommendations() {
     td: "Рекомендация по тест-драйву",
   };
 
-  // const priorityColors: Record<string, string> = {
-  //   high: "bg-red-100 text-red-700 border-red-200",
-  //   medium: "bg-yellow-100 text-yellow-700 border-yellow-200",
-  //   low: "bg-blue-100 text-blue-700 border-blue-200",
-  // };
-
   const priorityLabels: Record<string, string> = {
     h: "Высокий",
     m: "Средний",
     l: "Низкий",
   };
-
-  const handleDismiss = (id: string) => {
-    setDismissedIds([...dismissedIds, id]);
-  };
-
-  const handleApply = (id: string) => {
-    alert(
-      "Рекомендация применена! В реальной системе это запустит соответствующий процесс."
-    );
-    setDismissedIds([...dismissedIds, id]);
-  };
-
-  const activeRecommendations = aiRecommendations.filter(
-    (r) => !dismissedIds.includes(r.id)
-  );
 
   const items = [
     t("ai.aiFunctions.titleAnalaz"),
@@ -166,126 +143,6 @@ export function AIRecommendations() {
 
       {/* Recommendations List */}
       <div className="space-y-4">
-        {/* {activeRecommendations.map((recommendation) => {
-          const Icon = typeIcons[recommendation.type];
-          const typeColor = typeColors[recommendation.type];
-
-          return (
-            <div
-              key={recommendation.id}
-              className="bg-white border-2 border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-all"
-            >
-              <div
-                className={`p-4 border-l-4 ${
-                  typeColor.includes("E60012")
-                    ? "border-l-[#E60012]"
-                    : "border-l-green-500"
-                }`}
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex items-start gap-3 flex-1">
-                    <div
-                      className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 border-2 ${typeColors}`}
-                    >
-                      <Icon className="w-5 h-5" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h3 className="text-gray-900">
-                          {recommendation.title}
-                        </h3>
-                        <span
-                          className={`px-2 py-1 rounded-lg text-xs border ${
-                            priorityColors[recommendation.priority]
-                          }`}
-                        >
-                          {priorityLabels[recommendation.priority]}
-                        </span>
-                      </div>
-                      <p className="text-sm text-gray-600 mb-3">
-                        {recommendation.description}
-                      </p>
-
-                      <div className="flex flex-wrap items-center gap-4 text-xs">
-                        <span className="text-gray-500">
-                          {t("ai.person.type")}:{" "}
-                          <span className="text-gray-700">
-                            {typeLabels[recommendation.type]}
-                          </span>
-                        </span>
-                        {recommendation.targetCustomerName && (
-                          <span className="text-gray-500">
-                            {t("ai.person.client")}:{" "}
-                            <span className="text-gray-700">
-                              {recommendation.targetCustomerName}
-                            </span>
-                          </span>
-                        )}
-                        <span className="text-gray-500">
-                          {t("ai.person.reliability")}:{" "}
-                          <span className="text-gray-700">
-                            {recommendation.confidence}%
-                          </span>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col items-end gap-2">
-                    <div className="w-16 h-16 relative">
-                      <svg className="w-16 h-16 transform -rotate-90">
-                        <circle
-                          cx="32"
-                          cy="32"
-                          r="28"
-                          stroke="#e5e7eb"
-                          strokeWidth="4"
-                          fill="none"
-                        />
-                        <circle
-                          cx="32"
-                          cy="32"
-                          r="28"
-                          stroke="#E60012"
-                          strokeWidth="4"
-                          fill="none"
-                          strokeDasharray={`${
-                            (recommendation.confidence / 100) * 176
-                          } 176`}
-                          strokeLinecap="round"
-                        />
-                      </svg>
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-xs text-gray-900">
-                          {recommendation.confidence}%
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex gap-2 mt-4">
-                  <button
-                    onClick={() => handleApply(recommendation.id)}
-                    className="px-4 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors text-sm flex items-center gap-2"
-                  >
-                    <Check className="w-4 h-4" />
-                    {t("ai.person.apply")}
-                  </button>
-
-                  <button
-                    onClick={() => handleDismiss(recommendation.id)}
-                    className="px-4 py-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors text-sm flex items-center gap-2"
-                  >
-                    <X className="w-4 h-4" />
-                    {t("ai.person.reject")}
-                  </button>
-                </div>
-              </div>
-            </div>
-          );
-        })} */}
-
         {loading ? (
           <Loading />
         ) : (
@@ -305,24 +162,13 @@ export function AIRecommendations() {
                         className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 border-2 ${iconColor}`}
                       >
                         <Icon className="w-5 h-5" />
-                        {/* {typeIcons[recommendation.type]} */}
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
                           <h3 className="text-gray-900">
                             {recommendation?.full_name}
                           </h3>
-                          {/* <span
-                          className={`px-2 py-1 rounded-lg text-xs border ${
-                            recommendation?.label === "h"
-                              ? "border-l-[#E60012]"
-                              : recommendation?.label === "m"
-                              ? "border-l-yellow-100"
-                              : "border-l-green-500"
-                          }`}
-                        >
-                          {recommendation?.label}
-                        </span> */}
+
                           <span
                             className={`px-2 py-1 rounded-lg text-xs border ${
                               typeColorsTest[recommendation.label]
@@ -456,7 +302,7 @@ export function AIRecommendations() {
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
                     className="bg-[#E60012] h-2 rounded-full transition-all"
-                    style={{ width: effectiveness?.acceptance_rate }}
+                    style={{ width: `${effectiveness?.acceptance_rate}%` }}
                   ></div>
                 </div>
               </div>
@@ -472,7 +318,7 @@ export function AIRecommendations() {
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
                     className="bg-black h-2 rounded-full transition-all"
-                    style={{ width: effectiveness?.conversion_rate }}
+                    style={{ width: `${effectiveness?.conversion_rate}%` }}
                   ></div>
                 </div>
               </div>
@@ -488,7 +334,7 @@ export function AIRecommendations() {
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
                     className="bg-green-600 h-2 rounded-full transition-all"
-                    style={{ width: effectiveness?.prediction_accuracy }}
+                    style={{ width: `${effectiveness?.prediction_accuracy}%` }}
                   ></div>
                 </div>
               </div>

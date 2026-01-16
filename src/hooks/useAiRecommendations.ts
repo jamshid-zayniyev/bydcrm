@@ -61,7 +61,9 @@ const useAiRecommendations = () => {
 
     await api.put(`ai/recommendations/${id}/action/`, newObj);
 
+    getAiDailyStats();
     getAiRecommendations();
+    getAiEffectiveness();
   };
 
   useEffect(() => {

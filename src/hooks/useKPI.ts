@@ -3,7 +3,9 @@ import { useAuthContext } from "@/contexts/AuthContext";
 import { User } from "@/types/auth";
 import {
   BestStaff,
+  createEmployeeSchema,
   createKpiSchema,
+  Employee,
   generalStatistics,
   kpiMonthly,
   KpiMostSoldCar,
@@ -50,6 +52,7 @@ const useKPI = () => {
     useState<generalStatistics>();
   const [loading, setLoading] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
+
   const kpiSchema = createKpiSchema(t);
   const {
     register,
@@ -63,8 +66,23 @@ const useKPI = () => {
     },
   });
 
+  const {
+    register: registerEmployee,
+    handleSubmit: handleSubmitEmployee,
+    reset: resetEmployee,
+  } = useForm<Employee>({
+    resolver: zodResolver(createEmployeeSchema()),
+    defaultValues: {
+      target: "",
+      revenue_target: "",
+      rating_target: "",
+    },
+  });
+
   const [showRevenueModal, setShowRevenueModal] = useState(false);
   const [showPerformanceModal, setShowPerformanceModal] = useState(false);
+
+  const [showAddModalEmpolyee, setShowAddModalEmpolyee] = useState(false);
 
   const getKpiMonthly = async () => {
     try {
@@ -270,6 +288,42 @@ const useKPI = () => {
     }
   };
 
+  const [currentId, setCurrentId] = useState<number | null>(null);
+  const addSellerId = async (id: number) => {
+    setShowAddModalEmpolyee(true);
+    setCurrentId(id);
+    let { data } = await api.get(`/kpi/staff-reports/${id}/`);
+
+    resetEmployee({
+      target: data?.sales?.target || "",
+      revenue_target: data?.revenue?.target || "",
+      rating_target: data?.rating?.target || "",
+    });
+  };
+  const closeModalEmpolyee = () => {
+    setShowAddModalEmpolyee(false);
+    resetEmployee({
+      target: "",
+      revenue_target: "",
+      rating_target: "",
+    });
+  };
+
+  const onSubmitEmployee = async (objForm: Employee) => {
+    console.log(currentId);
+    let newData = {
+      ...objForm,
+      target: objForm?.target ? Number(objForm?.target) : null,
+      revenue_target: objForm?.revenue_target
+        ? Number(objForm?.revenue_target)
+        : null,
+      rating_target: objForm?.rating_target ? objForm?.rating_target : null,
+    };
+    await api.put(`/kpi/seller-kpi-target/${currentId}/`, newData);
+    getKpiStaffReports();
+    closeModalEmpolyee();
+  };
+
   useEffect(() => {
     getKpiMonthly();
     getKpiRevenue();
@@ -318,6 +372,14 @@ const useKPI = () => {
     setShowPerformanceModal,
     onSubmitRevenue,
     onSubmitPerformance,
+    addSellerId,
+
+    registerEmployee,
+    handleSubmitEmployee,
+
+    onSubmitEmployee,
+    showAddModalEmpolyee,
+    closeModalEmpolyee,
   };
 };
 

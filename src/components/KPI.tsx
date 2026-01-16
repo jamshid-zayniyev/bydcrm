@@ -12,6 +12,7 @@ import {
   PhoneCall,
   Wrench,
   DollarSignIcon,
+  X,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
@@ -146,6 +147,15 @@ export function KPI() {
     onSubmitPerformance,
     showPerformanceModal,
     setShowPerformanceModal,
+
+    addSellerId,
+
+    registerEmployee,
+    handleSubmitEmployee,
+
+    onSubmitEmployee,
+    showAddModalEmpolyee,
+    closeModalEmpolyee,
   } = useKPI();
   const { bestSeller } = usePieChart();
 
@@ -697,32 +707,53 @@ export function KPI() {
               >
                 <CardHeader>
                   <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="text-4xl">
-                        <img
-                          src={`${employee.avatar ? employee.avatar : NoUser}`}
-                          alt={`${employee.full_name}`}
-                          style={{
-                            width: "36px",
-                            height: "36px",
-                            borderRadius: "50%",
+                    <div className="flex justify-between align-center w-full">
+                      <div className="flex items-center gap-3">
+                        <div className="text-4xl">
+                          <img
+                            src={`${
+                              employee.avatar ? employee.avatar : NoUser
+                            }`}
+                            alt={`${employee.full_name}`}
+                            style={{
+                              width: "36px",
+                              height: "36px",
+                              borderRadius: "50%",
+                            }}
+                          />
+                        </div>
+                        <div>
+                          <CardTitle className="text-lg">
+                            {employee.full_name}
+                          </CardTitle>
+                          <p className="text-sm text-muted-foreground">
+                            {employee.role === "sa"
+                              ? "Super Admin"
+                              : employee.role === "s"
+                              ? "Seller"
+                              : employee.role === "t"
+                              ? "Technikal"
+                              : "Call-Center"}
+                          </p>
+                        </div>
+                      </div>
+                      {employee.role === "sa" ? (
+                        "Super Admin"
+                      ) : employee.role === "s" ? (
+                        <div
+                          className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center cursor-pointer"
+                          // onClickRole={() => setShowAddModal(true)}
+                          onClick={() => {
+                            addSellerId(employee.id);
                           }}
-                        />
-                      </div>
-                      <div>
-                        <CardTitle className="text-lg">
-                          {employee.full_name}
-                        </CardTitle>
-                        <p className="text-sm text-muted-foreground">
-                          {employee.role === "sa"
-                            ? "Super Admin"
-                            : employee.role === "s"
-                            ? "Seller"
-                            : employee.role === "t"
-                            ? "Technikal"
-                            : "Call-Center"}
-                        </p>
-                      </div>
+                        >
+                          <Plus className="h-5 w-5" />
+                        </div>
+                      ) : employee.role === "t" ? (
+                        "Technikal"
+                      ) : (
+                        "Call-Center"
+                      )}
                     </div>
                     {/* <Badge
                       className={getScoreBadgeColor(employee.score)}
@@ -1837,6 +1868,92 @@ export function KPI() {
         errors={errors}
         loading={loading}
       />
+
+      {showAddModalEmpolyee && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 bg-black/50 backdrop-blur">
+          <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-200 flex items-center justify-between">
+              {/* <h2 className="text-gray-900">
+                {selected
+                  ? `${t("customers.addClientObj.oneClient")}`
+                  : `${t("customers.addClientObj.addNewClient")}`}
+              </h2> */}
+              <button
+                onClick={closeModalEmpolyee}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+
+            <form
+              onSubmit={handleSubmitEmployee(onSubmitEmployee)}
+              className="p-6 space-y-4"
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    Target
+                  </label>
+                  <input
+                    {...registerEmployee("target")}
+                    placeholder={t("customers.addClientObj.enterName")}
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
+                    type="text"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    revenue_target
+                  </label>
+                  <input
+                    {...registerEmployee("revenue_target")}
+                    placeholder={t("customers.addClientObj.enterName")}
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
+                    type="text"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    rating_target
+                  </label>
+
+                  <select
+                    {...registerEmployee("rating_target")}
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
+                  >
+                    <option value="" disabled>
+                      Rating tanlang
+                    </option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="submit"
+                  className="flex-1 px-4 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors"
+                >
+                  Saqlash
+                  {/* <AddEditSelect selected={selected} loading={loading} t={t} /> */}
+                </button>
+                <button
+                  disabled={loading}
+                  onClick={closeModalEmpolyee}
+                  className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                >
+                  {t("customers.addClientObj.cancel")}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
