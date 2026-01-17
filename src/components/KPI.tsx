@@ -374,16 +374,6 @@ export function KPI() {
           <h1 className="text-3xl mb-2">{t("kpi.dashboard_title")}</h1>
           <p className="text-muted-foreground">{t("kpi.dashboard_subtitle")}</p>
         </div>
-        {/* <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm">
-            <Download className="h-4 w-4 mr-2" />
-            {t("kpi.export")}
-          </Button>
-          <Button size="sm" className="bg-[#E60012] hover:bg-[#c00010]">
-            <Plus className="h-4 w-4 mr-2" />
-            {t("kpi.addGoal")}
-          </Button>
-        </div> */}
       </div>
       {/* Overview Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
@@ -434,7 +424,6 @@ export function KPI() {
                   {t("kpi.revenue")}
                 </p>
                 <p className="text-2xl">
-                  {/* {formatPrice(kpiRevenue?.revenue_current)} */}
                   {formatCurrency(
                     kpiRevenue?.revenue_current
                       ? kpiRevenue?.revenue_current
@@ -656,7 +645,7 @@ export function KPI() {
         {/* Employees Tab */}
         <TabsContent value="employees" className="space-y-4">
           {/* Filters */}
-          <Card>
+          {/* <Card>
             <CardContent className="pt-6">
               <div className="flex flex-col sm:flex-row gap-4">
                 <div className="flex-1">
@@ -699,7 +688,7 @@ export function KPI() {
                 </div>
               </div>
             </CardContent>
-          </Card>
+          </Card> */}
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {kpiStaffReports.map((employee) => (
@@ -747,22 +736,6 @@ export function KPI() {
                       >
                         <Plus className="h-5 w-5" />
                       </div>
-                      {/* {employee.role === "sa" ? (
-                        "Super Admin"
-                      ) : employee.role === "s" ? (
-                        <div
-                          className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center cursor-pointer"
-                          onClick={() => {
-                            addSellerId(employee.id);
-                          }}
-                        >
-                          <Plus className="h-5 w-5" />
-                        </div>
-                      ) : employee.role === "t" ? (
-                        "Technikal"
-                      ) : (
-                        "Call-Center"
-                      )} */}
                     </div>
                   </div>
                 </CardHeader>
@@ -978,14 +951,6 @@ export function KPI() {
                           fillOpacity={0.3}
                           name="Продажи"
                         />
-                        {/* <Line
-                            type="monotone"
-                            dataKey="target"
-                            stroke="#cbd5e1"
-                            strokeWidth={2}
-                            strokeDasharray="5 5"
-                            name="Цель"
-                          /> */}
                       </AreaChart>
                     </ResponsiveContainer>
                   </div>
@@ -1105,7 +1070,7 @@ export function KPI() {
                                   {customersId?.average_rating}
                                 </p>
                                 <p className="text-xs text-muted-foreground">
-                                  Рейтинг
+                                  {t("kpi.averageRating")}
                                 </p>
                               </div>
                             </div>
@@ -1218,13 +1183,6 @@ export function KPI() {
                                     fill="#3b82f6"
                                     name={t("kpi.calls")}
                                   />
-                                  {/* <Line
-                                type="monotone"
-                                dataKey="продажи"
-                                stroke="#E60012"
-                                strokeWidth={3}
-                                name="Продажи"
-                              /> */}
                                 </ComposedChart>
                               </ResponsiveContainer>
                             </CardContent>
@@ -1291,14 +1249,7 @@ export function KPI() {
                                       <span className="text-muted-foreground">
                                         / {staffReports2Data?.sales?.target}
                                       </span>
-                                      <Badge
-                                      // variant={
-                                      //   selectedEmployeeData.kpis.carsSold
-                                      //     .trend === "up"
-                                      //     ? "default"
-                                      //     : "destructive"
-                                      // }
-                                      >
+                                      <Badge>
                                         {staffReports2Data?.sales?.percent}%
                                       </Badge>
                                     </div>
@@ -1338,14 +1289,7 @@ export function KPI() {
                                           : 0
                                       )}{" "}
                                       {t("dashboard.cars.mln")}
-                                      <Badge
-                                      // variant={
-                                      //   selectedEmployeeData.kpis.carsSold
-                                      //     .trend === "up"
-                                      //     ? "default"
-                                      //     : "destructive"
-                                      // }
-                                      >
+                                      <Badge>
                                         {staffReports2Data?.revenue?.percent}%
                                       </Badge>
                                     </div>
@@ -1380,14 +1324,7 @@ export function KPI() {
                                         {staffReports2Data?.rating?.value}
                                       </span>
                                       /{staffReports2Data?.rating?.target}
-                                      <Badge
-                                      // variant={
-                                      //   selectedEmployeeData.kpis.carsSold
-                                      //     .trend === "up"
-                                      //     ? "default"
-                                      //     : "destructive"
-                                      // }
-                                      >
+                                      <Badge>
                                         {staffReports2Data?.rating?.percent}%
                                       </Badge>
                                     </div>
@@ -1414,14 +1351,7 @@ export function KPI() {
                                         {staffReports2Data?.rating?.value}
                                       </span>
                                       /{staffReports2Data?.rating?.target}
-                                      <Badge
-                                      // variant={
-                                      //   selectedEmployeeData.kpis.carsSold
-                                      //     .trend === "up"
-                                      //     ? "default"
-                                      //     : "destructive"
-                                      // }
-                                      >
+                                      <Badge>
                                         {staffReports2Data?.rating?.percent}%
                                       </Badge>
                                     </div>
@@ -1450,14 +1380,7 @@ export function KPI() {
                                       <span className="text-muted-foreground">
                                         / {staffReports2Data?.calls?.target}
                                       </span>
-                                      <Badge
-                                      // variant={
-                                      //   selectedEmployeeData.kpis.carsSold
-                                      //     .trend === "up"
-                                      //     ? "default"
-                                      //     : "destructive"
-                                      // }
-                                      >
+                                      <Badge>
                                         {staffReports2Data?.calls?.percent}%
                                       </Badge>
                                     </div>
@@ -1493,104 +1416,9 @@ export function KPI() {
                                     value={staffReports2Data?.rating?.percent}
                                     className="h-3"
                                   />
-
-                                  {/* <div className="flex gap-1 mt-2">
-                                {[1, 2, 3, 4, 5].map((star) => (
-                                  <Star
-                                    key={star}
-                                    className={`h-5 w-5 ${
-                                      star <=
-                                      Math.round(
-                                        selectedEmployeeData.kpis
-                                          .customerSatisfaction.current
-                                      )
-                                        ? "text-yellow-600 fill-yellow-600"
-                                        : "text-gray-300"
-                                    }`}
-                                  />
-                                ))}
-                              </div> */}
                                 </div>
                               </>
                             )}
-
-                            {/* <div>
-                          <div className="flex items-center justify-between mb-2">
-                            <div className="flex items-center gap-2">
-                              <Star className="h-5 w-5 text-yellow-600" />
-                              <span className="font-medium">
-                                Удовлетворенность клиентов
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-3">
-                              <span className="text-2xl">
-                                {
-                                  selectedEmployeeData.kpis.customerSatisfaction
-                                    .current
-                                }
-                              </span>
-                              {selectedEmployeeData.kpis.customerSatisfaction
-                                .target > 0 && (
-                                <>
-                                  <span className="text-muted-foreground">
-                                    /{" "}
-                                    {
-                                      selectedEmployeeData.kpis
-                                        .customerSatisfaction.target
-                                    }
-                                  </span>
-                                  <Badge
-                                    variant={
-                                      selectedEmployeeData.kpis
-                                        .customerSatisfaction.trend === "up"
-                                        ? "default"
-                                        : "destructive"
-                                    }
-                                  >
-                                    {selectedEmployeeData.kpis
-                                      .customerSatisfaction.change > 0
-                                      ? "+"
-                                      : ""}
-                                    {
-                                      selectedEmployeeData.kpis
-                                        .customerSatisfaction.change
-                                    }
-                                    %
-                                  </Badge>
-                                </>
-                              )}
-                            </div>
-                          </div>
-                          {selectedEmployeeData.kpis.customerSatisfaction
-                            .target > 0 && (
-                            <Progress
-                              value={
-                                (selectedEmployeeData.kpis.customerSatisfaction
-                                  .current /
-                                  selectedEmployeeData.kpis.customerSatisfaction
-                                    .target) *
-                                100
-                              }
-                              className="h-3"
-                            />
-                          )}
-                          <div className="flex gap-1 mt-2">
-                            {[1, 2, 3, 4, 5].map((star) => (
-                              <Star
-                                key={star}
-                                className={`h-5 w-5 ${
-                                  star <=
-                                  Math.round(
-                                    selectedEmployeeData.kpis
-                                      .customerSatisfaction.current
-                                  )
-                                    ? "text-yellow-600 fill-yellow-600"
-                                    : "text-gray-300"
-                                }`}
-                              />
-                            ))}
-                          </div>
-                        </div> */}
                           </div>
                         </CardContent>
                       </Card>
@@ -1614,7 +1442,6 @@ export function KPI() {
                                 <YAxis yAxisId="right" orientation="right" />
                                 <Tooltip
                                   formatter={(value: any, name: string) => {
-                                    // revenue va target uchun formatPriceNoT funksiyasini ishlatish
                                     if (
                                       name === "Выручка (млн)" ||
                                       name === "Цель"
@@ -1876,11 +1703,6 @@ export function KPI() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 bg-black/50 backdrop-blur">
           <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-gray-200 flex items-center justify-between">
-              {/* <h2 className="text-gray-900">
-                {selected
-                  ? `${t("customers.addClientObj.oneClient")}`
-                  : `${t("customers.addClientObj.addNewClient")}`}
-              </h2> */}
               <button
                 onClick={closeModalEmpolyee}
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
