@@ -162,7 +162,6 @@ export const useSales = () => {
   const editBtn = async (id: number) => {
     setSelected(id);
     let { data } = await api.get(`/sales/sales-contract/${id}/`);
-    console.log(data?.car);
 
     reset({
       customer_id: `${data.customer_id}`,
