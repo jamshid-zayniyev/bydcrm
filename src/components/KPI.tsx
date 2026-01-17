@@ -51,6 +51,7 @@ import { NoUser } from "@/assets";
 import { formatPriceNoT } from "@/hooks/mlnNumberNoT";
 import Loading from "./ui/loading";
 import Modal from "./ui/modal";
+import AddEditSelect from "@/hooks/addEditSelect";
 
 interface SalesmanKPI {
   id: string;
@@ -156,6 +157,7 @@ export function KPI() {
     onSubmitEmployee,
     showAddModalEmpolyee,
     closeModalEmpolyee,
+    currentIdRole,
   } = useKPI();
   const { bestSeller } = usePieChart();
 
@@ -737,12 +739,19 @@ export function KPI() {
                           </p>
                         </div>
                       </div>
-                      {employee.role === "sa" ? (
+                      <div
+                        className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center cursor-pointer"
+                        onClick={() => {
+                          addSellerId(employee.id, employee.role);
+                        }}
+                      >
+                        <Plus className="h-5 w-5" />
+                      </div>
+                      {/* {employee.role === "sa" ? (
                         "Super Admin"
                       ) : employee.role === "s" ? (
                         <div
                           className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center cursor-pointer"
-                          // onClickRole={() => setShowAddModal(true)}
                           onClick={() => {
                             addSellerId(employee.id);
                           }}
@@ -753,14 +762,8 @@ export function KPI() {
                         "Technikal"
                       ) : (
                         "Call-Center"
-                      )}
+                      )} */}
                     </div>
-                    {/* <Badge
-                      className={getScoreBadgeColor(employee.score)}
-                      variant="outline"
-                    >
-                      {employee.score}%
-                    </Badge> */}
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -1891,47 +1894,82 @@ export function KPI() {
               className="p-6 space-y-4"
             >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm text-gray-700 mb-2">
-                    Target
-                  </label>
-                  <input
-                    {...registerEmployee("target")}
-                    placeholder={t("customers.addClientObj.enterName")}
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
-                    type="text"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm text-gray-700 mb-2">
-                    revenue_target
-                  </label>
-                  <input
-                    {...registerEmployee("revenue_target")}
-                    placeholder={t("customers.addClientObj.enterName")}
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
-                    type="text"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm text-gray-700 mb-2">
-                    rating_target
-                  </label>
-
-                  <select
-                    {...registerEmployee("rating_target")}
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
-                  >
-                    <option value="" disabled>
-                      Rating tanlang
-                    </option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                  </select>
-                </div>
+                {currentIdRole?.employeeRole === "sa" ? (
+                  "Super Admin"
+                ) : currentIdRole?.employeeRole === "s" ? (
+                  <>
+                    <div>
+                      <label className="block text-sm text-gray-700 mb-2">
+                        {t("kpi.Target")}
+                      </label>
+                      <input
+                        {...registerEmployee("target")}
+                        placeholder={t("kpi.TargetPlaceholder")}
+                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
+                        type="text"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm text-gray-700 mb-2">
+                        {t("kpi.revenue_target")}
+                      </label>
+                      <input
+                        {...registerEmployee("revenue_target")}
+                        placeholder={t("kpi.revenueTargetPlaceholder")}
+                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
+                        type="text"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm text-gray-700 mb-2">
+                        {t("kpi.rating_target")}
+                      </label>
+                      <input
+                        {...registerEmployee("rating_target")}
+                        placeholder={t("kpi.ratingPargetPlaceholder")}
+                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
+                        type="text"
+                      />
+                    </div>
+                  </>
+                ) : currentIdRole?.employeeRole === "t" ? (
+                  <div>
+                    <label className="block text-sm text-gray-700 mb-2">
+                      {t("kpi.rating_target")}
+                    </label>
+                    <input
+                      {...registerEmployee("rating_target")}
+                      placeholder={t("kpi.ratingPargetPlaceholder")}
+                      className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
+                      type="text"
+                    />
+                  </div>
+                ) : (
+                  <>
+                    <div>
+                      <label className="block text-sm text-gray-700 mb-2">
+                        {t("kpi.Target")}
+                      </label>
+                      <input
+                        {...registerEmployee("target")}
+                        placeholder={t("kpi.TargetPlaceholder")}
+                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
+                        type="text"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm text-gray-700 mb-2">
+                        {t("kpi.rating_target")}
+                      </label>
+                      <input
+                        {...registerEmployee("rating_target")}
+                        placeholder={t("kpi.ratingPargetPlaceholder")}
+                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2`}
+                        type="text"
+                      />
+                    </div>
+                  </>
+                )}
               </div>
 
               <div className="flex gap-3 pt-4">
@@ -1939,10 +1977,12 @@ export function KPI() {
                   type="submit"
                   className="flex-1 px-4 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors"
                 >
-                  Saqlash
-                  {/* <AddEditSelect selected={selected} loading={loading} t={t} /> */}
+                  {loading
+                    ? `${t("customers.addClientObj.addClient")}...`
+                    : t("customers.addClientObj.addClient")}
                 </button>
                 <button
+                  type="button"
                   disabled={loading}
                   onClick={closeModalEmpolyee}
                   className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"

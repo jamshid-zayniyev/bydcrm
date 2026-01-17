@@ -1,11 +1,10 @@
 import { api } from "@/api/axios";
-import { useAuthContext } from "@/contexts/AuthContext";
-import { User } from "@/types/auth";
 import {
   BestStaff,
   createEmployeeSchema,
   createKpiSchema,
   Employee,
+  EmployeeObj,
   generalStatistics,
   kpiMonthly,
   KpiMostSoldCar,
@@ -288,16 +287,18 @@ const useKPI = () => {
     }
   };
 
-  const [currentId, setCurrentId] = useState<number | null>(null);
-  const addSellerId = async (id: number) => {
+  const [currentIdRole, setCurrentIdRole] = useState<EmployeeObj>();
+  const addSellerId = async (id: number, employeeRole: string) => {
     setShowAddModalEmpolyee(true);
-    setCurrentId(id);
+    setCurrentIdRole({ id, employeeRole });
     let { data } = await api.get(`/kpi/staff-reports/${id}/`);
 
     resetEmployee({
-      target: data?.sales?.target || "",
-      revenue_target: data?.revenue?.target || "",
-      rating_target: data?.rating?.target || "",
+      target: data?.sales?.target
+        ? data?.sales?.target?.toString()
+        : data?.calls?.target?.toString(),
+      revenue_target: data?.revenue?.target?.toString() || "",
+      rating_target: data?.rating?.target?.toString() || "",
     });
   };
   const closeModalEmpolyee = () => {
@@ -307,21 +308,43 @@ const useKPI = () => {
       revenue_target: "",
       rating_target: "",
     });
+    setCurrentIdRole({
+      id: null,
+      employeeRole: "",
+    });
   };
 
   const onSubmitEmployee = async (objForm: Employee) => {
-    console.log(currentId);
-    let newData = {
-      ...objForm,
-      target: objForm?.target ? Number(objForm?.target) : null,
-      revenue_target: objForm?.revenue_target
-        ? Number(objForm?.revenue_target)
-        : null,
-      rating_target: objForm?.rating_target ? objForm?.rating_target : null,
-    };
-    await api.put(`/kpi/seller-kpi-target/${currentId}/`, newData);
-    getKpiStaffReports();
-    closeModalEmpolyee();
+    try {
+      setLoading(true);
+      let newData = {
+        ...objForm,
+        target: objForm?.target ? Number(objForm?.target) : null,
+        revenue_target: objForm?.revenue_target
+          ? Number(objForm?.revenue_target)
+          : null,
+        rating_target: objForm?.rating_target ? objForm?.rating_target : null,
+      };
+
+      if (currentIdRole?.employeeRole === "sa") {
+        console.log("Super Admin");
+      } else if (currentIdRole?.employeeRole === "s") {
+        await api.put(`/kpi/seller-kpi-target/${currentIdRole?.id}/`, newData);
+      } else if (currentIdRole?.employeeRole === "t") {
+        await api.put(
+          `/kpi/technical-kpi-target/${currentIdRole?.id}/`,
+          newData
+        );
+      } else {
+        await api.put(`/kpi/call-kpi-target/${currentIdRole?.id}/`, newData);
+      }
+      getKpiStaffReports();
+      closeModalEmpolyee();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -380,6 +403,7 @@ const useKPI = () => {
     onSubmitEmployee,
     showAddModalEmpolyee,
     closeModalEmpolyee,
+    currentIdRole,
   };
 };
 

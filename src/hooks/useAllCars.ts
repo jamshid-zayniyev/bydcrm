@@ -217,7 +217,7 @@ export const useAllCars = () => {
 
       reset({
         model: data.model,
-        base_price: data.base_price,
+        base_price: data.base_price.toString(),
         total_available: data.total_available,
         description_uz: data.description_uz,
         description_ru: data.description_ru,

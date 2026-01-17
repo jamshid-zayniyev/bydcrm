@@ -375,7 +375,13 @@
     "happyCustomers": "Qoniqqan mijozlar",
     "averageRating1": "O‘rtacha reyting",
     "kolechtvo": "Qo‘ng‘iroqlarning umumiy soni",
-    "uslog": "Yakunlangan xizmatlar"
+    "uslog": "Yakunlangan xizmatlar",
+    "Target": "Oylik sotish miqdori",
+    "TargetPlaceholder": "Maqsad",
+    "revenue_target": "Daromad miqdori",
+    "revenueTargetPlaceholder": "Daromad",
+    "rating_target": "Baholash [1-5]",
+    "ratingPargetPlaceholder": "Baholash"
   },
   "ai": {
     "title": "AI Tavsiyalari",

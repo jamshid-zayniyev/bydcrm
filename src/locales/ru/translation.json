@@ -372,7 +372,13 @@
     "happyCustomers": "Довольных клиентов",
     "averageRating1": "Средний рейтинг",
     "kolechtvo": "Общее количество звонков",
-    "uslog": "Завершенные услуги"
+    "uslog": "Завершенные услуги",
+    "Target": "Ежемесячный объём продаж",
+    "TargetPlaceholder": "Цель",
+    "revenue_target": "Сумма дохода",
+    "revenueTargetPlaceholder": "Доход",
+    "rating_target": "Оценка [1–5]",
+    "ratingPargetPlaceholder": "Оценка"
   },
   "ai": {
     "title": "ИИ Рекомендации",

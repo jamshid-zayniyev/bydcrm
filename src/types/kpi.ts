@@ -191,3 +191,8 @@ export const createEmployeeSchema = () =>
     rating_target: z.string().optional(),
   });
 export type Employee = z.infer<ReturnType<typeof createEmployeeSchema>>;
+
+export interface EmployeeObj {
+  id: number | null;
+  employeeRole: string;
+}

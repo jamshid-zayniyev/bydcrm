@@ -128,21 +128,6 @@ const Cars = () => {
     return `${(price / 1000000).toFixed(0)} ${t("dashboard.cars.mln")}`;
   };
 
-  // if (carsLoading) {
-  //   return (
-  //     <div className="space-y-4 sm:space-y-6">
-  //       <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl border border-gray-200 shadow-sm">
-  //         <div className="flex items-center justify-center h-32">
-  //           <div className="text-center">
-  //             <div className="w-8 h-8 border-4 border-[#E60012] border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-  //             <p className="text-gray-600 text-sm">{t("loading")}</p>
-  //           </div>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   );
-  // }
-
   return (
     <>
       <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl border border-gray-200 shadow-sm">
@@ -243,13 +228,6 @@ const Cars = () => {
                           {vehicle.description}
                         </p>
                       </div>
-                      {/* <div
-                        className={`w-3 h-3 rounded-full flex-shrink-0 mt-1 ${
-                          vehicle.brand_color === "#E60012"
-                            ? "bg-[#E60012]"
-                            : "bg-black"
-                        }`}
-                      ></div> */}
                     </div>
 
                     {/* Price */}
