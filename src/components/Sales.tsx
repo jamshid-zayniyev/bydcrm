@@ -53,6 +53,11 @@ export function Sales() {
     control,
     carustomersList,
     getCustomersList,
+
+    editForm,
+    customersId,
+    loadingDrive,
+    varinats,
   } = useSales();
 
   const { carsModels, customers } = useCustomers();
@@ -329,7 +334,10 @@ export function Sales() {
               </button>
             </div>
             <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div
+                className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                style={{ padding: "25px 0 50px" }}
+              >
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     {t("sales.customer")}
@@ -341,12 +349,14 @@ export function Sales() {
                       <>
                         <NameSelect
                           colors={carustomersList}
+                          editForm={editForm}
                           getCustomersList={getCustomersList}
                           value={field.value ? field.value.toString() : ""}
                           onChange={field.onChange}
                           placeholder={t("cars.customers")}
                           errorsColor={!!errors.customer_id}
                         />
+
                         {errors.customer_id && (
                           <p className="text-[#E60012] text-sm mt-1">
                             {errors.customer_id.message}
@@ -355,31 +365,66 @@ export function Sales() {
                       </>
                     )}
                   />
-                  {/* <select
-                    {...register("customer_id")}
-                    className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent border-red-500 ${
-                      errors.customer_id
-                        ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
-                        : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
-                    }`}
-                  >
-                    <option value="" disabled>
-                      {t("sales.customerSelect")}
-                    </option>
-                    {customers.map((customer) => (
-                      <option key={customer.id} value={customer.id}>
-                        {customer.full_name}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.customer_id && (
-                    <p className="text-[#E60012]">
-                      {errors.customer_id.message}
-                    </p>
-                  )} */}
                 </div>
 
-                <div>
+                {customersId?.interested_in && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      {t("customers.addClientObj.interestedModel")}
+                    </label>
+                    <select
+                      {...register("car")}
+                      // disabled
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed"
+                      style={{ height: "39px" }}
+                    >
+                      {loadingDrive ? (
+                        <option>{t("formLaoding")}</option>
+                      ) : (
+                        carsModels
+                          .filter(
+                            (car) => car.id === customersId?.interested_in
+                          )
+                          .map((car) => (
+                            <option
+                              key={car.id}
+                              value={customersId?.interested_in}
+                            >
+                              {car.model}
+                            </option>
+                          ))
+                      )}
+                    </select>
+                  </div>
+                )}
+
+                {customersId?.variants && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      {t("test-drive.seria")}
+                    </label>
+                    <select
+                      {...register("variants")}
+                      // disabled
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed"
+                      style={{ height: "39px" }}
+                    >
+                      {loadingDrive ? (
+                        <option>{t("formLaoding")}</option>
+                      ) : (
+                        varinats
+                          .filter((car) => car.id === customersId?.variants)
+                          .map((car) => (
+                            <option key={car.id} value={customersId?.variants}>
+                              {car.series}
+                            </option>
+                          ))
+                      )}
+                    </select>
+                  </div>
+                )}
+
+                {/* <div>
                   <label className="block text-sm text-gray-700 mb-2">
                     {t("sales.car")}
                   </label>
@@ -439,7 +484,7 @@ export function Sales() {
                   </div>
                 ) : (
                   <></>
-                )}
+                )} */}
 
                 <div>
                   <label className="block text-sm text-gray-700 mb-2">

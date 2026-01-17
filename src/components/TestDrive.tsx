@@ -328,7 +328,6 @@ const TestDrive = () => {
                   <div
                     key={customer.id}
                     className="bg-white p-5 rounded-xl border border-gray-200 hover:shadow-lg transition-all cursor-pointer"
-                    // onClick={() => setSelectedCustomer(customer)}
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1">

@@ -14,6 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "@/api/axios";
 import { CustomersSelectVariants } from "@/types/customers";
 import { CustomersList } from "@/types/testDrive";
+import { GetVariants } from "@/types/cars";
 
 export const useSales = () => {
   const [loading, setLoading] = useState(true);
@@ -35,6 +36,9 @@ export const useSales = () => {
     []
   );
   const [carustomersList, setCustomersList] = useState<CustomersList[]>([]);
+  const [customersId, setCustomersId] = useState<CustomersList | null>(null);
+  const [loadingDrive, setLoadingDrive] = useState(false);
+  const [varinats, setVarinats] = useState<GetVariants[]>([]);
 
   const { t } = useTranslation();
   const saleContractSchema = createSaleContractSchema(t);
@@ -122,6 +126,8 @@ export const useSales = () => {
       // variants: "",
     });
     setVariantSelect([]);
+
+    setCustomersId(null);
   };
 
   const fetchSalesBanner = async () => {
@@ -208,6 +214,23 @@ export const useSales = () => {
     }
   };
 
+  const editForm = async (id: number) => {
+    try {
+      setLoadingDrive(true);
+      const { data } = await api.get(`/users/customers/${id}/`);
+      setCustomersId(data);
+
+      let {
+        data: [{ variants }],
+      } = await api.get(`/cars/variants/${data?.interested_in}/`);
+      setVarinats(variants);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadingDrive(false);
+    }
+  };
+
   return {
     sales,
     salesStatistics,
@@ -246,5 +269,10 @@ export const useSales = () => {
     control,
     carustomersList,
     getCustomersList,
+    editForm,
+
+    customersId,
+    loadingDrive,
+    varinats,
   };
 };
