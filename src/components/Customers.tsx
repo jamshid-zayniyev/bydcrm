@@ -683,6 +683,7 @@ export function Customers() {
 
               <div className="flex gap-3 pt-4">
                 <button
+                  disabled={loading}
                   type="submit"
                   className="flex-1 px-4 py-2 bg-[#E60012] text-white rounded-lg hover:bg-[#b00010] transition-colors"
                 >

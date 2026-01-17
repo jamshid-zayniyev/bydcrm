@@ -15,6 +15,7 @@ import { api } from "@/api/axios";
 import { CustomersSelectVariants } from "@/types/customers";
 import { CustomersList } from "@/types/testDrive";
 import { GetVariants } from "@/types/cars";
+import { log } from "console";
 
 export const useSales = () => {
   const [loading, setLoading] = useState(true);
@@ -54,7 +55,7 @@ export const useSales = () => {
     resolver: zodResolver(saleContractSchema),
     defaultValues: {
       customer_id: "",
-      car: "",
+      // car: "",
       price: "",
       status: "",
     },
@@ -62,6 +63,9 @@ export const useSales = () => {
 
   const onSubmit = async (data: SaleContractSchema) => {
     try {
+      console.log(data?.car);
+      console.log(data?.variants);
+
       setLoadingPost(true);
       let newData = {
         ...data,
@@ -120,7 +124,7 @@ export const useSales = () => {
     setShowAddModal(false);
     reset({
       customer_id: "",
-      car: "",
+      // car: "",
       price: "",
       status: "",
       // variants: "",
@@ -158,20 +162,20 @@ export const useSales = () => {
   const editBtn = async (id: number) => {
     setSelected(id);
     let { data } = await api.get(`/sales/sales-contract/${id}/`);
-    console.log(data);
+    console.log(data?.car);
 
     reset({
       customer_id: `${data.customer_id}`,
-      car: `${data.car}`,
-      variants: `${data.variants}`,
+      // car: `${data.car}`,
+      // variants: `${data.variants}`,
 
       price: `${data.price}`,
       status: data.status,
     });
-    if (data.car) {
-      await editFormSelect(data.car);
-    }
-
+    // if (data.car) {
+    //   await editFormSelect(data.car);
+    // }
+    editForm(data.customer_id);
     setShowAddModal(true);
   };
 
