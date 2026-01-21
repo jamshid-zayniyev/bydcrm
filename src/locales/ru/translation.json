@@ -126,6 +126,8 @@
     }
   },
   "customers": {
+    "isbuyTrue": "Продано",
+    "isbuyFalse": "Не продано",
     "clientManagement": "Управление клиентами",
     "totalClients": "Всего клиентов",
     "totalDay": "Клиенты за сегодня",

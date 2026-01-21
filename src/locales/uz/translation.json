@@ -128,6 +128,9 @@
     }
   },
   "customers": {
+    "isbuyTrue": "Sotildi",
+    "isbuyFalse": "Sotilmadi",
+
     "clientManagement": "Mijozlarni boshqarish",
     "totalClients": "Jami mijozlar",
     "totalDay": "Bugungi mijozlar",

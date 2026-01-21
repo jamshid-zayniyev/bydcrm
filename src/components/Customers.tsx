@@ -297,6 +297,15 @@ export function Customers() {
                         </h3>
                       </div>
                       <div className="flex gap-3">
+                        <span
+                          className={`inline-block px-3 py-1 rounded-lg text-xs border  ${
+                            customer?.is_buy ? "bg-green-500" : "bg-red-500"
+                          } text-white`}
+                        >
+                          {customer.is_buy
+                            ? t("customers.isbuyTrue")
+                            : t("customers.isbuyFalse")}{" "}
+                        </span>
                         <img
                           src={Edit}
                           alt={customer.full_name}

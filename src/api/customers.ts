@@ -16,6 +16,7 @@ export interface Customers {
   variants: string;
   district: number;
   date_joined: string;
+  is_buy:string;
   // email?: string;
   ai_probability: number;
   ai_stage: string;
