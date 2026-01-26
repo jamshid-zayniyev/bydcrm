@@ -43,10 +43,8 @@ export function QRScanner() {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-[#E60012]/90 to-transparent flex items-center px-6">
           <div>
-            <h3 className="text-white mb-1">Добро пожаловать в салон BYD</h3>
-            <p className="text-white/90 text-sm">
-              Зарегистрируйтесь для получения персональной консультации
-            </p>
+            <h3 className="text-white mb-1">{t("qr.salon-qr")}</h3>
+            <p className="text-white/90 text-sm">{t("qr.byd-registeration")}</p>
           </div>
         </div>
       </div>

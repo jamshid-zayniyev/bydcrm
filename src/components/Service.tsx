@@ -93,10 +93,8 @@ export function Service() {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent flex items-center px-6">
           <div>
-            <h3 className="text-white mb-1">Профессиональный сервис BYD</h3>
-            <p className="text-gray-200 text-sm">
-              Качественное обслуживание вашего автомобиля
-            </p>
+            <h3 className="text-white mb-1">{t("service.BYDservices")}</h3>
+            <p className="text-gray-200 text-sm">{t("service.BYDavtomabil")}</p>
           </div>
         </div>
       </div>

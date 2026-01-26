@@ -220,7 +220,9 @@
     "todayTarget": "Bugungi maqsad",
     "callNumber": "qo'ng'iroqlar",
     "outgoing": "Chiquvchi",
-    "incoming": "Kiruvchi"
+    "incoming": "Kiruvchi",
+    "aiAnalysis": "AI tahlil bilan integratsiya",
+    "avtomatic": "Qo‘ng‘iroqlar sifatini avtomatik tahlil qilish"
   },
   "sales": {
     "departmentSales": "Savdo bo'limi",
@@ -290,7 +292,10 @@
     "Thursday": "Payshanba",
     "Friday": "Juma",
     "Saturday": "Shanba",
-    "dayOff": "Dam olish kuni"
+    "dayOff": "Dam olish kuni",
+
+    "BYDservices": "BYD uchun professional servis",
+    "BYDavtomabil": "Avtomobilingizga sifatli xizmat"
   },
   "kpi": {
     "dashboard_title": "Sotuv bo‘limi KPI",
@@ -465,7 +470,9 @@
       },
       "submitButton": "Tashrif buyuruvchini ro'yxatga olish"
     },
-    "recentVisits": "Oxirgi tashrif buyuruvchilar"
+    "recentVisits": "Oxirgi tashrif buyuruvchilar",
+    "salon-qr": "BYD saloniga xush kelibsiz",
+    "byd-registeration": "Shaxsiy maslahat olish uchun ro‘yxatdan o‘ting"
   },
   "reviews": {
     "title": "Sharhlarni boshqarish",

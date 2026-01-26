@@ -64,7 +64,7 @@ export function MainApp() {
             <Route path="/kpi" element={<KPI />} />
             <Route path="/ai" element={<AIRecommendations />} />
             <Route path="/qr" element={<QRScanner />} />
-            <Route path="/reviews" element={<Reviews />} />
+            {/* <Route path="/reviews" element={<Reviews />} /> */}
             <Route path="/cars" element={<Cars />} />
 
             <Route path="/" element={<Dashboard />} />

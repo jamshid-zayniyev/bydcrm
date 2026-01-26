@@ -96,13 +96,13 @@ export function Sidebar({ userRole, isMobile = false, onClose }: SidebarProps) {
       icon: QrCode,
       roles: ["sa", "m"],
     },
-    {
-      id: "reviews",
-      path: "/reviews",
-      label: t("nav.reviews"),
-      icon: Star,
-      roles: ["sa", "m"],
-    },
+    // {
+    //   id: "reviews",
+    //   path: "/reviews",
+    //   label: t("nav.reviews"),
+    //   icon: Star,
+    //   roles: ["sa", "m"],
+    // },
   ];
 
   // ... qolgan kod o'zgarmadi

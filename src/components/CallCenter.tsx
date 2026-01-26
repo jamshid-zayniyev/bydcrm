@@ -153,10 +153,8 @@ export function CallCenter() {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent flex items-center px-6">
           <div>
-            <h3 className="text-white mb-1">Интеграция с AI анализом</h3>
-            <p className="text-gray-200 text-sm">
-              Автоматический анализ качества звонков
-            </p>
+            <h3 className="text-white mb-1">{t("callCenter.aiAnalysis")}</h3>
+            <p className="text-gray-200 text-sm">{t("callCenter.avtomatic")}</p>
           </div>
         </div>
       </div>
