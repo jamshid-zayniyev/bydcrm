@@ -15,7 +15,6 @@ import { api } from "@/api/axios";
 import { CustomersSelectVariants } from "@/types/customers";
 import { CustomersList } from "@/types/testDrive";
 import { GetVariants } from "@/types/cars";
-import { log } from "console";
 
 export const useSales = () => {
   const [loading, setLoading] = useState(true);
@@ -42,6 +41,8 @@ export const useSales = () => {
   const [varinats, setVarinats] = useState<GetVariants[]>([]);
   const [pgnCount, setPgnCount] = useState<number | null>(null);
   const [activePage, setActivePage] = useState(1);
+  const [searchFilter, setSearchFilter] = useState("");
+  const [filterStatus, setFilterStatus] = useState("");
 
   const { t } = useTranslation();
   const saleContractSchema = createSaleContractSchema(t);
@@ -97,7 +98,6 @@ export const useSales = () => {
     try {
       setLoading(true);
       setError(null);
-      // const data = await getSales();
       const { data } = await api.get(`/sales/sales-contract/`, {
         params: {
           page: active,
@@ -145,6 +145,9 @@ export const useSales = () => {
     setVariantSelect([]);
 
     setCustomersId(null);
+
+    setSearchFilter("");
+    setFilterStatus("");
   };
 
   const fetchSalesBanner = async () => {
@@ -294,5 +297,10 @@ export const useSales = () => {
     fetchSales,
     setActivePage,
     activePage,
+
+    searchFilter,
+    setSearchFilter,
+    filterStatus,
+    setFilterStatus,
   };
 };

@@ -24,8 +24,7 @@ import Loading from "./ui/loading";
 
 export function Sales() {
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
-  const [searchFilter, setSearchFilter] = useState("");
-  const [filterStatus, setFilterStatus] = useState("");
+
   const { t } = useTranslation();
 
   const {
@@ -75,6 +74,11 @@ export function Sales() {
     fetchSales,
     setActivePage,
     activePage,
+
+    searchFilter,
+    setSearchFilter,
+    filterStatus,
+    setFilterStatus,
   } = useSales();
 
   const { carsModels, customers } = useCustomers();
@@ -199,6 +203,7 @@ export function Sales() {
 
           <select
             className="w-[200px] px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#E60012] focus:border-transparent"
+            value={filterStatus}
             onChange={(e) => {
               const value = e.target.value;
 
