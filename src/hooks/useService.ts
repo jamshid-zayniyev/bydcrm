@@ -194,7 +194,6 @@ export const useService = () => {
 
       reset({
         customer_id: `${data.customer_id}`,
-        // customer_name: data.customer_name,
         date: data.date,
         rate: `${data.rate}`,
         service_type: `${data.service_type}`,

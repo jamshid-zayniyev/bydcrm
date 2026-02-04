@@ -1,9 +1,7 @@
 import {
   Wrench,
-  Calendar,
   Star,
   CheckCircle,
-  Clock,
   Plus,
   X,
   Search,

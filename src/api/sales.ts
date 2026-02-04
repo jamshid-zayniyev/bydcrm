@@ -10,6 +10,7 @@ export interface Sales {
   created_at: number;
   updated_at: number;
   variants: string;
+  contract_number: string;
 }
 
 export interface SalesStatistics {

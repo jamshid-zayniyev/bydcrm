@@ -252,6 +252,7 @@
 
     "statusSelect": "Holatni tanlang",
     "statusSelectError": "Holat tanlanilishligi shart!",
+    "statusNumberError": "Shartnoma raqami kiritilishligi shart!",
 
     "variantsLabel": "Seria",
     "variants": "Seriani tanlang",

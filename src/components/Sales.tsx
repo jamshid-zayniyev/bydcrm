@@ -1,4 +1,12 @@
-import { TrendingUp, DollarSign, Calendar, User, Plus, X } from "lucide-react";
+import {
+  TrendingUp,
+  DollarSign,
+  Calendar,
+  User,
+  Plus,
+  X,
+  Search,
+} from "lucide-react";
 import { sales, customers } from "../data/mockData";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useTranslation } from "react-i18next";
@@ -11,9 +19,13 @@ import DeleteModal from "./ui/delete-modal";
 
 import { Controller } from "react-hook-form";
 import { NameSelect } from "./ui/name-select";
+import { PaginationDemo } from "./ui/paginationApi";
+import Loading from "./ui/loading";
 
 export function Sales() {
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
+  const [searchFilter, setSearchFilter] = useState("");
+  const [filterStatus, setFilterStatus] = useState("");
   const { t } = useTranslation();
 
   const {
@@ -58,6 +70,11 @@ export function Sales() {
     customersId,
     loadingDrive,
     varinats,
+
+    pgnCount,
+    fetchSales,
+    setActivePage,
+    activePage,
   } = useSales();
 
   const { carsModels, customers } = useCustomers();
@@ -79,61 +96,21 @@ export function Sales() {
     cc: "bg-red-100 text-red-700 border-red-200",
   };
 
-  // const statusLabels: Record<string, string> = {
-  //   cp: "Завершена",
-  //   p: "В обработке",
-  //   cancelled: "Отменена",
-  // };
-
-  // const totalRevenue = sales.reduce((sum, sale) => sum + sale.amount, 0);
-  // const completedSales = sales.filter((s) => s.status === "completed").length;
-  // const avgSaleValue = Math.round(totalRevenue / sales.length);
-
-  // const pipeline = [
-  //   {
-  //     stage: "Новые лиды",
-  //     count: customers.filter((c) => c.status === "new").length,
-  //     color: "blue",
-  //   },
-  //   {
-  //     stage: "Связались",
-  //     count: customers.filter((c) => c.status === "contacted").length,
-  //     color: "purple",
-  //   },
-  //   {
-  //     stage: "Квалифицированы",
-  //     count: customers.filter((c) => c.status === "qualified").length,
-  //     color: "green",
-  //   },
-  //   {
-  //     stage: "Переговоры",
-  //     count: customers.filter((c) => c.status === "negotiation").length,
-  //     color: "yellow",
-  //   },
-  //   {
-  //     stage: "Продажи",
-  //     count: customers.filter((c) => c.status === "won").length,
-  //     color: "red",
-  //   },
-  // ];
-
-  // BYD Vehicles loading state
-
-  if (loading) {
-    return (
-      <div className="space-y-4 sm:space-y-6">
-        {/* Loading state for BYD Models section */}
-        <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl border border-gray-200 shadow-sm">
-          <div className="flex items-center justify-center h-32">
-            <div className="text-center">
-              <div className="w-8 h-8 border-4 border-[#E60012] border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-              <p className="text-gray-600 text-sm">{t("loading")}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="space-y-4 sm:space-y-6">
+  //       {/* Loading state for BYD Models section */}
+  //       <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl border border-gray-200 shadow-sm">
+  //         <div className="flex items-center justify-center h-32">
+  //           <div className="text-center">
+  //             <div className="w-8 h-8 border-4 border-[#E60012] border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+  //             <p className="text-gray-600 text-sm">{t("loading")}</p>
+  //           </div>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="space-y-6">
@@ -202,101 +179,153 @@ export function Sales() {
 
       {/* Sales List */}
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
-        <div className="flex items-center justify-between p-5 border-b border-gray-200">
+        <div className="flex items-center justify-between p-5 border-b border-gray-200 gap-6">
           <h3 className="text-gray-900">{t("sales.latestTransactions")}</h3>
+
+          <div className="flex-1 relative">
+            <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              placeholder={t("service.search")}
+              value={searchFilter}
+              onChange={(e) => {
+                const value = e.target.value;
+                setSearchFilter(value);
+                fetchSales(1, value, filterStatus);
+              }}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#E60012] focus:border-transparent"
+            />
+          </div>
+
+          <select
+            className="w-[200px] px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#E60012] focus:border-transparent"
+            onChange={(e) => {
+              const value = e.target.value;
+
+              setFilterStatus(value);
+              fetchSales(1, searchFilter, value);
+            }}
+          >
+            <option value="">{t("sales.statusSelect")}</option>
+            <option value={"cp"}>{t("sales.COMPLETED")}</option>
+            <option value={"p"}>{t("sales.PENDING")}</option>
+            <option value={"r"}>{t("sales.REVISED")}</option>
+            <option value={"cc"}>{t("sales.CANCELLED")}</option>
+          </select>
+
           <div
             className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-[#E60012] to-[#b00010] text-white rounded-lg text-xs sm:text-sm shadow-sm"
             onClick={() => setShowAddModal(true)}
           >
             <Plus className="w-4 h-4" />
-            {/* <span className="text-sm">{t("cars.carsObj")}</span> */}
           </div>
         </div>
         <div className="divide-y divide-gray-200">
-          {sales.map((sale) => (
-            <div
-              key={sale.id}
-              className="p-5 hover:bg-gray-50 transition-colors"
-            >
-              <div className="flex flex-col sm:flex-row lg:items-center justify-between gap-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-10 h-10 bg-red-50 border-2 border-[#E60012] rounded-full flex items-center justify-center">
-                      <TrendingUp className="w-5 h-5 text-[#E60012]" />
-                    </div>
-                    <div>
-                      <h4
-                        className="text-gray-900"
-                        style={{
-                          width: "200px",
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                        }}
-                      >
-                        {sale.customer_name}
-                      </h4>
-                      <p className="text-sm text-gray-500">
-                        {sale.car}
+          {loading ? (
+            <Loading />
+          ) : (
+            sales.map((sale) => (
+              <div
+                key={sale.id}
+                className="p-5 hover:bg-gray-50 transition-colors"
+              >
+                <div className="flex flex-col sm:flex-row lg:items-center justify-between gap-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="w-10 h-10 bg-red-50 border-2 border-[#E60012] rounded-full flex items-center justify-center">
+                        <TrendingUp className="w-5 h-5 text-[#E60012]" />
+                      </div>
+                      <div>
+                        <h4
+                          className="text-gray-900"
+                          style={{
+                            width: "200px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {sale.customer_name}
+                        </h4>
+                        <p className="text-sm text-gray-500">
+                          {sale.car}
 
-                        {sale.variants ? (
-                          <>
-                            {" "}
-                            {"->"} {sale.variants}
-                          </>
-                        ) : (
-                          ""
-                        )}
-                      </p>
+                          {sale.variants ? (
+                            <>
+                              {" "}
+                              {"->"} {sale.variants}
+                            </>
+                          ) : (
+                            ""
+                          )}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap gap-3 ml-13">
+                      <div className="flex items-center gap-2">
+                        <DollarSign className="w-4 h-4 text-gray-400" />
+                        <span className="text-sm text-gray-700">
+                          {formatAmount(sale.price)}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Calendar className="w-4 h-4 text-gray-400" />
+                        <span className="text-sm text-gray-700">
+                          {sale.created_at.toString().split("T")[0]}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <User className="w-4 h-4 text-gray-400" />
+                        <span className="text-sm text-gray-700">
+                          {sale.sold_by}
+                        </span>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap gap-3 ml-13">
-                    <div className="flex items-center gap-2">
-                      <DollarSign className="w-4 h-4 text-gray-400" />
-                      <span className="text-sm text-gray-700">
-                        {formatAmount(sale.price)}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-gray-400" />
-                      <span className="text-sm text-gray-700">
-                        {sale.created_at.toString().split("T")[0]}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <User className="w-4 h-4 text-gray-400" />
-                      <span className="text-sm text-gray-700">
-                        {sale.sold_by}
-                      </span>
-                    </div>
+                  <div className="flex flex-col items-center gap-2">
+                    <span
+                      className={`px-3 py-1 rounded-lg text-sm border ${
+                        statusColors[sale.status]
+                      }`}
+                    >
+                      {sale.status == "cp"
+                        ? `${t("sales.COMPLETED")}`
+                        : sale.status == "p"
+                        ? `${t("sales.PENDING")}`
+                        : sale.status == "r"
+                        ? `${t("sales.REVISED")}`
+                        : `${t("sales.CANCELLED")}`}
+                      {": "}
+                      <b>{sale?.contract_number}</b>
+                    </span>
+                    <EditDelete
+                      id={sale.id}
+                      editBtn={editBtn}
+                      setSelectedItemId={setSelectedItemId}
+                      openDeleteModal={openDeleteModal}
+                    />
                   </div>
-                </div>
-
-                <div className="flex flex-col items-center gap-2">
-                  <span
-                    className={`px-3 py-1 rounded-lg text-sm border ${
-                      statusColors[sale.status]
-                    }`}
-                  >
-                    {sale.status == "cp"
-                      ? `${t("sales.COMPLETED")}`
-                      : sale.status == "p"
-                      ? `${t("sales.PENDING")}`
-                      : sale.status == "r"
-                      ? `${t("sales.REVISED")}`
-                      : `${t("sales.CANCELLED")}`}
-                  </span>
-                  <EditDelete
-                    id={sale.id}
-                    editBtn={editBtn}
-                    setSelectedItemId={setSelectedItemId}
-                    openDeleteModal={openDeleteModal}
-                  />
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
+
+          {pgnCount && pgnCount > 10 ? (
+            <PaginationDemo
+              pgnCount={pgnCount}
+              fetchUsers={fetchSales}
+              activePage={activePage}
+              setActivePage={setActivePage}
+              searchFilter={searchFilter}
+              filterStatus={filterStatus}
+              filterService="" /*{filterService}*/
+              filterDate="" /*{filterDate}*/
+            />
+          ) : (
+            ""
+          )}
         </div>
       </div>
 
@@ -424,68 +453,6 @@ export function Sales() {
                   </div>
                 )}
 
-                {/* <div>
-                  <label className="block text-sm text-gray-700 mb-2">
-                    {t("sales.car")}
-                  </label>
-                  <select
-                    {...register("car")}
-                    className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent border-red-500 ${
-                      errors.car
-                        ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
-                        : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
-                    }`}
-                    onChange={(e) => {
-                      if (e.target.value) {
-                        const selectedId = parseInt(e.target.value);
-                        editFormSelect(selectedId);
-                      }
-                    }}
-                  >
-                    <option value="" disabled>
-                      {t("sales.carSelect")}
-                    </option>
-                    {carsModels.length ? (
-                      carsModels.map((el) => (
-                        <option key={el?.id} value={el?.id}>
-                          {el?.model}
-                        </option>
-                      ))
-                    ) : (
-                      <option value="" disabled>
-                        {t("noInformation")}
-                      </option>
-                    )}
-                  </select>
-                  {errors.car && (
-                    <p className="text-[#E60012]">{errors.car.message}</p>
-                  )}
-                </div>
-
-                {variantSelect[0]?.variants?.length ? (
-                  <div>
-                    <label className="block text-sm text-gray-700 mb-2">
-                      {t("test-drive.seria")}
-                    </label>
-                    <select
-                      {...register("variants")}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60012]"
-                    >
-                      {loadingModel ? (
-                        <option>{t("formLaoding")}</option>
-                      ) : (
-                        variantSelect[0]?.variants?.map((el) => (
-                          <option key={el?.id} value={el?.id}>
-                            {el?.series}
-                          </option>
-                        ))
-                      )}
-                    </select>
-                  </div>
-                ) : (
-                  <></>
-                )} */}
-
                 <div>
                   <label className="block text-sm text-gray-700 mb-2">
                     {t("cars.price")}
@@ -549,6 +516,28 @@ export function Sales() {
                   </select>
                   {errors.status && (
                     <p className="text-[#E60012]">{errors.status.message}</p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm text-gray-700 mb-2">
+                    Shartnoma raqamini kiriting!
+                  </label>
+
+                  <input
+                    type="text"
+                    {...register("contract_number")}
+                    placeholder="Raqamini kiriting!"
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                      errors.contract_number
+                        ? "border-[#E60012] focus:ring-[#E60012] focus:border-[#E60012]"
+                        : "border-gray-300 focus:ring-[#E60012] focus:border-transparent"
+                    }`}
+                  />
+                  {errors.contract_number && (
+                    <p className="text-[#E60012]">
+                      {errors.contract_number.message}
+                    </p>
                   )}
                 </div>
               </div>

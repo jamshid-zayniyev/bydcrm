@@ -249,6 +249,7 @@
 
     "statusSelect": "Выберите статус",
     "statusSelectError": "Выбор статуса обязателен!",
+    "statusNumberError": "Необходимо ввести номер договора!",
 
     "variants": "Выберите модель"
   },

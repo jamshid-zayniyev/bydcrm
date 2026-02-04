@@ -40,6 +40,8 @@ export const useSales = () => {
   const [customersId, setCustomersId] = useState<CustomersList | null>(null);
   const [loadingDrive, setLoadingDrive] = useState(false);
   const [varinats, setVarinats] = useState<GetVariants[]>([]);
+  const [pgnCount, setPgnCount] = useState<number | null>(null);
+  const [activePage, setActivePage] = useState(1);
 
   const { t } = useTranslation();
   const saleContractSchema = createSaleContractSchema(t);
@@ -91,12 +93,23 @@ export const useSales = () => {
     }
   };
 
-  const fetchSales = async () => {
+  const fetchSales = async (active = 1, search = "", status = "") => {
     try {
       setLoading(true);
       setError(null);
-      const data = await getSales();
-      setSales(data);
+      // const data = await getSales();
+      const { data } = await api.get(`/sales/sales-contract/`, {
+        params: {
+          page: active,
+          search,
+          status,
+        },
+      });
+
+      setSales(data?.results);
+      setPgnCount(data?.count);
+
+      setActivePage(active);
     } catch (err) {
       setError("Mashinalarni yuklab boʻlmadi");
       console.error("Error fetching cars:", err);
@@ -165,8 +178,7 @@ export const useSales = () => {
 
     reset({
       customer_id: `${data.customer_id}`,
-      // car: `${data.car}`,
-      // variants: `${data.variants}`,
+      contract_number: data.contract_number,
 
       price: `${data.price}`,
       status: data.status,
@@ -277,5 +289,10 @@ export const useSales = () => {
     customersId,
     loadingDrive,
     varinats,
+
+    pgnCount,
+    fetchSales,
+    setActivePage,
+    activePage,
   };
 };
