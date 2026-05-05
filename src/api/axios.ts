@@ -7,8 +7,8 @@ import {
 } from "../utils/token";
 import i18n from "../i18n/i18n";
 
-export const API_BASE_URL = "https://api.byd-karshi.uz";
-// export const API_BASE_URL = "https://bydats.pythonanywhere.com";
+// export const API_BASE_URL = "https://api.byd-karshi.uz";
+export const API_BASE_URL = "https://bydats.pythonanywhere.com";
 
 export const api = axios.create({
   baseURL: `${API_BASE_URL}/api/v1`,
@@ -33,7 +33,7 @@ api.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 // Response interceptor to handle token refresh
@@ -52,7 +52,7 @@ api.interceptors.response.use(
             `${API_BASE_URL}/api/v1/users/token/refresh/`,
             {
               refresh: refreshToken,
-            }
+            },
           );
 
           const { access } = response.data;
@@ -69,5 +69,5 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
